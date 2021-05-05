@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:sayphi/authentication/view/loginScreen.dart';
+import 'package:sayphi/authentication/view/02_SignUpScreen.dart';
 import 'package:sayphi/mainApp/components/mainButton.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/appImages.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/mainApp/resources/stringResources.dart';
-import 'package:sayphi/mainApp/resources/svgResource.dart';
 
 class GetStartedScreen extends StatefulWidget {
   @override
@@ -31,6 +28,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
       body: Column(
         children: [
           SizedBox(height: 52),
+          /// TITLE IMAGE
           Padding(
             padding: const EdgeInsets.only(left: 20,right: 10),
             child: AspectRatio(
@@ -39,12 +37,14 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
             ),
           ),
           SizedBox(height: 32),
+
+          /// WELCOME TEXTS
           Text(
             Strings.GetStartedScreen_Welcome,
             style: TextStyle(
               fontSize: 24,
               letterSpacing: 2,
-              fontFamily: FontStyle.FONT_LIGHT,
+              fontFamily: CFontFamily.FONT_LIGHT,
 
             ),
           ),
@@ -54,14 +54,19 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
             style: TextStyle(
               fontSize: 44,
               letterSpacing: 1.3,
-              fontFamily: FontStyle.FONT_MEDIUM,
+              fontFamily: CFontFamily.FONT_MEDIUM,
 
             ),
           ),
+
           SizedBox(height: 32),
+          /// GO TO SIGN UP PAGE BTN
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: MainButton(
+              onPress: (){
+                Get.to(()=>SignUpScreen());
+              },
               label: Strings.GetStartedScreen_Btn_SignUp,
             ),
           ),
@@ -69,37 +74,37 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 24),
             child: Text(
-              Strings.GetStartedScreen_Or,
+              Strings.Or,
               style: TextStyle(
                 color: AppColor.TEXT_COLOR.withOpacity(.5),
                 fontSize: 18,
-                fontFamily: FontStyle.FONT_REGULAR
+                fontFamily: CFontFamily.FONT_REGULAR
               ),
             ),
           ),
-
+          /// LOGIN
           RichText(
             text: TextSpan(
-              text: Strings.GetStartedScreen_LoginPrefix,
+              text: Strings.AlreadyHaveAcc,
               style: TextStyle(
                 fontSize: 16,
-                fontFamily: FontStyle.FONT_REGULAR,
+                fontFamily: CFontFamily.FONT_REGULAR,
                 color: AppColor.TEXT_COLOR
               ),
               children: [
                 TextSpan(
-                  text: Strings.GetStartedScreen_Login,
+                  text: Strings.Login,
                   style: TextStyle(
                     fontSize: 16,
-                    fontFamily: FontStyle.FONT_REGULAR,
+                    fontFamily: CFontFamily.FONT_REGULAR,
                     color: AppColor.PRIMARY
                   )
                 ),
                 TextSpan(
-                  text: Strings.GetStartedScreen_LoginSuffix,
+                  text: Strings.Here,
                   style: TextStyle(
                     fontSize: 16,
-                    fontFamily: FontStyle.FONT_REGULAR,
+                    fontFamily: CFontFamily.FONT_REGULAR,
                     color: AppColor.TEXT_COLOR
                   )
                 )
@@ -107,36 +112,37 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
             ),
           ),
 
+          /// FOOTER
           Spacer(),
           Text(
             Strings.GetStartedScreen_Footer1,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 12,
-              fontFamily: FontStyle.FONT_REGULAR,
+              fontFamily: CFontFamily.FONT_REGULAR,
             ),
           ),
           SizedBox(height: 8),
           RichText(
             text: TextSpan(
-                text: Strings.GetStartedScreen_Footer2PP,
+                text: Strings.PrivacyPolicy,
                 style: TextStyle(
                     fontSize: 12,
-                    fontFamily: FontStyle.FONT_REGULAR,
+                    fontFamily: CFontFamily.FONT_REGULAR,
                     color: AppColor.PRIMARY
                 ),
                 children: [
                   TextSpan(
-                      text: Strings.GetStartedScreen_Footer,
+                      text: Strings.AND,
                       style: TextStyle(
-                          fontFamily: FontStyle.FONT_REGULAR,
+                          fontFamily: CFontFamily.FONT_REGULAR,
                           color: AppColor.TEXT_COLOR
                       )
                   ),
                   TextSpan(
-                      text: Strings.GetStartedScreen_Footer2ToS,
+                      text: Strings.ToS,
                       style: TextStyle(
-                          fontFamily: FontStyle.FONT_REGULAR,
+                          fontFamily: CFontFamily.FONT_REGULAR,
                       )
                   )
                 ]

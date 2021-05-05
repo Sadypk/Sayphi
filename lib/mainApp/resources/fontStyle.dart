@@ -1,4 +1,4 @@
-class FontStyle{
+class CFontFamily{
   static const FONT_THIN = 'THIN';
   static const FONT_LIGHT = 'LIGHT';
   static const FONT_REGULAR = 'REGULAR';

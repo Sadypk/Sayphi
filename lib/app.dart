@@ -16,7 +16,7 @@ class App extends StatelessWidget {
           displayColor: AppColor.TEXT_COLOR,
         ),
         scaffoldBackgroundColor: AppColor.SCAFFOLD_BACKGROUND,
-        fontFamily: FontStyle.FONT_LIGHT
+        fontFamily: CFontFamily.FONT_LIGHT
       ),
       home: GetStartedScreen(),
     );
