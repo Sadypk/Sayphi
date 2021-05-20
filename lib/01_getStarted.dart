@@ -1,11 +1,17 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sayphi/authentication/view/02_SignUpScreen.dart';
 import 'package:sayphi/mainApp/components/mainButton.dart';
+import 'package:sayphi/mainApp/components/shaderBgBody.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/appImages.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/mainApp/resources/stringResources.dart';
+
+import 'mainApp/resources/appColor.dart';
+import 'mainApp/resources/appImages.dart';
+import 'package:sayphi/authentication/view/04_LoginWithMobileEmailScreen.dart';
 
 class GetStartedScreen extends StatefulWidget {
   @override
@@ -15,142 +21,146 @@ class GetStartedScreen extends StatefulWidget {
 class _GetStartedScreenState extends State<GetStartedScreen> {
 
   @override
-  void initState() {
-    super.initState();
-    // Future.delayed(Duration(seconds: 2),(){
-    //   Get.off(()=>LoginScreen());
-    // });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          SizedBox(height: 52),
-          /// TITLE IMAGE
-          Padding(
-            padding: const EdgeInsets.only(left: 20,right: 10),
-            child: AspectRatio(
-              aspectRatio: 346/208,
-              child: Image.asset(Images.GET_STARTED_TOP)
-            ),
-          ),
-          SizedBox(height: 32),
-
-          /// WELCOME TEXTS
-          Text(
-            Strings.GetStartedScreen_Welcome,
-            style: TextStyle(
-              fontSize: 24,
-              letterSpacing: 2,
-              fontFamily: CFontFamily.FONT_LIGHT,
-
-            ),
-          ),
-          SizedBox(height: 4),
-          Text(
-            Strings.APP_NAME,
-            style: TextStyle(
-              fontSize: 44,
-              letterSpacing: 1.3,
-              fontFamily: CFontFamily.FONT_MEDIUM,
-
-            ),
-          ),
-
-          SizedBox(height: 32),
-          /// GO TO SIGN UP PAGE BTN
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: MainButton(
-              onPress: (){
-                Get.to(()=>SignUpScreen());
-              },
-              label: Strings.GetStartedScreen_Btn_SignUp,
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 24),
-            child: Text(
-              Strings.Or,
-              style: TextStyle(
-                color: AppColor.TEXT_COLOR.withOpacity(.5),
-                fontSize: 18,
-                fontFamily: CFontFamily.FONT_REGULAR
+      backgroundColor: AppColor.PRIMARY,
+      body: ShaderBgBody(
+        body: Column(
+          children: [
+            /// TITLE IMAGE
+            Container(
+              padding: const EdgeInsets.all(20),
+              child: Image.asset(
+                Images.COUPLE_HOLDING_HANDS,
+                color: Colors.white,
+                height: Get.height * .5,
               ),
             ),
-          ),
-          /// LOGIN
-          RichText(
-            text: TextSpan(
-              text: Strings.AlreadyHaveAcc,
-              style: TextStyle(
-                fontSize: 16,
-                fontFamily: CFontFamily.FONT_REGULAR,
-                color: AppColor.TEXT_COLOR
-              ),
-              children: [
-                TextSpan(
-                  text: Strings.Login,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontFamily: CFontFamily.FONT_REGULAR,
-                    color: AppColor.PRIMARY
-                  )
-                ),
-                TextSpan(
-                  text: Strings.Here,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontFamily: CFontFamily.FONT_REGULAR,
-                    color: AppColor.TEXT_COLOR
-                  )
-                )
-              ]
-            ),
-          ),
 
-          /// FOOTER
-          Spacer(),
-          Text(
-            Strings.GetStartedScreen_Footer1,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: CFontFamily.FONT_REGULAR,
+            /// WELCOME TEXTS
+            Text(
+              Strings.GetStartedScreen_Welcome,
+              style: TextStyle(
+                  fontSize: 24,
+                  letterSpacing: 2.2,
+                  fontFamily: CFontFamily.FONT_LIGHT,
+                  color: Colors.white
+              ),
             ),
-          ),
-          SizedBox(height: 8),
-          RichText(
-            text: TextSpan(
-                text: Strings.PrivacyPolicy,
+            SizedBox(height: 4),
+            Text(
+              Strings.APP_NAME,
+              style: TextStyle(
+                  fontSize: 44,
+                  letterSpacing: 1.3,
+                  fontFamily: CFontFamily.FONT_MEDIUM,
+                  color: Colors.white
+              ),
+            ),
+
+            /// GO TO SIGN UP PAGE BTN
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+              child: MainButton(
+                onPress: (){
+                  Get.to(()=>SignUpScreen());
+                },
+                btnColor: Colors.white,
+                label: Strings.GetStartedScreen_Btn_SignUp,
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Text(
+                Strings.Or,
                 style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: CFontFamily.FONT_REGULAR,
-                    color: AppColor.PRIMARY
+                  color: Colors.grey[200],
+                  fontSize: 18,
+                  fontFamily: CFontFamily.FONT_REGULAR,
                 ),
-                children: [
-                  TextSpan(
-                      text: Strings.AND,
-                      style: TextStyle(
-                          fontFamily: CFontFamily.FONT_REGULAR,
-                          color: AppColor.TEXT_COLOR
-                      )
-                  ),
-                  TextSpan(
-                      text: Strings.ToS,
-                      style: TextStyle(
-                          fontFamily: CFontFamily.FONT_REGULAR,
-                      )
-                  )
-                ]
+              ),
             ),
-          ),
-          SizedBox(height: 20)
-        ],
+            /// LOGIN
+            RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                  text: Strings.AlreadyHaveAcc,
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: CFontFamily.FONT_REGULAR,
+                      color: Colors.white,
+                      height: 1.3
+                  ),
+                  children: [
+                    TextSpan(
+                        recognizer: TapGestureRecognizer()..onTap = () {
+                          Get.to(() => LoginWithMobileEmailScreen());
+                        },
+                        text: Strings.Login,
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: CFontFamily.FONT_REGULAR,
+                            color: AppColor.PRIMARY
+                        )
+                    ),
+                    TextSpan(
+                        text: Strings.Here,
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: CFontFamily.FONT_REGULAR,
+                            color: Colors.white
+                        )
+                    )
+                  ]
+              ),
+            ),
+
+            /// FOOTER
+            Spacer(),
+            Text(
+              Strings.GetStartedScreen_Footer1,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 12,
+                  fontFamily: CFontFamily.FONT_REGULAR,
+                  color: Colors.white
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: RichText(
+                text: TextSpan(
+                    text: Strings.PrivacyPolicy,
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: CFontFamily.FONT_MEDIUM,
+                        color: Colors.white,
+                        decoration: TextDecoration.underline
+                    ),
+                    children: [
+                      TextSpan(
+                          text: Strings.AND,
+                          style: TextStyle(
+                              fontFamily: CFontFamily.FONT_REGULAR,
+                              decoration: TextDecoration.none
+                          )
+                      ),
+                      TextSpan(
+                          text: Strings.ToS,
+                          style: TextStyle(
+                            fontFamily: CFontFamily.FONT_MEDIUM,
+                          )
+                      )
+                    ]
+                ),
+              ),
+            ),
+          ],
+        )
       ),
     );
   }
 }
+
+

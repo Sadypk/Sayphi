@@ -5,4 +5,6 @@ class AppColor{
   static const TEXT_COLOR = const Color(0xff141015);
 
   static const PRIMARY = const Color(0xffEC1F6C);
+  static const PRIMARY_DARK = const Color(0xff89226B);
+  static const TEXT_LIGHT = const Color(0xff434448);
 }

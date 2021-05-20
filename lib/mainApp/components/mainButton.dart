@@ -2,21 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 
+import '../resources/appColor.dart';
+
 class MainButton extends StatelessWidget {
   final String label;
   final VoidCallback onPress;
-  const MainButton({Key? key,required this.onPress,required this.label}) : super(key: key);
+  final Color? btnColor;
+  const MainButton({Key? key,
+    required this.onPress,
+    required this.label,
+    this.btnColor
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onPress,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(6),
       child: Container(
         width: double.infinity,
         height: 50,
         decoration: BoxDecoration(
-          color: AppColor.PRIMARY,
+          color: btnColor ?? AppColor.PRIMARY,
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
@@ -32,7 +39,7 @@ class MainButton extends StatelessWidget {
             style: TextStyle(
               fontSize: 22,
               fontFamily: CFontFamily.FONT_REGULAR,
-              color: Colors.white
+              color: btnColor == null ? Colors.white : AppColor.PRIMARY
             ),
           ),
         ),
