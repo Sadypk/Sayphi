@@ -8,7 +8,7 @@ import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/appImages.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/mainApp/resources/stringResources.dart';
-import 'package:sayphi/user/view/06+7+8_how_do_you_identify_screen.dart';
+import 'package:sayphi/user/view/09_interested_in_and_ethinicity_screen.dart';
 
 import 'mainApp/resources/appColor.dart';
 import 'mainApp/resources/appImages.dart';
@@ -64,7 +64,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
               child: MainButton(
                 onPress: (){
-                  Get.to(() => UserGenderSetScreen());
+                  Get.to(() => InterestedInAndEthnicityChooseScreen());
                   // Get.to(()=>SignUpScreen());
                 },
                 btnColor: Colors.white,

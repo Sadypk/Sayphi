@@ -8,10 +8,12 @@ class MainButton extends StatelessWidget {
   final String label;
   final VoidCallback onPress;
   final Color? btnColor;
+  final IconData? trailingIcon;
   const MainButton({Key? key,
     required this.onPress,
     required this.label,
-    this.btnColor
+    this.btnColor,
+    this.trailingIcon
   }) : super(key: key);
 
   @override
@@ -33,15 +35,27 @@ class MainButton extends StatelessWidget {
             )
           ]
         ),
-        child: Center(
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 22,
-              fontFamily: CFontFamily.REGULAR,
-              color: btnColor == null ? Colors.white : AppColor.PRIMARY
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 22,
+                fontFamily: CFontFamily.REGULAR,
+                color: btnColor == null ? Colors.white : AppColor.PRIMARY
+              ),
             ),
-          ),
+            if(trailingIcon != null) Row(
+              children: [
+                SizedBox(width: 8),
+                Icon(
+                  trailingIcon,
+                  color: Colors.green,
+                )
+              ],
+            )
+          ],
         ),
       ),
     );
