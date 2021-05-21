@@ -45,7 +45,7 @@ class SignUpScreen extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 24,
-                        fontFamily: CFontFamily.FONT_REGULAR
+                        fontFamily: CFontFamily.REGULAR
                       ),
                     ),
 
@@ -86,7 +86,7 @@ class SignUpScreen extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.grey[200],
                           fontSize: 18,
-                          fontFamily: CFontFamily.FONT_REGULAR,
+                          fontFamily: CFontFamily.REGULAR,
                         ),
                       ),
                     ),
@@ -97,7 +97,7 @@ class SignUpScreen extends StatelessWidget {
                           text: Strings.AlreadyHaveAcc,
                           style: TextStyle(
                               fontSize: 16,
-                              fontFamily: CFontFamily.FONT_REGULAR,
+                              fontFamily: CFontFamily.REGULAR,
                               color: Colors.white,
                               height: 1.3
                           ),
@@ -109,7 +109,7 @@ class SignUpScreen extends StatelessWidget {
                                 text: Strings.Login,
                                 style: TextStyle(
                                     fontSize: 16,
-                                    fontFamily: CFontFamily.FONT_REGULAR,
+                                    fontFamily: CFontFamily.REGULAR,
                                     color: AppColor.PRIMARY
                                 )
                             ),
@@ -117,7 +117,7 @@ class SignUpScreen extends StatelessWidget {
                                 text: Strings.Here,
                                 style: TextStyle(
                                     fontSize: 16,
-                                    fontFamily: CFontFamily.FONT_REGULAR,
+                                    fontFamily: CFontFamily.REGULAR,
                                     color: Colors.white
                                 )
                             )
@@ -133,7 +133,7 @@ class SignUpScreen extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 12,
-                          fontFamily: CFontFamily.FONT_REGULAR,
+                          fontFamily: CFontFamily.REGULAR,
                           color: Colors.white
                       ),
                     ),
@@ -142,7 +142,7 @@ class SignUpScreen extends StatelessWidget {
                           text: Strings.PrivacyPolicy,
                           style: TextStyle(
                               fontSize: 12,
-                              fontFamily: CFontFamily.FONT_MEDIUM,
+                              fontFamily: CFontFamily.MEDIUM,
                               color: Colors.white,
                               decoration: TextDecoration.underline
                           ),
@@ -150,14 +150,14 @@ class SignUpScreen extends StatelessWidget {
                             TextSpan(
                                 text: Strings.AND,
                                 style: TextStyle(
-                                    fontFamily: CFontFamily.FONT_REGULAR,
+                                    fontFamily: CFontFamily.REGULAR,
                                     decoration: TextDecoration.none
                                 )
                             ),
                             TextSpan(
                                 text: Strings.ToS,
                                 style: TextStyle(
-                                  fontFamily: CFontFamily.FONT_MEDIUM,
+                                  fontFamily: CFontFamily.MEDIUM,
                                 )
                             )
                           ]
@@ -218,7 +218,7 @@ class AuthButton extends StatelessWidget {
                 'Continue with '+label,
                 style: TextStyle(
                   fontSize: 18,
-                  fontFamily: CFontFamily.FONT_REGULAR,
+                  fontFamily: CFontFamily.REGULAR,
                   color: textColor ?? Colors.white
                 ),
               )

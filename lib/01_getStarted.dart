@@ -8,6 +8,7 @@ import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/appImages.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/mainApp/resources/stringResources.dart';
+import 'package:sayphi/user/view/06_how_do_you_identify_screen.dart';
 
 import 'mainApp/resources/appColor.dart';
 import 'mainApp/resources/appImages.dart';
@@ -43,7 +44,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
               style: TextStyle(
                   fontSize: 24,
                   letterSpacing: 2.2,
-                  fontFamily: CFontFamily.FONT_LIGHT,
+                  fontFamily: CFontFamily.LIGHT,
                   color: Colors.white
               ),
             ),
@@ -53,7 +54,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
               style: TextStyle(
                   fontSize: 44,
                   letterSpacing: 1.3,
-                  fontFamily: CFontFamily.FONT_MEDIUM,
+                  fontFamily: CFontFamily.MEDIUM,
                   color: Colors.white
               ),
             ),
@@ -63,7 +64,8 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
               child: MainButton(
                 onPress: (){
-                  Get.to(()=>SignUpScreen());
+                  Get.to(() => UserGenderSetScreen());
+                  // Get.to(()=>SignUpScreen());
                 },
                 btnColor: Colors.white,
                 label: Strings.GetStartedScreen_Btn_SignUp,
@@ -77,7 +79,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                 style: TextStyle(
                   color: Colors.grey[200],
                   fontSize: 18,
-                  fontFamily: CFontFamily.FONT_REGULAR,
+                  fontFamily: CFontFamily.REGULAR,
                 ),
               ),
             ),
@@ -88,7 +90,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                   text: Strings.AlreadyHaveAcc,
                   style: TextStyle(
                       fontSize: 16,
-                      fontFamily: CFontFamily.FONT_REGULAR,
+                      fontFamily: CFontFamily.REGULAR,
                       color: Colors.white,
                       height: 1.3
                   ),
@@ -100,7 +102,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                         text: Strings.Login,
                         style: TextStyle(
                             fontSize: 16,
-                            fontFamily: CFontFamily.FONT_REGULAR,
+                            fontFamily: CFontFamily.REGULAR,
                             color: AppColor.PRIMARY
                         )
                     ),
@@ -108,7 +110,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                         text: Strings.Here,
                         style: TextStyle(
                             fontSize: 16,
-                            fontFamily: CFontFamily.FONT_REGULAR,
+                            fontFamily: CFontFamily.REGULAR,
                             color: Colors.white
                         )
                     )
@@ -123,7 +125,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 12,
-                  fontFamily: CFontFamily.FONT_REGULAR,
+                  fontFamily: CFontFamily.REGULAR,
                   color: Colors.white
               ),
             ),
@@ -134,7 +136,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                     text: Strings.PrivacyPolicy,
                     style: TextStyle(
                         fontSize: 12,
-                        fontFamily: CFontFamily.FONT_MEDIUM,
+                        fontFamily: CFontFamily.MEDIUM,
                         color: Colors.white,
                         decoration: TextDecoration.underline
                     ),
@@ -142,14 +144,14 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                       TextSpan(
                           text: Strings.AND,
                           style: TextStyle(
-                              fontFamily: CFontFamily.FONT_REGULAR,
+                              fontFamily: CFontFamily.REGULAR,
                               decoration: TextDecoration.none
                           )
                       ),
                       TextSpan(
                           text: Strings.ToS,
                           style: TextStyle(
-                            fontFamily: CFontFamily.FONT_MEDIUM,
+                            fontFamily: CFontFamily.MEDIUM,
                           )
                       )
                     ]

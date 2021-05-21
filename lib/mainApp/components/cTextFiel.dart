@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sayphi/mainApp/resources/appColor.dart';
 
 class CTextField extends StatelessWidget {
   final String? hintText;
@@ -9,17 +10,19 @@ class CTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-            color: Color(0xffF1F1F1),
-            borderRadius: BorderRadius.circular(6)
-        ),
-        child: TextField(
-          decoration: InputDecoration(
-              hintText: hintText,
-              contentPadding: EdgeInsets.only(left: 12)
-          ),
+    return TextField(
+      decoration: InputDecoration(
+        fillColor: Colors.white,
+        filled: true,
+        hintText: hintText,
+        contentPadding: EdgeInsets.only(left: 12),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(6),
+          borderSide: BorderSide(
+            color: AppColor.BORDER_COLOR
+          )
         )
+      ),
     );
   }
 }

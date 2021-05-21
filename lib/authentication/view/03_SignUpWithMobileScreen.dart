@@ -44,7 +44,7 @@ class SignUpWithMobileScreen extends StatelessWidget {
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 24,
-                              fontFamily: CFontFamily.FONT_REGULAR
+                              fontFamily: CFontFamily.REGULAR
                           ),
                         ),
                         SizedBox(height: 12),
@@ -54,7 +54,7 @@ class SignUpWithMobileScreen extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 12,
-                            fontFamily: CFontFamily.FONT_REGULAR
+                            fontFamily: CFontFamily.REGULAR
                           ),
                         ),
                         SizedBox(height: 32),

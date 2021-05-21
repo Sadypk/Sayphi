@@ -38,7 +38,7 @@ class MainButton extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: 22,
-              fontFamily: CFontFamily.FONT_REGULAR,
+              fontFamily: CFontFamily.REGULAR,
               color: btnColor == null ? Colors.white : AppColor.PRIMARY
             ),
           ),

@@ -11,12 +11,19 @@ class App extends StatelessWidget {
       title: 'Sayphi',
       defaultTransition: Transition.cupertino,
       theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          color: Colors.transparent,
+          elevation: 0,
+          iconTheme: IconThemeData(
+            color: AppColor.TEXT_COLOR
+          )
+        ),
         textTheme: Theme.of(context).textTheme.apply(
           bodyColor: AppColor.TEXT_COLOR,
           displayColor: AppColor.TEXT_COLOR,
         ),
         scaffoldBackgroundColor: AppColor.SCAFFOLD_BACKGROUND,
-        fontFamily: CFontFamily.FONT_LIGHT
+        fontFamily: CFontFamily.LIGHT
       ),
       home: GetStartedScreen(),
     );

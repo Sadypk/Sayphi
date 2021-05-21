@@ -8,7 +8,6 @@ import '../../mainApp/components/mainButton.dart';
 import '../../mainApp/resources/appColor.dart';
 import '../../mainApp/resources/appImages.dart';
 import '../../mainApp/resources/fontStyle.dart';
-import '../../mainApp/resources/fontStyle.dart';
 
 class VerifyOtpScreen extends StatefulWidget {
   @override
@@ -69,7 +68,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 24,
-                              fontFamily: CFontFamily.FONT_REGULAR
+                              fontFamily: CFontFamily.REGULAR
                           ),
                         ),
                         SizedBox(height: 12),
@@ -79,7 +78,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 12,
-                              fontFamily: CFontFamily.FONT_REGULAR
+                              fontFamily: CFontFamily.REGULAR
                           ),
                         ),
                         SizedBox(height: 40),
@@ -149,7 +148,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                                   style: TextStyle(
                                     color: Colors.white,
                                     decoration: TextDecoration.underline,
-                                    fontFamily: CFontFamily.FONT_MEDIUM
+                                    fontFamily: CFontFamily.MEDIUM
                                   )
                               )]
                           ),
