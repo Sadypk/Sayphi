@@ -94,7 +94,9 @@ class _UserGenderSetScreenState extends State<UserGenderSetScreen> {
 
             /// Other genders bottom sheet
             Center(
-              child: extraGender ? Padding(
+              child: extraGender ?
+                  /// when gender selected from bottom sheet showing special button
+              Padding(
                 padding: EdgeInsets.only(top: 12),
                 child: GestureDetector(
                   onTap: _buildOtherGenders,
@@ -133,7 +135,10 @@ class _UserGenderSetScreenState extends State<UserGenderSetScreen> {
                     ),
                   ),
                 ),
-              ) : TextButton(
+              )
+                  :
+                  /// button to see other gender options
+              TextButton(
                 onPressed: _buildOtherGenders,
                 child: Text(
                   'Another gender',

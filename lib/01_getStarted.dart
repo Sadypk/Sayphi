@@ -8,7 +8,7 @@ import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/appImages.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/mainApp/resources/stringResources.dart';
-import 'package:sayphi/user/view/06_how_do_you_identify_screen.dart';
+import 'package:sayphi/user/view/06+7+8_how_do_you_identify_screen.dart';
 
 import 'mainApp/resources/appColor.dart';
 import 'mainApp/resources/appImages.dart';
