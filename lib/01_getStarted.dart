@@ -9,6 +9,7 @@ import 'package:sayphi/mainApp/resources/appImages.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/mainApp/resources/stringResources.dart';
 import 'package:sayphi/user/view/10_name_bithday_screen.dart';
+import 'package:sayphi/user/view/11_12_13_upload_pics_screen.dart';
 
 import 'mainApp/resources/appColor.dart';
 import 'mainApp/resources/appImages.dart';
@@ -64,7 +65,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
               child: MainButton(
                 onPress: (){
-                  Get.to(() => NameAndBirthdayScreen());
+                  Get.to(() => UploadPhotoViewScreen());
                   // Get.to(()=>SignUpScreen());
                 },
                 btnColor: Colors.white,
