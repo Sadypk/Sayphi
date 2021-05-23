@@ -9,4 +9,5 @@ class AppColor{
   static const BORDER_COLOR = const Color(0xff434448);
   static const PRIMARY_DARK = const Color(0xff89226B);
   static const TEXT_LIGHT = const Color(0xff434448);
+  static const DARK_GREY = const Color(0xff545558);
 }

@@ -8,11 +8,13 @@ class MainButton extends StatelessWidget {
   final String label;
   final VoidCallback onPress;
   final Color? btnColor;
+  final Color? labelColor;
   final IconData? trailingIcon;
   const MainButton({Key? key,
     required this.onPress,
     required this.label,
     this.btnColor,
+    this.labelColor,
     this.trailingIcon
   }) : super(key: key);
 
@@ -43,7 +45,7 @@ class MainButton extends StatelessWidget {
               style: TextStyle(
                 fontSize: 22,
                 fontFamily: CFontFamily.REGULAR,
-                color: btnColor == null ? Colors.white : AppColor.PRIMARY
+                color: labelColor == null ? btnColor == null ? Colors.white : AppColor.PRIMARY : labelColor
               ),
             ),
             if(trailingIcon != null) Row(

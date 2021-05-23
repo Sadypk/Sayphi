@@ -8,4 +8,5 @@ class Images{
   static const BG_LIGHT = 'assets/images/GetStartedBGPathLight.png';
 
   static const ICON_GALLERY_IMAGE = 'assets/images/Icon ionic-md-photos.png';
+  static const ICON_HEXAGON = 'assets/images/hexagon.png';
 }
