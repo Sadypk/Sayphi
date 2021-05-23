@@ -156,7 +156,7 @@ class _UploadPhotoViewScreenState extends State<UploadPhotoViewScreen> {
                 ),
               ),
               Positioned(
-                right: 4,11-12
+                right: 4,
                 child: Container(
                   decoration: BoxDecoration(
                     color: AppColor.PRIMARY,
