@@ -66,7 +66,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
               child: MainButton(
                 onPress: (){
-                  Get.to(() => AllowLocationScreen());
+                  Get.to(() => Home());
                   // Get.to(()=>SignUpScreen());
                 },
                 btnColor: Colors.white,
