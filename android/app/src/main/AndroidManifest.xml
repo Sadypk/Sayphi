@@ -8,6 +8,11 @@
         android:label="sayphi"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC7MITSVySnBEZ6k7_OUaO1fgBQLT4v9xY"/>
+
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

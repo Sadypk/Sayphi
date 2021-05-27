@@ -8,11 +8,13 @@ import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/appImages.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/mainApp/resources/stringResources.dart';
-import 'package:sayphi/user/view/17_18_19_20_profile_questionsScreen.dart';
+import 'package:sayphi/user/view/21_allow_location_screen.dart';
 
 import 'mainApp/resources/appColor.dart';
 import 'mainApp/resources/appImages.dart';
 import 'package:sayphi/authentication/view/04_LoginWithMobileEmailScreen.dart';
+
+import 'mainApp/view/home.dart';
 
 class GetStartedScreen extends StatefulWidget {
   @override
@@ -64,7 +66,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 20),
               child: MainButton(
                 onPress: (){
-                  Get.to(() => ProfileQuestionsScreen());
+                  Get.to(() => AllowLocationScreen());
                   // Get.to(()=>SignUpScreen());
                 },
                 btnColor: Colors.white,
