@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
 import 'package:sayphi/demo_files.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
+import 'package:sayphi/mainApp/resources/appConst.dart';
 import 'package:sayphi/mainApp/resources/appImages.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:tcard/tcard.dart';
@@ -18,6 +19,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   final TCardController _controller = TCardController();
+
+  bool showStory = false;
 
   @override
   Widget build(BuildContext context) {
@@ -60,9 +63,9 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: EdgeInsets.zero,
           itemCount: Demo.DEMO_USERS.length,
           itemBuilder: (_, index) => UserDayAvatar(
-            imageLink: Demo.DEMO_USERS[index],
-            name: 'user_$index',
-            isOwn: index == 0
+              imageLink: Demo.DEMO_USERS[index],
+              name: 'user_$index',
+              isOwn: index == 0
           ),
         ),
       );
@@ -101,120 +104,127 @@ class _HomeScreenState extends State<HomeScreen> {
     _buildCardInfo(bool isUserLive){
       return Padding(
         padding : EdgeInsets.only(bottom: 26, left: 20, right: 20,top: 4),
-        child: Container(
-          height: 100,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(0,2),
-                blurRadius: 1,
-                spreadRadius: 1,
-                color: AppColor.PRIMARY.withOpacity(.1)
-              )
-            ]
-          ),
-          padding: EdgeInsets.symmetric(horizontal: 16,vertical: 12),
-          child: Row(
-            children: [
-              Expanded(
-                flex: 8,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    /// is user live ?
-                    if(isUserLive)Row(
-                      children: [
-                        Icon(
-                          Icons.surround_sound,
-                          color: AppColor.PRIMARY,
-                        ),
-                        SizedBox(width: 4),
-                        Text(
-                          'Live now',
-                          style: TextStyle(
-                            fontFamily: CFontFamily.MEDIUM,
-                            color: AppColor.PRIMARY
+        child: GestureDetector(
+          onVerticalDragStart: (drag){
+            setState(() {
+              showStory = !showStory;
+            });
+          },
+          child: Container(
+            height: 100,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  offset: Offset(0,2),
+                  blurRadius: 1,
+                  spreadRadius: 1,
+                  color: AppColor.PRIMARY.withOpacity(.1)
+                )
+              ]
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 16,vertical: 12),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 8,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      /// is user live ?
+                      if(isUserLive)Row(
+                        children: [
+                          Icon(
+                            Icons.surround_sound,
+                            color: AppColor.PRIMARY,
                           ),
-                        )
-                      ],
-                    ),
-
-                    /// user name
-                    Text(
-                      'User name ${_controller.index}',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontFamily: CFontFamily.BOLD,
+                          SizedBox(width: 4),
+                          Text(
+                            'Live now',
+                            style: TextStyle(
+                              fontFamily: CFontFamily.MEDIUM,
+                              color: AppColor.PRIMARY
+                            ),
+                          )
+                        ],
                       ),
-                    ),
 
-                    /// user location
-                    Text(
-                      'Las Vegas, CA',
-                      style: TextStyle(
-                        fontFamily: CFontFamily.REGULAR,
-                        color: AppColor.TEXT_LIGHT
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              Expanded(
-                flex: 2,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-
-                    /// VIP points
-                    Stack(
-                      children: [
-                        Image.asset(
-                          Images.ICON_HEXAGON,
-                          height: 54,
-                          width: 48,
+                      /// user name
+                      Text(
+                        'User name ${_controller.index}',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontFamily: CFontFamily.BOLD,
                         ),
-                        Positioned.fill(
-                          child: Center(
-                            child: Text(
-                              '${_controller.index * 12}',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontFamily: CFontFamily.MEDIUM
+                      ),
+
+                      /// user location
+                      Text(
+                        'Las Vegas, CA',
+                        style: TextStyle(
+                          fontFamily: CFontFamily.REGULAR,
+                          color: AppColor.TEXT_LIGHT
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+
+                      /// VIP points
+                      Stack(
+                        children: [
+                          Image.asset(
+                            Images.ICON_HEXAGON,
+                            height: 54,
+                            width: 48,
+                          ),
+                          Positioned.fill(
+                            child: Center(
+                              child: Text(
+                                '${_controller.index * 12}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontFamily: CFontFamily.MEDIUM
+                                ),
                               ),
                             ),
-                          ),
-                        )
-                      ],
-                    ),
+                          )
+                        ],
+                      ),
 
-                    /// distance
-                    Row(
-                      children: [
-                        Icon(
-                          CupertinoIcons.location_fill,
-                          color: AppColor.PRIMARY,
-                          size: 14,
-                        ),
-                        SizedBox(width: 4),
-                        Text(
-                          '${_controller.index * 7} Km',
-                          style: TextStyle(
+                      /// distance
+                      Row(
+                        children: [
+                          Icon(
+                            CupertinoIcons.location_fill,
                             color: AppColor.PRIMARY,
-                            fontFamily: CFontFamily.REGULAR
+                            size: 14,
                           ),
-                        )
-                      ],
-                    )
+                          SizedBox(width: 4),
+                          Text(
+                            '${_controller.index * 7} Km',
+                            style: TextStyle(
+                              color: AppColor.PRIMARY,
+                              fontFamily: CFontFamily.REGULAR
+                            ),
+                          )
+                        ],
+                      )
 
-                  ],
+                    ],
+                  )
                 )
-              )
-            ],
+              ],
+            ),
           ),
         ),
       );
@@ -226,7 +236,12 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           _buildAppBar(),
 
-          _buildStoryPart(),
+          AnimatedCrossFade(
+            firstChild: _buildStoryPart(),
+            secondChild: SizedBox(),
+            crossFadeState: showStory ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+            duration: AppConst.DURATION_FAST
+          ),
 
           _buildCards(),
 

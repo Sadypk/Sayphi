@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:sayphi/features/homeScreen/view/homeScreen.dart';
+import 'package:sayphi/features/homeScreen/view/23_homeScreen.dart';
 import 'package:sayphi/mainApp/util/localStorage.dart';
 import 'package:sayphi/user/view/22_fullWidthDialog.dart';
 
