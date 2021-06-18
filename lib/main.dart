@@ -7,10 +7,10 @@ main() async{
   WidgetsFlutterBinding.ensureInitialized();
 
   /// loading environment variables
-  await load();
+  // await load();
 
   /// starting local storage
-  await LocalStorage.init();
+  // await LocalStorage.init();
 
   runApp(App());
 }

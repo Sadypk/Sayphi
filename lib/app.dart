@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:sayphi/01_getStarted.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
+import 'package:sayphi/sady/view/41_profile_page.dart';
 
 class App extends StatelessWidget {
   @override
@@ -25,7 +26,7 @@ class App extends StatelessWidget {
         scaffoldBackgroundColor: AppColor.SCAFFOLD_BACKGROUND,
         fontFamily: CFontFamily.LIGHT
       ),
-      home: GetStartedScreen(),
+      home: ProfilePage(),
     );
   }
 }
