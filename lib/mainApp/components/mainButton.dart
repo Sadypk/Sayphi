@@ -10,12 +10,18 @@ class MainButton extends StatelessWidget {
   final Color? btnColor;
   final Color? labelColor;
   final IconData? trailingIcon;
+  final IconData? leadingIcon;
+  final TextStyle? textStyle;
+  final String? assetLeadingIcon;
   const MainButton({Key? key,
     required this.onPress,
     required this.label,
     this.btnColor,
     this.labelColor,
-    this.trailingIcon
+    this.trailingIcon,
+    this.leadingIcon,
+    this.textStyle,
+    this.assetLeadingIcon
   }) : super(key: key);
 
   @override
@@ -40,9 +46,28 @@ class MainButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            if(assetLeadingIcon!=null)Row(
+              children: [
+                Container(
+                  height: 20,
+                  width: 20,
+                  child: Image.asset('$assetLeadingIcon', fit: BoxFit.cover,),
+                ),
+                SizedBox(width: 8,)
+              ],
+            ),
+            if(leadingIcon != null) Row(
+              children: [
+                Icon(
+                  leadingIcon,
+                  color: Colors.white,
+                ),
+                SizedBox(width: 8),
+              ],
+            ),
             Text(
               label,
-              style: TextStyle(
+              style: textStyle!=null?textStyle:TextStyle(
                 fontSize: 22,
                 fontFamily: CFontFamily.REGULAR,
                 color: labelColor == null ? btnColor == null ? Colors.white : AppColor.PRIMARY : labelColor

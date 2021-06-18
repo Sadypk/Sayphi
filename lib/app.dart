@@ -6,6 +6,7 @@ import 'package:sayphi/features/create_audio_room/view/create_new_room.dart';
 import 'package:sayphi/features/live/view/live.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
+import 'package:sayphi/sady/view/46_settings_page.dart';
 
 class App extends StatelessWidget {
   @override
@@ -29,7 +30,7 @@ class App extends StatelessWidget {
         fontFamily: CFontFamily.LIGHT
       ),
       // home: GetStartedScreen(),
-      home: LiveScreen(),
+      home: SettingsPage(),
     );
   }
 }

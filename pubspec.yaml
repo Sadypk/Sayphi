@@ -55,6 +55,7 @@ flutter:
   assets:
     - .env
     - assets/images/
+    - assets/icons/
 
   fonts:
     - family: THIN

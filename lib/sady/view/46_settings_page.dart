@@ -1,8 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sayphi/app.dart';
+import 'package:sayphi/mainApp/components/mainButton.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
+import 'package:sayphi/mainApp/resources/fontStyle.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -13,6 +16,7 @@ class _SettingsPageState extends State<SettingsPage> {
   //Variables
   String selectedInterest ='';
   String selectedFilterBy ='';
+  RangeValues ageRange = RangeValues(18, 30);
   
   
   @override
@@ -20,12 +24,13 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       backgroundColor: AppColor.SCAFFOLD_BG_PINK,
       appBar: AppBar(
-        title: Text('Profile settings'),
+        title: Text('Profile settings', style: TextStyle(color: AppColor.TEXT_COLOR),),
         centerTitle: true,
       ),
       body: ListView(
         children: [
           //Boost and subscription
+          SizedBox(height: 10,),
           Container(
             height: 80,
             margin: EdgeInsets.symmetric(horizontal: 20),
@@ -85,7 +90,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 SizedBox(height: 10,),
                 Container(
                   height: 40,
-                  color: Colors.white,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: Colors.white,
+                  ),
                   child: TextFormField(
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(horizontal: 10),
@@ -249,12 +257,139 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                   ],
-                )
+                ),
+
+
+
+                SizedBox(height: 20,),
+
+
+
+                //Age range
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('Age range', style: TextStyle(fontSize: 16),),
+                    Text('${ageRange.start.toInt()}-${ageRange.end.toInt()}', style: TextStyle(color: AppColor.PRIMARY, fontSize: 14),)
+                  ],
+                ),
+                SizedBox(height: 10,),
+                RangeSlider(
+                  values: ageRange,
+                  onChanged: (v){
+                    setState(() {
+                      ageRange = v;
+                    });
+                  },
+                  min: 18,
+                  max: 100,
+                  activeColor: AppColor.PRIMARY,
+                ),
+
+
+
+                SizedBox(height: 20,),
+
+
+
+                //Advanced filter
+                Text('Advanced filter', style: TextStyle(fontSize: 16),),
+                SizedBox(height: 15,),
+                advancedFilterListTile('Icon metro-language.png', 'Language', (){}, 'Select'),
+                advancedFilterListTile('Icon material-radio-button-checked.png', 'Looking for', (){}, 'Select'),
+                advancedFilterListTile('Icon awesome-check-circle.png', 'Photo verified', (){}, 'Select'),
+
+
+
+                SizedBox(height: 20,),
+
+
+
+                //More option
+                Text('More option', style: TextStyle(fontSize: 16),),
+                SizedBox(height: 10,),
+                Text('Answer these questions on your own profile to use these filters', style: TextStyle(fontSize: 12, color: AppColor.TEXT_LIGHT),),
+                SizedBox(height: 15,),
+                advancedFilterListTile('Icon awesome-ruler.png', 'Height', (){}, 'Answer'),
+                advancedFilterListTile('Icon material-child-care.png', 'Children', (){}, 'Answer'),
+                advancedFilterListTile('Icon material-child-care.png', 'Children', (){}, 'Answer'),
+                advancedFilterListTile('Icon awesome-smoking.png', 'Smoking', (){}, 'Answer'),
+                advancedFilterListTile('Icon material-pets.png', 'Pets', (){}, 'Answer'),
+                advancedFilterListTile('Icon awesome-praying-hands.png', 'Religion', (){}, 'Answer'),
+
+
+                SizedBox(height: 10,),
+
+
+                //Apply filter button
+                MainButton(
+                  onPress: (){},
+                  label: 'Apply filter',
+                  textStyle: TextStyle(
+                      fontSize: 18,
+                      fontFamily: CFontFamily.REGULAR,
+                      color: Colors.white
+                  ),
+                ),
+                Divider(height: 50,),
+
+
+
+
+                //More option
+                Text('More option', style: TextStyle(fontSize: 16),),
+                SizedBox(height: 10,),
+                Text('Browse the apps in incognito mode (Paid only)', style: TextStyle(fontSize: 12, color: AppColor.TEXT_LIGHT),),
+                SizedBox(height: 10,),
+                MainButton(
+                  onPress: (){},
+                  label: 'Browse incognito',
+                  assetLeadingIcon: 'assets/icons/incognito-6-902117.png',
+                  textStyle: TextStyle(
+                      fontSize: 18,
+                      fontFamily: CFontFamily.REGULAR,
+                      color: Colors.white
+                  ),
+                ),
+                SizedBox(height: 20,),
               ],
             ),
           )
         ],
       ),
+    );
+  }
+
+  advancedFilterListTile(String assetName, String label, Function onTap, String label2){
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Container(
+                  height: 16,
+                  width: 16,
+                  child: Image.asset('assets/icons/$assetName', fit: BoxFit.cover,),
+                ),
+                SizedBox(width: 5,),
+                Text(label, style: TextStyle(fontSize: 16, color: AppColor.TEXT_LIGHT),)
+              ],
+            ),
+            Row(
+              children: [
+                Text(label2, style: TextStyle(fontSize: 14, color: AppColor.TEXT_LIGHT),),
+                SizedBox(width: 3,),
+                Icon(Icons.arrow_forward_ios, size: 14,)
+              ],
+            )
+          ],
+        ),
+        Divider(height: 30),
+      ],
     );
   }
 }
