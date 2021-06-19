@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:sayphi/features/chat_menu/view_model/chat_head.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 
+import '../../../demo_files.dart';
+
 class AddPeople extends StatelessWidget {
   final RxBool selected = false.obs;
   @override
@@ -34,7 +36,7 @@ class AddPeople extends StatelessWidget {
                     children: [
                       Container(
                         height: 60,
-                        child: ChatHeader(),
+                        child: ChatHeader(image: Demo.DEMO_USERS[5]),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

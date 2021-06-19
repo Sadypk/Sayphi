@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:sayphi/mainApp/components/shaderBgBody.dart';
+import 'package:sayphi/user/view/06+7+8_how_do_you_identify_screen.dart';
 import 'dart:async';
 import '../../mainApp/components/mainButton.dart';
 import '../../mainApp/resources/appColor.dart';
@@ -40,7 +42,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
     return Scaffold(
       backgroundColor: AppColor.PRIMARY,
       body: ShaderBgBody(
-        body: Padding(
+        child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
@@ -131,7 +133,9 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                         SizedBox(height: 20),
 
                         MainButton(
-                          onPress: (){},
+                          onPress: (){
+                            Get.to(()=>UserGenderSetScreen());
+                          },
                           label: 'Verify'
                         ),
 

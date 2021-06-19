@@ -1,6 +1,8 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:sayphi/authentication/view/05_verify_otp_code.dart';
 import 'package:sayphi/mainApp/components/shaderBgBody.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
@@ -16,7 +18,7 @@ class SignUpWithMobileScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColor.PRIMARY,
       body: ShaderBgBody(
-        body: Padding(
+        child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
@@ -102,7 +104,9 @@ class SignUpWithMobileScreen extends StatelessWidget {
                         SizedBox(height: 20),
 
                         MainButton(
-                          onPress: (){},
+                          onPress: (){
+                            Get.to(()=> VerifyOtpScreen());
+                          },
                           btnColor: Colors.white,
                           label: 'Continue'
                         )

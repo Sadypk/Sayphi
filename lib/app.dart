@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sayphi/01_getStarted.dart';
-import 'package:sayphi/features/chat_menu/view/chat_main_screen.dart';
-import 'package:sayphi/features/create_audio_room/view/create_new_room.dart';
-import 'package:sayphi/features/live/view/live.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
-import 'package:sayphi/sady/view/46_settings_page.dart';
 
 class App extends StatelessWidget {
   @override
@@ -15,6 +11,7 @@ class App extends StatelessWidget {
       title: 'Sayphi',
       defaultTransition: Transition.cupertino,
       theme: ThemeData(
+        primaryColor: AppColor.PRIMARY,
         appBarTheme: AppBarTheme(
           color: Colors.transparent,
           elevation: 0,
@@ -29,8 +26,10 @@ class App extends StatelessWidget {
         scaffoldBackgroundColor: AppColor.SCAFFOLD_BACKGROUND,
         fontFamily: CFontFamily.LIGHT
       ),
-      // home: GetStartedScreen(),
-      home: SettingsPage(),
+      home: GetStartedScreen(),
+
+      /// Use this for custom routing
+      // home: Home(),
     );
   }
 }

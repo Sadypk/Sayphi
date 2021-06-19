@@ -20,13 +20,13 @@ class SignUpScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColor.PRIMARY,
       body: ShaderBgBody(
-        body: Padding(
-          padding: const EdgeInsets.all(20),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 12),
           child: Column(
             children: [
 
               Expanded(
-                flex: 35,
+                flex: 32,
                 child: Center(
                   child: Image.asset(
                     Images.COMPLEX_HEART,
@@ -37,7 +37,7 @@ class SignUpScreen extends StatelessWidget {
               ),
 
               Expanded(
-                flex: 65,
+                flex: 68,
                 child: Column(
                   children: [
                     Text(
@@ -73,7 +73,7 @@ class SignUpScreen extends StatelessWidget {
                     ),
                     AuthButton(
                       onPress: () => Get.to(() => SignUpWithMobileScreen()),
-                      color: Color(0xff3B5998),
+                      color: AppColor.PRIMARY,
                       icon: Icons.call_rounded,
                       label: 'phone number',
                     ),

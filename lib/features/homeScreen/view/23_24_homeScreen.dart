@@ -1,13 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:like_button/like_button.dart';
 import 'package:sayphi/demo_files.dart';
+import 'package:sayphi/features/homeScreen/view/widgets/circularBtn.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/appConst.dart';
 import 'package:sayphi/mainApp/resources/appImages.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:tcard/tcard.dart';
+
+import '25_26_super_like_option_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,7 +24,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final TCardController _controller = TCardController();
 
-  bool showStory = false;
+  bool showStory = true;
+
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
     /// friends stories
     _buildStoryPart(){
       return Container(
-        height: 80,
+        height: Get.height * .12,
         margin: EdgeInsets.only(left: 20, right: 20, top: 12),
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
@@ -63,9 +68,9 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: EdgeInsets.zero,
           itemCount: Demo.DEMO_USERS.length,
           itemBuilder: (_, index) => UserDayAvatar(
-              imageLink: Demo.DEMO_USERS[index],
-              name: 'user_$index',
-              isOwn: index == 0
+            imageLink: Demo.DEMO_USERS[index],
+            name: 'user_$index',
+            isOwn: index == 0
           ),
         ),
       );
@@ -73,7 +78,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     /// main swiper widget
     _buildCards(){
-      return Expanded(
+      return SizedBox(
+        height: Get.height * .5,
         child: RotatedBox(
           quarterTurns: 2,
           child: TCard(
@@ -101,9 +107,9 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     /// showing the front up users info
-    _buildCardInfo(bool isUserLive){
+    _buildUserInfo(bool isUserLive){
       return Padding(
-        padding : EdgeInsets.only(bottom: 26, left: 20, right: 20,top: 4),
+        padding : EdgeInsets.only(bottom: 12, left: 20, right: 20,top: 4),
         child: GestureDetector(
           onVerticalDragStart: (drag){
             setState(() {
@@ -230,22 +236,53 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
-    return Container(
-      color: Color(0xffFDE6EF).withOpacity(.4),
-      child: Column(
-        children: [
-          _buildAppBar(),
+    /// users bluh
+    _buildUserBluh(){
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 8),
+        child: Stack(
+          children: [
+            Container(
+              height: Get.height * .12,
+              margin: EdgeInsets.only(bottom: 20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: AppColor.PRIMARY.withOpacity(.2)
+              ),
+              padding: EdgeInsets.only(top: 16,left: 42, right: 8),
+              child: Text(
+                'Katerina is an American singer and actress. She also loves to travel..',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: CFontFamily.REGULAR
+                ),
+              ),
+            ),
 
-          AnimatedCrossFade(
-            firstChild: _buildStoryPart(),
-            secondChild: SizedBox(),
-            crossFadeState: showStory ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-            duration: AppConst.DURATION_FAST
-          ),
+            Positioned(
+              top: 0,
+              left: 0,
+              child: Image.asset(
+                Images.ICON_QUOTE,
+                height: 32,
+                width: 36,
+              ),
+            )
+          ],
+        ),
+      );
+    }
 
-          _buildCards(),
-
-          _buildCardInfo(true),
+    return Scaffold(
+      appBar: _buildAppBar(),
+      body: CustomScrollView(
+        slivers: [
+          SliverList(delegate: SliverChildListDelegate([
+            _buildStoryPart(),
+            _buildCards(),
+            _buildUserInfo(true),
+            _buildUserBluh()
+          ]))
         ],
       ),
     );
@@ -291,7 +328,7 @@ class UserDayAvatar extends StatelessWidget {
             ],
           ),
           if(isOwn)Positioned(
-            bottom: 20,
+            bottom: 24,
             right: 0,
             child: Icon(
               Icons.add_circle_rounded,
@@ -354,8 +391,12 @@ class UserSwiperCard extends StatelessWidget {
                   icon: Icons.thumb_up_sharp,
                   iconColor: Color(0xff7920FF)
                 ),
+
+                /// super like btn
                 CIconButton(
-                  onTap: (){},
+                  onTap: (){
+                    Get.to(() => SuperLikeOptionScreen());
+                  },
                   icon: Icons.emoji_emotions,
                   iconColor: Color(0xff00DC84)
                 ),
@@ -364,39 +405,6 @@ class UserSwiperCard extends StatelessWidget {
           ),
         )
       ],
-    );
-  }
-}
-
-class CIconButton extends StatelessWidget {
-  final IconData icon;
-  final Color iconColor;
-  final VoidCallback onTap;
-  const CIconButton({Key? key,
-    required this.onTap,
-    required this.icon,
-    required this.iconColor
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return LikeButton(
-      size: 48,
-      circleColor: CircleColor(start: iconColor, end: iconColor),
-      bubblesColor: BubblesColor(
-        dotPrimaryColor: iconColor,
-        dotSecondaryColor: iconColor
-      ),
-      likeBuilder: (_) => Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          shape: BoxShape.circle
-        ),
-        child: Icon(
-            icon,
-            color: iconColor
-        ),
-      )
     );
   }
 }

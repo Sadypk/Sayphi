@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sayphi/mainApp/components/shaderBgBody.dart';
+import 'package:sayphi/mainApp/view/home.dart';
 
 import '../../mainApp/components/mainButton.dart';
 import '../../mainApp/resources/appColor.dart';
@@ -15,7 +16,7 @@ class LoginWithMobileEmailScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColor.PRIMARY,
       body: ShaderBgBody(
-        body: Padding(
+        child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
@@ -71,7 +72,7 @@ class LoginWithMobileEmailScreen extends StatelessWidget {
                         SizedBox(height: 32),
 
                         MainButton(
-                            onPress: () => Get.to(() => VerifyOtpScreen()),
+                            onPress: () => Get.to(() => Home()),
                             btnColor: Colors.white,
                             label: 'Login'
                         )

@@ -4,6 +4,8 @@ import 'package:sayphi/mainApp/components/mainButton.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/appImages.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
+import 'package:sayphi/mainApp/view/home.dart';
+import 'package:sayphi/user/view/17_18_19_20_profile_questionsScreen.dart';
 
 class CompleteYourProfileScreen extends StatelessWidget {
   const CompleteYourProfileScreen({Key? key}) : super(key: key);
@@ -12,19 +14,7 @@ class CompleteYourProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.SCAFFOLD_BG_PINK,
-      appBar: AppBar(
-        actions: [
-          TextButton(
-              onPressed: (){},
-              child: Text(
-                'Skip',
-                style: TextStyle(
-                    color: AppColor.TEXT_COLOR
-                ),
-              )
-          )
-        ],
-      ),
+      appBar: AppBar(),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -47,12 +37,16 @@ class CompleteYourProfileScreen extends StatelessWidget {
 
             SizedBox(height: Get.height * .15,),
             MainButton(
-              onPress: (){},
+              onPress: (){
+                Get.to(()=>ProfileQuestionsScreen());
+              },
               label: 'Complete profile'
             ),
 
             TextButton(
-              onPressed: (){},
+              onPressed: (){
+                Get.offAll(()=>Home());
+              },
               child: Text(
                 'Maybe later',
                 style: TextStyle(

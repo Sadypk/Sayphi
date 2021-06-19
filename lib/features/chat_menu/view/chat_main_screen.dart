@@ -3,6 +3,8 @@ import 'package:sayphi/features/chat_menu/view/all_messages.dart';
 import 'package:sayphi/features/chat_menu/view_model/chat_head.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 
+import '../../../demo_files.dart';
+
 class ChatMainScreen extends StatelessWidget {
   final TextEditingController searchController = TextEditingController();
 
@@ -72,7 +74,7 @@ class ChatMainScreen extends StatelessWidget {
                     itemCount: 10,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (_, index) {
-                      return ChatHeader();
+                      return ChatHeader(image: Demo.DEMO_USERS[2]);
                     },
                   ),
                 ),

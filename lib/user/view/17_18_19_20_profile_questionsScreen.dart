@@ -5,6 +5,7 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/appConst.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
+import 'package:sayphi/mainApp/view/home.dart';
 
 class ProfileQuestionsScreen extends StatefulWidget {
   const ProfileQuestionsScreen({Key? key}) : super(key: key);
@@ -32,13 +33,28 @@ class _ProfileQuestionsScreenState extends State<ProfileQuestionsScreen> with Si
     HighestDegree(),
   ];
 
+  void navigateNext(){
+    final nextPageIndex = _tabController.index + 1;
+    setState(() {
+      progress += .25;
+    });
+    if(nextPageIndex == 3){
+      setState(() {
+        showDoneBtn = true;
+      });
+    }
+    _tabController.animateTo(nextPageIndex, duration: AppConst.DURATION);
+  }
+
   @override
   Widget build(BuildContext context) {
 
     _buildDoneBtn () => SizedBox(
       height: 30,
       child: FloatingActionButton.extended(
-        onPressed: (){},
+        onPressed: (){
+          Get.offAll(()=>Home());
+        },
         backgroundColor: AppColor.PRIMARY,
         elevation: 3,
         label: Text(
@@ -53,18 +69,7 @@ class _ProfileQuestionsScreenState extends State<ProfileQuestionsScreen> with Si
 
     _buildNextBtn () => InkWell(
       borderRadius: BorderRadius.circular(100),
-      onTap: (){
-        final nextPageIndex = _tabController.index + 1;
-        setState(() {
-          progress += .25;
-        });
-        if(nextPageIndex == 3){
-          setState(() {
-            showDoneBtn = true;
-          });
-        }
-        _tabController.animateTo(nextPageIndex, duration: AppConst.DURATION);
-      },
+      onTap: navigateNext,
       child: Container(
         height: 30,
         width: 30,
@@ -86,8 +91,8 @@ class _ProfileQuestionsScreenState extends State<ProfileQuestionsScreen> with Si
         backgroundColor: AppColor.SCAFFOLD_BG_PINK,
         appBar: AppBar(
           actions: [
-            TextButton(
-                onPressed: (){},
+            if(!showDoneBtn)TextButton(
+                onPressed: navigateNext,
                 child: Text(
                   'Skip',
                   style: TextStyle(
@@ -549,7 +554,7 @@ class _HighestDegreeState extends State<HighestDegree> {
         SizedBox(width: double.infinity),
 
         Text(
-          'What is your hobby?',
+          'What is your highest degree?',
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 20,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sayphi/mainApp/components/mainButton.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
+import 'package:sayphi/user/view/15_terms_and_condition_screen.dart';
 
 class SetPasswordScreen extends StatefulWidget {
   const SetPasswordScreen({Key? key}) : super(key: key);
@@ -34,19 +36,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.SCAFFOLD_BG_PINK,
-      appBar: AppBar(
-        actions: [
-          TextButton(
-              onPressed: (){},
-              child: Text(
-                'Skip',
-                style: TextStyle(
-                    color: AppColor.TEXT_COLOR
-                ),
-              )
-          )
-        ],
-      ),
+      appBar: AppBar(),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: SingleChildScrollView(
@@ -116,7 +106,9 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
 
               SizedBox(height: 32),
               MainButton(
-                onPress: (){},
+                onPress: (){
+                  Get.to(()=>TermsAndConditionAgreementScreen());
+                },
                 label: 'Continue'
               )
             ]

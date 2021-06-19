@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sayphi/mainApp/components/mainButton.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
+
+import '16_complete_your_profile.dart';
 
 class TermsAndConditionAgreementScreen extends StatelessWidget {
   const TermsAndConditionAgreementScreen({Key? key}) : super(key: key);
@@ -33,66 +36,66 @@ class TermsAndConditionAgreementScreen extends StatelessWidget {
           ],
         ),
         body: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: SingleChildScrollView(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Please read carefully our terms and conditions',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontFamily: CFontFamily.MEDIUM
-                      ),
+            padding: EdgeInsets.symmetric(horizontal: 20,vertical: 12),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Please read carefully our terms and conditions',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: CFontFamily.MEDIUM
                     ),
-                    SizedBox(height: 12),
-                    Text(
-                      'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard.',
-                      style: TextStyle(
-                          fontFamily: CFontFamily.REGULAR
-                      ),
+                  ),
+                  SizedBox(height: 12),
+                  Text(
+                    'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard.',
+                    style: TextStyle(
+                        fontFamily: CFontFamily.REGULAR
                     ),
+                  ),
 
-                    /// basic info`s suggestions about image uploads
-                    SizedBox(height: 20),
+                  /// basic info`s suggestions about image uploads
+                  SizedBox(height: 20),
 
-                    Terms(
-                      title: 'Be yourself',
-                      subTitle: 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
-                    ),
-                    Terms(
-                      title: 'Stay safe',
-                      subTitle: 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
-                    ),
-                    Terms(
-                      title: 'Respect people',
-                      subTitle: 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
-                    ),
+                  Terms(
+                    title: 'Be yourself',
+                    subTitle: 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
+                  ),
+                  Terms(
+                    title: 'Stay safe',
+                    subTitle: 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
+                  ),
+                  Terms(
+                    title: 'Respect people',
+                    subTitle: 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
+                  ),
 
 
-                    SizedBox(height: 20),
-                    Text(
-                      'Sayphie and our partners use technologies such as device recognition to store or access information on your device., and to process personal information such as gender and age',
-                      style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        fontFamily: CFontFamily.MEDIUM,
-                        fontSize: 16
-                      ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Sayphie and our partners use technologies such as device recognition to store or access information on your device., and to process personal information such as gender and age',
+                    style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontFamily: CFontFamily.MEDIUM,
+                      fontSize: 16
                     ),
-                    SizedBox(height: 32),
-                    MainButton(
-                      onPress: (){},
-                      label: 'Agree and Continue'
-                    ),
-                    SizedBox(height: 20),
-                    MainButton(
-                      onPress: (){},
-                      btnColor: AppColor.PRIMARY_DARK,
-                      label: 'Cancel',
-                      labelColor: Colors.white,
-                    ),
-                  ]
-              ),
+                  ),
+                  Spacer(),
+                  MainButton(
+                    onPress: (){
+                      Get.to(()=>CompleteYourProfileScreen());
+                    },
+                    label: 'Agree and Continue'
+                  ),
+                  SizedBox(height: 20),
+                  MainButton(
+                    onPress: (){},
+                    btnColor: AppColor.PRIMARY_DARK,
+                    label: 'Cancel',
+                    labelColor: Colors.white,
+                  ),
+                ]
             )
         )
     );

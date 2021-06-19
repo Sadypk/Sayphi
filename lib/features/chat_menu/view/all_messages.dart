@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sayphi/demo_files.dart';
 import 'package:sayphi/features/chat_menu/view_model/chat_head.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 
@@ -25,7 +26,7 @@ class AllMessages extends StatelessWidget {
                   children: [
                     Container(
                       height: 60,
-                      child: ChatHeader(),
+                      child: ChatHeader(image: Demo.DEMO_USERS[1]),
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
