@@ -9,6 +9,7 @@ import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/sady/view/46_settings_page.dart';
 import 'package:sayphi/sady/view/48_more_button_page_(button_6).dart';
 import 'package:sayphi/sady/view/51_view_all_stories.dart';
+import 'package:sayphi/sady/view/52_see_stories.dart';
 
 class App extends StatelessWidget {
   @override
@@ -32,7 +33,7 @@ class App extends StatelessWidget {
         fontFamily: CFontFamily.LIGHT
       ),
       // home: GetStartedScreen(),
-      home: ViewAllStories(),
+      home: SeeStories(),
     );
   }
 }
