@@ -21,6 +21,7 @@ class _MoreButtonPageState extends State<MoreButtonPage> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppColor.SCAFFOLD_BACKGROUND,
         title: Text('More options', style: TextStyle(color: AppColor.TEXT_COLOR, fontSize: 16),),
           centerTitle: true,
       ),

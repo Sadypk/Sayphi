@@ -21,6 +21,7 @@ class _ViewAllStoriesState extends State<ViewAllStories> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColor.SCAFFOLD_BACKGROUND,
       appBar: AppBar(
         title: Text('All stories', style: TextStyle(fontSize: 16, color: AppColor.TEXT_COLOR),),
         centerTitle: true,

@@ -34,6 +34,7 @@ class _MyFavoritesState extends State<MyFavorites> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColor.SCAFFOLD_BACKGROUND,
       appBar: AppBar(
         title: Text('Followers', style: TextStyle(color: AppColor.TEXT_COLOR, fontSize: 16),),
         centerTitle: true,
