@@ -1,0 +1,49 @@
+import 'package:flutter/material.dart';
+import 'package:sayphi/mainApp/resources/appColor.dart';
+
+class MoreButtonPage extends StatefulWidget {
+  @override
+  _MoreButtonPageState createState() => _MoreButtonPageState();
+}
+
+class _MoreButtonPageState extends State<MoreButtonPage> {
+  @override
+  Widget build(BuildContext context) {
+    listTile(String label){
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: TextStyle(fontSize: 14, color: AppColor.TEXT_COLOR),),
+          Divider(height: 30,),
+        ],
+      );
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('More options', style: TextStyle(color: AppColor.TEXT_COLOR, fontSize: 16),),
+          centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: ListView(
+          children: [
+            SizedBox(height: 15,),
+            listTile('Smart picks'),
+            listTile('Daily surprise'),
+            listTile('All stories'),
+            listTile('Followers'),
+            listTile('My favorite'),
+            listTile('Top ranked people'),
+            listTile('Know me better: Challenge questions'),
+            listTile('Notifications'),
+            listTile('Transactions'),
+            listTile('Blocked people'),
+            listTile('Legal/Privacy'),
+            listTile('Extra'),
+          ],
+        ),
+      ),
+    );
+  }
+}
