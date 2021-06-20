@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sayphi/demo_files.dart';
 import 'package:sayphi/features/chat_menu/view_model/chat_head.dart';
+import 'package:sayphi/features/gift/view/29_send_gift_bottom_sheet.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
+import 'package:sayphi/mainApp/resources/appConst.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 
 class ChattingScreen extends StatefulWidget {
@@ -15,10 +17,13 @@ class ChattingScreen extends StatefulWidget {
 }
 
 class _ChattingScreenState extends State<ChattingScreen> {
+
+  bool _isSendGiftSheetOpen = false;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: Get.height * .7,
+      height: _isSendGiftSheetOpen ? Get.height * .9 : Get.height * .6,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: CachedNetworkImageProvider(Demo.PROFILE_IMAGE),
@@ -73,7 +78,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20,vertical: 12),
                 child: SizedBox(
-                  height: 55,
+                  height: 50,
                   child: TextField(
                     decoration: InputDecoration(
                       fillColor: Colors.white,
@@ -85,7 +90,10 @@ class _ChattingScreenState extends State<ChattingScreen> {
                       ),
                       suffixIcon: GestureDetector(
                         onTap: (){
-                          
+                          setState(() {
+                            _isSendGiftSheetOpen = !_isSendGiftSheetOpen;
+                          });
+                          FocusScope.of(context).unfocus();
                         },
                         child: Icon(
                           CupertinoIcons.gift_fill,
@@ -95,6 +103,13 @@ class _ChattingScreenState extends State<ChattingScreen> {
                     ),
                   ),
                 ),
+              ),
+
+              AnimatedCrossFade(
+                firstChild: SendGiftBottomSheet(),
+                secondChild: SizedBox(),
+                duration: AppConst.DURATION_FAST,
+                crossFadeState: _isSendGiftSheetOpen ? CrossFadeState.showFirst : CrossFadeState.showSecond,
               )
             ],
           )
