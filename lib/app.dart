@@ -12,6 +12,7 @@ import 'package:sayphi/sady/view/51_view_all_stories.dart';
 import 'package:sayphi/sady/view/52_see_stories.dart';
 import 'package:sayphi/sady/view/54_followers.dart';
 import 'package:sayphi/sady/view/56_top_ranked_people.dart';
+import 'package:sayphi/sady/view/58_transactions.dart';
 import 'package:sayphi/sady/view/widgets/top_ranked_tile.dart';
 
 class App extends StatelessWidget {
@@ -36,7 +37,7 @@ class App extends StatelessWidget {
         fontFamily: CFontFamily.LIGHT
       ),
       // home: GetStartedScreen(),
-      home: TopRankedPeople(),
+      home: Transactions(),
     );
   }
 }
