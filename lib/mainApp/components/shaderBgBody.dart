@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import '../resources/appImages.dart';
 
 class ShaderBgBody extends StatelessWidget {
-  final Widget body;
-  const ShaderBgBody({Key? key, required this.body}) : super(key: key);
+  final Widget child;
+  const ShaderBgBody({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class ShaderBgBody extends StatelessWidget {
         /// shader mask images
 
         SafeArea(
-          child: body,
+          child: child,
         ),
       ],
     );

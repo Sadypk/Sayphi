@@ -8,6 +8,7 @@ import 'package:sayphi/mainApp/helpers/imageHelper.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/appImages.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
+import 'package:sayphi/user/view/14_password_set_screen.dart';
 
 class UploadPhotoViewScreen extends StatefulWidget {
   const UploadPhotoViewScreen({Key? key}) : super(key: key);
@@ -30,6 +31,21 @@ class _UploadPhotoViewScreenState extends State<UploadPhotoViewScreen> {
     File(''),
     File(''),
   ];
+
+
+  Future<void> getImage([ImageSource source = ImageSource.gallery]) async{
+    File? image = await ImageHelper.selectPic(source);
+    if(image != null){
+      for(int i = 0 ; i< 8 ; i++){
+        if(files[i].path == ''){
+          setState(() {
+            files[i] = image;
+          });
+          return ;
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,22 +129,7 @@ class _UploadPhotoViewScreenState extends State<UploadPhotoViewScreen> {
         children: [
           GestureDetector(
             onTap: () async{
-              if(files.length == 8){
-                /// list full can not upload more show snack here
-                //TODO show snack here
-              }else{
-                File? image = await ImageHelper.selectPic(ImageSource.camera);
-                if(image != null){
-                  for(int i = 0 ; i< 8 ; i++){
-                    if(files[i].path == ''){
-                      setState(() {
-                        files[i] = image;
-                      });
-                      return ;
-                    }
-                  }
-                }
-              }
+              await getImage(ImageSource.camera);
             },
             child: Container(
               decoration: BoxDecoration(
@@ -167,7 +168,6 @@ class _UploadPhotoViewScreenState extends State<UploadPhotoViewScreen> {
                       padding: EdgeInsets.zero,
                       onPressed: (){
                         setState(() {
-                          // files[i] = File('');
                           files.removeAt(i);
                           files.add(File(''));
                         });
@@ -182,17 +182,7 @@ class _UploadPhotoViewScreenState extends State<UploadPhotoViewScreen> {
             ],
           ) : GestureDetector(
             onTap: () async{
-              File? image = await ImageHelper.selectPic();
-              if(image != null){
-                for(int i = 0 ; i< 8 ; i++){
-                  if(files[i].path == ''){
-                    setState(() {
-                      files[i] = image;
-                    });
-                    return ;
-                  }
-                }
-              }
+              await getImage();
             },
             child: PlaceHolderImageWidget())
         ],
@@ -206,18 +196,7 @@ class _UploadPhotoViewScreenState extends State<UploadPhotoViewScreen> {
         title: Text(
           showImagePickers ? 'Add photo/video' : '',
           style: TextStyle(color: AppColor.TEXT_COLOR),
-        ),
-        actions: [
-          if(!showImagePickers)TextButton(
-              onPressed: (){},
-              child: Text(
-                'Skip',
-                style: TextStyle(
-                    color: AppColor.TEXT_COLOR
-                ),
-              )
-          )
-        ],
+        )
       ),
       body: Container(
         padding: EdgeInsets.all(20),
@@ -299,6 +278,7 @@ class _UploadPhotoViewScreenState extends State<UploadPhotoViewScreen> {
               });
             }else{
               /// uploading selected images if there are any
+              Get.to(()=>SetPasswordScreen());
             }
           },
           label: 'Upload photo/video'

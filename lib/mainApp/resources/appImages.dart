@@ -9,4 +9,5 @@ class Images{
 
   static const ICON_GALLERY_IMAGE = 'assets/images/Icon ionic-md-photos.png';
   static const ICON_HEXAGON = 'assets/images/hexagon.png';
+  static const ICON_QUOTE = 'assets/images/quote_icon.png';
 }

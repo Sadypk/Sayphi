@@ -1,10 +1,18 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:sayphi/features/homeScreen/view/23_homeScreen.dart';
+import 'package:sayphi/features/chat_messaging/view/32_chat_main_screen.dart';
+import 'package:sayphi/features/homeScreen/view/23_24_homeScreen.dart';
+import 'package:sayphi/features/homeScreen/view/33_live_Screen.dart';
+import 'package:sayphi/features/homeScreen/view/65_likes_buttons_screen.dart';
+import 'package:sayphi/mainApp/components/customBottomNav/lib/fancy_bottom_navigation.dart';
+import 'package:sayphi/mainApp/resources/appColor.dart';
+import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/mainApp/util/localStorage.dart';
 import 'package:sayphi/user/view/22_fullWidthDialog.dart';
+
+import '../../demo_files.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -13,76 +21,94 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  PersistentTabController _controller = PersistentTabController(initialIndex: 0);
-
   final _screens = [
     HomeScreen(),
-    Container(color: Colors.red),
-    Container(color: Colors.black),
-    Container(color: Colors.pinkAccent),
+    ChatMainScreen(),
+    LiveScreen(),
+    LikesListScreen(),
     Container(color: Colors.orangeAccent),
   ];
 
   final _navItems = [
-    PersistentBottomNavBarItem(
-      icon: Icon(Icons.home),
-      activeColorPrimary: Color(0xffAC2585),
-      inactiveColorPrimary: Color(0xffAC2585),
+    TabData(
+      icon: Icons.home,
+      color: Color(0xffAC2585),
     ),
-    PersistentBottomNavBarItem(
-      icon: Icon(CupertinoIcons.chat_bubble_2_fill),
-      activeColorPrimary: Color(0xff4975FF),
-      inactiveColorPrimary: Color(0xff4975FF),
+    TabData(
+      icon: CupertinoIcons.chat_bubble_2_fill,
+      color: Color(0xff4975FF),
     ),
-    PersistentBottomNavBarItem(
-      icon: Icon(Icons.live_tv),
-      activeColorPrimary: Color(0xffE74C3C),
-      inactiveColorPrimary: Color(0xffE74C3C),
+    TabData(
+      icon: Icons.live_tv,
+      color: Color(0xffE74C3C),
     ),
-    PersistentBottomNavBarItem(
-      icon: Icon(Icons.favorite),
-      activeColorPrimary: Color(0xffF74231),
-      inactiveColorPrimary: Color(0xffF74231),
+    TabData(
+      icon: Icons.favorite,
+      color: Color(0xffF74231),
     ),
-    PersistentBottomNavBarItem(
-      icon: Icon(Icons.flash_on_rounded),
-      activeColorPrimary: Color(0xffECBB16),
-      inactiveColorPrimary: Color(0xffECBB16),
+    TabData(
+      icon: Icons.flash_on_rounded,
+      color: Color(0xffECBB16),
     ),
   ];
 
+  int _screenIndex = 0;
+
   @override
   Widget build(BuildContext context) {
+    _buildAppBar() {
+      return AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        title: Text(
+          _screenIndex == 0 ? 'Home' :
+              _screenIndex == 1 ? 'Chat' :
+                  _screenIndex == 2 ? 'Live' :
+                      _screenIndex == 3 ? 'Likes' :
+                          'Boost',
+          style: TextStyle(
+            color: AppColor.TEXT_COLOR,
+            fontFamily: CFontFamily.MEDIUM
+          ),
+        ),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: CircleAvatar(
+            backgroundImage: CachedNetworkImageProvider(
+              Demo.PROFILE_IMAGE
+            ),
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: IconButton(
+              onPressed: (){},
+              icon: Icon(
+                Icons.more_horiz,
+                color: AppColor.DARK_GREY,
+              ),
+            )
+          )
+        ],
+      );
+    }
 
     return Stack(
       children: [
-        PersistentTabView(
-          context,
-          controller: _controller,
-          screens: _screens,
-          items: _navItems,
-          confineInSafeArea: true,
-          backgroundColor: Colors.white, // Default is Colors.white.
-          handleAndroidBackButtonPress: true, // Default is true.
-          resizeToAvoidBottomInset: true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
-          stateManagement: true, // Default is true.
-          hideNavigationBarWhenKeyboardShows: true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
-          decoration: NavBarDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            colorBehindNavBar: Colors.white,
+        Scaffold(
+
+          appBar: _buildAppBar(),
+
+          body: IndexedStack(
+            index: _screenIndex,
+            children: _screens,
           ),
-          popAllScreensOnTapOfSelectedTab: true,
-          popActionScreens: PopActionScreensType.all,
-          itemAnimationProperties: ItemAnimationProperties( // Navigation Bar's items animation properties.
-            duration: Duration(milliseconds: 200),
-            curve: Curves.ease,
+          bottomNavigationBar: FancyBottomNavigation(
+            tabs: _navItems,
+            onTabChangedListener: (index) => setState(() => _screenIndex = index),
           ),
-          screenTransitionAnimation: ScreenTransitionAnimation( // Screen transition animation on change of selected tab.
-            animateTabTransition: true,
-            curve: Curves.ease,
-            duration: Duration(milliseconds: 200),
-          ),
-          navBarStyle: NavBarStyle.style6, // Choose the nav bar style with this property.
         ),
 
         /// should come up only for the first time when user comes here

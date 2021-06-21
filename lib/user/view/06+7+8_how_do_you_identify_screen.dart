@@ -6,6 +6,7 @@ import 'package:sayphi/mainApp/components/mainButton.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import './widgets/genderBox.dart';
+import '09_interested_in_and_ethinicity_screen.dart';
 
 class UserGenderSetScreen extends StatefulWidget {
   const UserGenderSetScreen({Key? key}) : super(key: key);
@@ -24,19 +25,7 @@ class _UserGenderSetScreenState extends State<UserGenderSetScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.SCAFFOLD_BG_PINK,
-      appBar: AppBar(
-        actions: [
-          TextButton(
-            onPressed: (){},
-            child: Text(
-              'Skip',
-              style: TextStyle(
-                color: AppColor.TEXT_COLOR
-              ),
-            )
-          )
-        ],
-      ),
+      appBar: AppBar(),
       body: Container(
         padding: EdgeInsets.all(20),
         child: Column(
@@ -190,7 +179,10 @@ class _UserGenderSetScreenState extends State<UserGenderSetScreen> {
             ),
 
             SizedBox(height: 20),
-            MainButton(onPress: (){}, label: 'Continue')
+            MainButton(onPress: (){
+              Get.to(()=>InterestedInAndEthnicityChooseScreen());
+
+            }, label: 'Continue')
           ],
         ),
       ),
