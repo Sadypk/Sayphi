@@ -51,22 +51,24 @@ class TermsAndConditionAgreementScreen extends StatelessWidget {
                   Text(
                     'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard.',
                     style: TextStyle(
-                        fontFamily: CFontFamily.REGULAR
+                      fontFamily: CFontFamily.REGULAR,
+                      color: AppColor.TEXT_LIGHT,
+                      height: 1.4
                     ),
                   ),
 
                   /// basic info`s suggestions about image uploads
                   SizedBox(height: 20),
 
-                  Terms(
+                  TermsWidget(
                     title: 'Be yourself',
                     subTitle: 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
                   ),
-                  Terms(
+                  TermsWidget(
                     title: 'Stay safe',
                     subTitle: 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
                   ),
-                  Terms(
+                  TermsWidget(
                     title: 'Respect people',
                     subTitle: 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
                   ),
@@ -78,7 +80,8 @@ class TermsAndConditionAgreementScreen extends StatelessWidget {
                     style: TextStyle(
                       fontStyle: FontStyle.italic,
                       fontFamily: CFontFamily.MEDIUM,
-                      fontSize: 16
+                      fontSize: 16,
+                      height: 1.4
                     ),
                   ),
                   Spacer(),
@@ -102,10 +105,10 @@ class TermsAndConditionAgreementScreen extends StatelessWidget {
   }
 }
 
-class Terms extends StatelessWidget {
+class TermsWidget extends StatelessWidget {
   final String title;
   final String subTitle;
-  const Terms({Key? key, required this.title, required this.subTitle}) : super(key: key);
+  const TermsWidget({Key? key, required this.title, required this.subTitle}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

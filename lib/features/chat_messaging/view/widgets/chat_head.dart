@@ -4,9 +4,11 @@ import 'package:sayphi/mainApp/resources/appColor.dart';
 
 class ChatHeader extends StatelessWidget {
   final String image;
+  final bool isActive;
   const ChatHeader({
     Key? key,
-    required this.image
+    required this.image,
+    this.isActive = false
   }) : super(key: key);
 
   @override
@@ -18,7 +20,7 @@ class ChatHeader extends StatelessWidget {
           height: 60,
           margin: EdgeInsets.only(right: 10),
           decoration: BoxDecoration(
-            border: Border.all(color: AppColor.PRIMARY, width: .5),
+            border: Border.all(color: AppColor.PRIMARY, width: 1),
             shape: BoxShape.circle,
             image: DecorationImage(
               image: CachedNetworkImageProvider(image),
@@ -26,7 +28,7 @@ class ChatHeader extends StatelessWidget {
             )
           ),
         ),
-        Positioned(
+        if(isActive)Positioned(
           top: 5,
           right: 10,
           child: Container(width: 15, height: 15, decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.green)),

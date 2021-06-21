@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sayphi/features/chat_menu/view_model/chat_head.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
+import 'package:sayphi/features/chat_messaging/view/widgets/chat_head.dart';
 
 import '../../../demo_files.dart';
 

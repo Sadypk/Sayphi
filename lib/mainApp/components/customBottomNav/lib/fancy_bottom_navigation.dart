@@ -121,7 +121,6 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
                 uniqueKey: t.key,
                 selected: t.key == widget.tabs[currentSelected].key,
                 iconData: t.icon,
-                title: t.title,
                 iconColor: t.color,
                 textColor: textColor,
                 callbackFunction: (uniqueKey) {
@@ -236,10 +235,9 @@ class FancyBottomNavigationState extends State<FancyBottomNavigation>
 }
 
 class TabData {
-  TabData({required this.icon, required this.title, required this.color});
+  TabData({required this.icon, required this.color});
 
   IconData icon;
-  String title;
   Color color;
   final UniqueKey key = UniqueKey();
 }

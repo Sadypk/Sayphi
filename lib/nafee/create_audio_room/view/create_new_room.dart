@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sayphi/features/create_audio_room/view_model/add_people.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
+import 'package:sayphi/nafee/create_audio_room/view_model/add_people.dart';
 
 class CreateNewRoom extends StatelessWidget {
   final TextEditingController roomNameController = TextEditingController();

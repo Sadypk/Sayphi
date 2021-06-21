@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sayphi/demo_files.dart';
-import 'package:sayphi/features/chat_menu/view_model/chat_head.dart';
 import 'package:sayphi/features/gift/view/29_send_gift_bottom_sheet.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/appConst.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
+import 'package:sayphi/features/chat_messaging/view/widgets/chat_head.dart';
 
 class ChattingScreen extends StatefulWidget {
   const ChattingScreen({Key? key}) : super(key: key);

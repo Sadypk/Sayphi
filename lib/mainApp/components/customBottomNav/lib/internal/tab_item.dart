@@ -13,13 +13,11 @@ class TabItem extends StatelessWidget {
       {required this.uniqueKey,
       required this.selected,
       required this.iconData,
-      required this.title,
       required this.callbackFunction,
       required this.textColor,
       required this.iconColor});
 
   final UniqueKey uniqueKey;
-  final String title;
   final IconData iconData;
   final bool selected;
   final Function(UniqueKey uniqueKey) callbackFunction;

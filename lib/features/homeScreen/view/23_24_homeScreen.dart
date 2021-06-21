@@ -30,32 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
 
-    _buildAppBar() {
-      return AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: CircleAvatar(
-            backgroundImage: CachedNetworkImageProvider(
-              Demo.PROFILE_IMAGE
-            ),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: IconButton(
-              onPressed: (){_controller.reset();},
-              icon: Icon(
-                Icons.more_horiz,
-                color: AppColor.DARK_GREY,
-              ),
-            )
-          )
-        ],
-      );
-    }
 
     /// friends stories
     _buildStoryPart(){
@@ -274,7 +248,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return Scaffold(
-      appBar: _buildAppBar(),
       body: CustomScrollView(
         slivers: [
           SliverList(delegate: SliverChildListDelegate([
