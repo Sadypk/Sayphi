@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 
 class ChatHead extends StatelessWidget {
-  ChatHead(this.isOnline, this.image, this.name, this.age);
+  ChatHead(this.isOnline, this.image, this.name, this.age, {this.size = 90});
   final String image;
   final String name;
   final int age;
   final bool isOnline;
-
+  final double size;
   // ChatHead({@required this.image, @required this.isOnline});
 
   @override
@@ -15,8 +15,8 @@ class ChatHead extends StatelessWidget {
     return Column(
       children: [
         Container(
-          height: 90,
-          width: 90,
+          height: size,
+          width: size,
           decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(color: AppColor.PRIMARY, width: 1),
@@ -30,8 +30,8 @@ class ChatHead extends StatelessWidget {
             mainAxisAlignment:MainAxisAlignment.end,
             children: [
               if(isOnline)Container(
-                height: 18,
-                width: 18,
+                height: size/5,
+                width: size/5,
                 margin: EdgeInsets.only(top: 4, right: 4),
                 decoration: BoxDecoration(
                     color: Color(0xff0FDF0F),
