@@ -15,6 +15,8 @@ import 'package:sayphi/sady/view/56_top_ranked_people.dart';
 import 'package:sayphi/sady/view/58_transactions.dart';
 import 'package:sayphi/sady/view/59_privacy_policy.dart';
 import 'package:sayphi/sady/view/60_extra_options.dart';
+import 'package:sayphi/sady/view/62_challenge_friends_version_1.dart';
+import 'package:sayphi/sady/view/63_challenge_game_page.dart';
 import 'package:sayphi/sady/view/widgets/top_ranked_tile.dart';
 
 class App extends StatelessWidget {
@@ -39,7 +41,7 @@ class App extends StatelessWidget {
         fontFamily: CFontFamily.LIGHT
       ),
       // home: GetStartedScreen(),
-      home: ExtraOptions(),
+      home: ChallengeGamePage(),
     );
   }
 }
