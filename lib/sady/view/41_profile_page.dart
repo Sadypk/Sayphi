@@ -1,19 +1,21 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:sayphi/demo_files.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/appImages.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/sady/view/42_profile_page_edit_info.dart';
 import 'package:sayphi/sady/view/46_settings_page.dart';
 
-class ProfilePage extends StatefulWidget {
+class UserProfilePage extends StatefulWidget {
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _UserProfilePageState createState() => _UserProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _UserProfilePageState extends State<UserProfilePage> {
   @override
   Widget build(BuildContext context) {
     detailSection(String title, String detail){
@@ -33,11 +35,12 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       backgroundColor: AppColor.SCAFFOLD_BG_PINK,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         leading: IconButton(icon: Icon(Icons.settings, color: AppColor.DARK_GREY,), onPressed: (){Get.to(SettingsPage());},),
         actions: [
           IconButton(onPressed: (){
-            Get.to(ProfilePageEditInfo());
-          }, icon: Icon(Icons.person, color: AppColor.DARK_GREY,)),
+            Get.to(()=>ProfilePageEditInfo());
+          }, icon: Icon(Icons.person_remove_alt_1_rounded, color: AppColor.DARK_GREY,)),
         ],
       ),
       body: ListView(
@@ -49,11 +52,11 @@ class _ProfilePageState extends State<ProfilePage> {
             clipBehavior: Clip.none,
             children: [
               Container(
-                height: 477,
-                margin: EdgeInsets.symmetric(horizontal: 20),
+                height: Get.height * .6,
+                margin: EdgeInsets.symmetric(horizontal: 20,vertical: 12),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(7),
-                  image: DecorationImage(image: NetworkImage('https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'), fit: BoxFit.cover),
+                  image: DecorationImage(image: CachedNetworkImageProvider(Demo.PROFILE_IMAGE), fit: BoxFit.cover),
                 ),
               ),
               Positioned(

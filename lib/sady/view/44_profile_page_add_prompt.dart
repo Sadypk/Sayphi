@@ -33,15 +33,20 @@ class _ProfilePageAddPromptState extends State<ProfilePageAddPrompt> {
               SizedBox(height: 10,),
               Text('Specify your profiles to get more dates', style: TextStyle(fontSize: 16),),
               SizedBox(height: 20,),
-              Container(
-                height: 50,
-                width: 155,
-                decoration: BoxDecoration(
-                    color: AppColor.PRIMARY,
-                    borderRadius: BorderRadius.circular(6)
-                ),
-                child: Center(
-                  child: Text('Add a prompt', style: TextStyle(color: Colors.white, fontSize: 18),),
+              InkWell(
+                onTap: (){
+                  Get.to(()=>ProfilePageAddPromptList());
+                },
+                child: Container(
+                  height: 50,
+                  width: 155,
+                  decoration: BoxDecoration(
+                      color: AppColor.PRIMARY,
+                      borderRadius: BorderRadius.circular(6)
+                  ),
+                  child: Center(
+                    child: Text('Add a prompt', style: TextStyle(color: Colors.white, fontSize: 18),),
+                  ),
                 ),
               )
             ],
@@ -53,40 +58,36 @@ class _ProfilePageAddPromptState extends State<ProfilePageAddPrompt> {
 
 
         //prompt list I guess
-        InkWell(
-          onTap: (){
-            Get.to(ProfilePageAddPromptList());
-          },
-          child: Container(
-            height: 80,
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-              border: Border.all(color: AppColor.TEXT_LIGHT, width: 0.5),
-              borderRadius: BorderRadius.circular(5)
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('A book everyone should read', style: TextStyle(color: AppColor.PRIMARY, fontSize: 16),),
-                    Text('Sherlock Holmes', style: TextStyle(fontSize: 16),)
-                  ],
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(FontAwesomeIcons.edit, size: 15, color: Color(0xff666666),),
-                    SizedBox(width: 7,),
-                    Icon(Icons.delete, size: 20, color: AppColor.PRIMARY,),
-                  ],
-                )
-              ],
-            ),
+        Container(
+          height: 80,
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: AppColor.TEXT_LIGHT, width: 0.5),
+            borderRadius: BorderRadius.circular(5)
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('A book everyone should read', style: TextStyle(color: AppColor.PRIMARY, fontSize: 16),),
+                  Text('Sherlock Holmes', style: TextStyle(fontSize: 16),)
+                ],
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(FontAwesomeIcons.edit, size: 15, color: Color(0xff666666),),
+                  SizedBox(width: 7,),
+                  Icon(Icons.delete, size: 20, color: AppColor.PRIMARY,),
+                ],
+              )
+            ],
           ),
         )
       ],

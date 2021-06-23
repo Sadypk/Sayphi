@@ -44,6 +44,9 @@ dependencies:
   google_sign_in: ^5.0.2
 
 
+  #network
+  dio: ^4.0.0
+  graphql: ^5.0.0
 
 dev_dependencies:
   flutter_test:

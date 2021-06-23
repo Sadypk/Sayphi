@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
@@ -74,7 +75,9 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
             TabBar(
               controller: tabController,
               indicatorColor: AppColor.PRIMARY,
-              labelStyle: TextStyle(color: Colors.black87),
+              labelColor: AppColor.TEXT_COLOR,
+              indicatorWeight: 4,
+              labelStyle: TextStyle(fontSize: 18),
               tabs: [
                 Tab(text: 'Detail',),
                 Tab(text: 'Photos',),
@@ -136,6 +139,11 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
                                 color: Color(0xffE8E8E8),
                                 border: Border.all(color: AppColor.BORDER_COLOR, width: 0.5)
                               ),
+                              child: Center(child: Icon(
+                                CupertinoIcons.gift_fill ,
+                                color: AppColor.PRIMARY,
+                                size: 36,
+                              ),),
                             );
                           }),
                       ),

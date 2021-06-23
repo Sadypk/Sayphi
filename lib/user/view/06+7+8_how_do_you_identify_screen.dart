@@ -5,6 +5,8 @@ import 'package:sayphi/mainApp/components/cTextFiel.dart';
 import 'package:sayphi/mainApp/components/mainButton.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
+import 'package:sayphi/user/model/genderModel.dart';
+import 'package:sayphi/user/repository/getBasicData.dart';
 import './widgets/genderBox.dart';
 import '09_interested_in_and_ethinicity_screen.dart';
 
@@ -16,6 +18,8 @@ class UserGenderSetScreen extends StatefulWidget {
 }
 
 class _UserGenderSetScreenState extends State<UserGenderSetScreen> {
+
+  final _controller = TextEditingController();
 
   String selectedGender = '';
   bool showGenderOnProfile = true;
@@ -202,48 +206,63 @@ class _UserGenderSetScreenState extends State<UserGenderSetScreen> {
       ),
       child: SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),
-        child: Column(
+        child: FutureBuilder<List<GenderModel>>(
+          future: BasicDataRepo.getAllGenders(),
+          initialData: [],
+          builder: (_, AsyncSnapshot<List<GenderModel>> snapshot){
+            return Column(
 
-          children: [
-            AppBar(),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: CTextField(
-                hintText: 'Search',
-              ),
-            ),
-
-            SizedBox(
-              height: Get.height * .65,
-              child: ListView.builder(
-                shrinkWrap: true,
-                padding: EdgeInsets.symmetric(horizontal: 30,vertical: 12),
-                itemCount: 200,
-                itemBuilder: (_, index) => InkWell(
-                  onTap: (){
-                    setState(() {
-                      selectedGender = 'Gender  $index';
-                      extraGender = true;
-                    });
-                    Get.back();
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 8),
-                    child: Text(
-                      'Gender  $index',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: CFontFamily.REGULAR
-                      ),
-                    ),
+              children: [
+                AppBar(
+                  centerTitle: true,
+                  title: Text(
+                      'Select a Gender'
                   ),
                 ),
-              ),
-            )
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: CTextField(
+                    controller: _controller,
+                    hintText: 'Search',
+                  ),
+                ),
+
+                SizedBox(
+                  height: Get.height * .65,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.symmetric(horizontal: 30,vertical: 12),
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (_, index) {
+                      GenderModel _gender = snapshot.data![index];
+                      return InkWell(
+                        onTap: (){
+                          setState(() {
+                            selectedGender = 'Gender  $index';
+                            extraGender = true;
+                          });
+                          Get.back();
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Text(
+                            _gender.gender.capitalize!,
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: CFontFamily.REGULAR
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                )
 
 
-          ],
+              ],
+            );
+          }
         ),
       ),
     ),isScrollControlled: true);

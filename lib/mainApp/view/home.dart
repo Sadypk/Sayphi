@@ -10,6 +10,8 @@ import 'package:sayphi/mainApp/components/customBottomNav/lib/fancy_bottom_navig
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/mainApp/util/localStorage.dart';
+import 'package:sayphi/sady/view/41_profile_page.dart';
+import 'package:sayphi/sady/view/48_more_button_page_(button_6).dart';
 import 'package:sayphi/user/view/22_fullWidthDialog.dart';
 
 import '../../demo_files.dart';
@@ -74,9 +76,14 @@ class _HomeState extends State<Home> {
         ),
         leading: Padding(
           padding: const EdgeInsets.only(left: 20),
-          child: CircleAvatar(
-            backgroundImage: CachedNetworkImageProvider(
-              Demo.PROFILE_IMAGE
+          child: GestureDetector(
+            onTap: (){
+              Get.to(()=> UserProfilePage());
+            },
+            child: CircleAvatar(
+              backgroundImage: CachedNetworkImageProvider(
+                Demo.PROFILE_IMAGE
+              ),
             ),
           ),
         ),
@@ -84,7 +91,9 @@ class _HomeState extends State<Home> {
           Padding(
             padding: const EdgeInsets.only(right: 20),
             child: IconButton(
-              onPressed: (){},
+              onPressed: (){
+                Get.to(()=>MoreButtonPage());
+              },
               icon: Icon(
                 Icons.more_horiz,
                 color: AppColor.DARK_GREY,

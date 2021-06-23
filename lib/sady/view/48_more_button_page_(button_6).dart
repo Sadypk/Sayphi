@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
+import 'package:sayphi/mainApp/resources/fontStyle.dart';
 
 class MoreButtonPage extends StatefulWidget {
   @override
@@ -22,7 +23,7 @@ class _MoreButtonPageState extends State<MoreButtonPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.SCAFFOLD_BACKGROUND,
-        title: Text('More options', style: TextStyle(color: AppColor.TEXT_COLOR, fontSize: 16),),
+        title: Text('More options', style: TextStyle(color: AppColor.TEXT_COLOR, fontSize: 16, fontFamily: CFontFamily.REGULAR),),
           centerTitle: true,
       ),
       body: Padding(
