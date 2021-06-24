@@ -9,4 +9,8 @@ class Snack{
       backgroundColor: Colors.red
     );
   }
+
+  static void top({String? title, String? message}){
+    Get.snackbar(title ?? 'Wait!!', message ?? 'Please Complete the Task');
+  }
 }

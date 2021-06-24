@@ -28,7 +28,7 @@ class AuthRepo{
   }
 
   static Future<void> completeUserAuth(String token) async{
-    UserViewModel.setAuthToken(token);
+    await UserViewModel.setAuthToken(token);
   }
 
 }

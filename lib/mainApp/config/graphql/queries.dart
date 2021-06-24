@@ -27,4 +27,18 @@ class GQueries{
 }
   ''';
   static const GET_ALL_GENDERS_NAME = 'getAllGender';
+
+  static const GET_ALL_ETHNICITY = r'''
+query{
+  getAllEthnicity{
+    error
+    msg
+    data{
+      _id
+      ethnicity
+    }
+  }
+}
+  ''';
+  static const GET_ALL_ETHNICITY_NAME = 'getAllEthnicity';
 }

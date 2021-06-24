@@ -2,11 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sayphi/mainApp/components/cTextFiel.dart';
+import 'package:sayphi/mainApp/components/loader.dart';
 import 'package:sayphi/mainApp/components/mainButton.dart';
+import 'package:sayphi/mainApp/helpers/snack.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/user/model/genderModel.dart';
 import 'package:sayphi/user/repository/getBasicData.dart';
+import 'package:sayphi/user/repository/userRepo.dart';
 import './widgets/genderBox.dart';
 import '09_interested_in_and_ethinicity_screen.dart';
 
@@ -19,11 +22,28 @@ class UserGenderSetScreen extends StatefulWidget {
 
 class _UserGenderSetScreenState extends State<UserGenderSetScreen> {
 
-  final _controller = TextEditingController();
+  late TextEditingController _controller;
 
-  String selectedGender = '';
+  GenderModel? selectedGender;
+
+  List<GenderModel>? _extraGenders;
+
   bool showGenderOnProfile = true;
   bool extraGender = false;
+
+  final _male = GenderModel(id: '608bce580f50fa08afa3bd24', gender: 'Male');
+  final _female = GenderModel(id: '608bce580f50fa08afa3bd23', gender: 'Female');
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController()..addListener(() {
+      searchGenders(_controller.text);
+    });
+  }
+
+  RxString _searchValue = ''.obs;
+  void searchGenders(String value) => _searchValue.value = value;
 
   @override
   Widget build(BuildContext context) {
@@ -57,12 +77,12 @@ class _UserGenderSetScreenState extends State<UserGenderSetScreen> {
                   child: GestureDetector(
                     onTap: (){
                       setState(() {
-                        selectedGender = 'male';
+                        selectedGender = _male;
                         extraGender = false;
                       });
                     },
                     child: GenderBox(
-                      isSelected: selectedGender == 'male',
+                      isSelected: selectedGender == _male,
                       label: 'Male',
                     ),
                   ),
@@ -72,12 +92,12 @@ class _UserGenderSetScreenState extends State<UserGenderSetScreen> {
                   child: GestureDetector(
                     onTap: (){
                       setState(() {
-                        selectedGender = 'female';
+                        selectedGender = _female;
                         extraGender = false;
                       });
                     },
                     child: GenderBox(
-                      isSelected: selectedGender == 'female',
+                      isSelected: selectedGender == _female,
                       label: 'Female',
                     ),
                   ),
@@ -114,7 +134,7 @@ class _UserGenderSetScreenState extends State<UserGenderSetScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          selectedGender,
+                          selectedGender!.gender.capitalize!,
                           style: TextStyle(
                             fontSize: 18,
                             fontFamily: CFontFamily.REGULAR
@@ -178,13 +198,26 @@ class _UserGenderSetScreenState extends State<UserGenderSetScreen> {
                 ],
 
               ),
-              crossFadeState: selectedGender == '' ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+              crossFadeState: selectedGender == null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
               duration: Duration(milliseconds: 400)
             ),
 
             SizedBox(height: 20),
             MainButton(onPress: (){
-              Get.to(()=>InterestedInAndEthnicityChooseScreen());
+
+              if(selectedGender != null){
+
+                UserRepo.updateProfile(
+                  genderId: selectedGender!.id,
+                  showGender: showGenderOnProfile
+                );
+
+                Get.to(()=>InterestedInAndEthnicityChooseScreen());
+              }else{
+                Snack.top(
+                  message: 'Please choose a gender to continue'
+                );
+              }
 
             }, label: 'Continue')
           ],
@@ -204,65 +237,93 @@ class _UserGenderSetScreenState extends State<UserGenderSetScreen> {
             topRight: Radius.circular(20),
           )
       ),
-      child: SingleChildScrollView(
-        physics: NeverScrollableScrollPhysics(),
-        child: FutureBuilder<List<GenderModel>>(
-          future: BasicDataRepo.getAllGenders(),
-          initialData: [],
-          builder: (_, AsyncSnapshot<List<GenderModel>> snapshot){
-            return Column(
+      child: Center(
+        child: SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
+          child: FutureBuilder<List<GenderModel>>(
+            future: BasicDataRepo.getAllGenders(),
+            initialData: _extraGenders,
+            builder: (_, AsyncSnapshot<List<GenderModel>> snapshot){
+              if(snapshot.hasData && snapshot.data != null){
 
-              children: [
-                AppBar(
-                  centerTitle: true,
-                  title: Text(
-                      'Select a Gender'
-                  ),
-                ),
+                _extraGenders = snapshot.data;
 
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: CTextField(
-                    controller: _controller,
-                    hintText: 'Search',
-                  ),
-                ),
+                return Column(
 
-                SizedBox(
-                  height: Get.height * .65,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.symmetric(horizontal: 30,vertical: 12),
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (_, index) {
-                      GenderModel _gender = snapshot.data![index];
-                      return InkWell(
-                        onTap: (){
-                          setState(() {
-                            selectedGender = 'Gender  $index';
-                            extraGender = true;
-                          });
-                          Get.back();
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 8),
-                          child: Text(
-                            _gender.gender.capitalize!,
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontFamily: CFontFamily.REGULAR
-                            ),
-                          ),
+                  children: [
+                    AppBar(
+                      centerTitle: true,
+                      title: Text(
+                        'Select a Gender',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: CFontFamily.REGULAR,
+                          color: AppColor.TEXT_COLOR
                         ),
-                      );
-                    },
-                  ),
-                )
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: CTextField(
+                        controller: _controller,
+                        hintText: 'Search',
+                      ),
+                    ),
+
+                    SizedBox(
+                      height: Get.height * .65,
+                      child: Obx((){
+
+                        final data = snapshot.data!;
+
+                        List<GenderModel> temp = [];
+
+                        if(_searchValue.value != ''){
+                          temp = data.where((element) => element.gender.toLowerCase().contains(_searchValue.value.toLowerCase())).toList();
+                        }else{
+                          temp = data;
+                        }
 
 
-              ],
-            );
-          }
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.symmetric(horizontal: 30,vertical: 12),
+                          itemCount: temp.length,
+                          itemBuilder: (_, index) {
+                            GenderModel _gender = temp[index];
+                            return InkWell(
+                              onTap: (){
+                                setState(() {
+                                  selectedGender = _gender;
+                                  extraGender = true;
+                                });
+                                Get.back();
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 8),
+                                child: Text(
+                                  _gender.gender.capitalize!,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: CFontFamily.REGULAR
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }),
+                    )
+
+
+                  ],
+                );
+              }else{
+                return Loader();
+              }
+            }
+          ),
         ),
       ),
     ),isScrollControlled: true);

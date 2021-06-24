@@ -3,6 +3,7 @@ import 'package:graphql/client.dart';
 import 'package:sayphi/mainApp/helpers/snack.dart';
 import 'package:sayphi/mainApp/model/apiResponse.dart';
 import 'package:sayphi/mainApp/util/env.dart';
+import 'package:sayphi/mainApp/util/logger.dart';
 import 'package:sayphi/user/view_model/userViewModel.dart';
 
 
@@ -46,6 +47,8 @@ class Api{
       );
       if(showLoad) swapLoad();
 
+      logger.i(response, variables);
+
 
       if(response.data![queryName]['error']){
         return ApiResponse(
@@ -72,6 +75,57 @@ class Api{
       return ApiResponse(
         error: true,
         message: e.toString()
+      );
+    }
+  }
+
+  static Future<ApiResponse> mutate({
+    bool auth = false,
+    bool showLoad = true,
+    required String queryName,
+    required String query,
+    Map<String, dynamic> variables = const {}
+  }) async{
+    try{
+      final _client = getClient(auth ? UserViewModel.userToken : null);
+
+      if(showLoad) swapLoad();
+
+      final response = await _client.mutate(
+          MutationOptions(
+            document: gql(query),
+            variables: variables
+          )
+      );
+      if(showLoad) swapLoad();
+
+      logger.i(response, variables);
+
+      if(response.data![queryName]['error']){
+        return ApiResponse(
+            error: true,
+            message: response.data![queryName]['msg']
+        );
+      }else{
+        if(response.data![queryName].containsKey('token')){
+          return ApiResponse(
+              error: false,
+              data: response.data![queryName]['token']
+          );
+        }else{
+          return ApiResponse(
+              error: false,
+              data: response.data![queryName]['data']
+          );
+        }
+      }
+
+    }catch(e){
+      print(e.toString());
+      Snack.showError(message: e.toString());
+      return ApiResponse(
+          error: true,
+          message: e.toString()
       );
     }
   }
