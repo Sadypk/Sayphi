@@ -1,6 +1,7 @@
-import 'package:agora_uikit/agora_uikit.dart';
 import 'package:flutter/material.dart';
-import 'package:sayphi/mainApp/util/env.dart';
+import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:sayphi/features/agora_streaming/view/boradcastPage.dart';
 
 class AgoraStreaming extends StatefulWidget {
   @override
@@ -8,29 +9,61 @@ class AgoraStreaming extends StatefulWidget {
 }
 
 class _AgoraStreamingState extends State<AgoraStreaming> {
-  final AgoraClient client = AgoraClient(
+  String check = '';
 
-    agoraConnectionData: AgoraConnectionData(
-      channelName: 'test',
-      appId: Env.agoraID,
-    ),
-    enabledPermission: [
-      Permission.microphone,
-      Permission.camera,
-    ]);
+  Future<void> onJoin({required bool isBroadcaster}) async {
+    await [Permission.camera, Permission.microphone].request();
+
+    Get.to(() => BroadcastPage(
+          isBroadcaster: isBroadcaster,
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          AgoraVideoViewer(
-            client: client,
-            layoutType: Layout.floating,
+        resizeToAvoidBottomInset: true,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextButton(
+                onPressed: () => onJoin(isBroadcaster: false),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'Just Watch  ',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Icon(
+                      Icons.remove_red_eye,
+                    )
+                  ],
+                ),
+              ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  primary: Colors.pink,
+                ),
+                onPressed: () => onJoin(isBroadcaster: true),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'Broadcast    ',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Icon(Icons.live_tv)
+                  ],
+                ),
+              ),
+              Text(
+                check,
+                style: TextStyle(color: Colors.red),
+              )
+            ],
           ),
-          AgoraVideoButtons(client: client)
-        ],
-      ),
-    );
+        ));
   }
 }

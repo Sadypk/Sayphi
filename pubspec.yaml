@@ -56,8 +56,7 @@ dependencies:
   firebase_messaging: ^10.0.2
 
   #realtime communication
-  agora_rtc_engine: ^4.0.1
-  agora_uikit: ^0.0.2
+  agora_rtc_engine: ^4.0.2
 
 dev_dependencies:
   flutter_test:
