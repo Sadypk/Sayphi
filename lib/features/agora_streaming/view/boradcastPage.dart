@@ -69,6 +69,7 @@ class _BroadcastPageState extends State<BroadcastPage> {
     await _engine.joinChannel(Env.agoraTOKEN, 'gg', null, 0);
   }
 
+
   Future<void> _initAgoraRtcEngine() async {
     _engine = await RtcEngine.createWithConfig(RtcEngineConfig(Env.agoraID));
     await _engine.enableVideo();
