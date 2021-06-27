@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:sayphi/01_getStarted.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
-import 'package:sayphi/sady/view/49_smart_picks.dart';
+
+import 'user/view/06+7+8_how_do_you_identify_screen.dart';
 
 class App extends StatelessWidget {
   @override
@@ -27,10 +28,10 @@ class App extends StatelessWidget {
         scaffoldBackgroundColor: AppColor.SCAFFOLD_BACKGROUND,
         fontFamily: CFontFamily.LIGHT
       ),
-      home: SmartPicks(),
+      // home: GetStartedScreen(),
 
       /// Use this for custom routing
-      // home: Home(),
+      home: UserGenderSetScreen(),
     );
   }
 }

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:sayphi/features/homeScreen/view/widgets/34_go_live_bottom_sheet.dart';
+import 'package:sayphi/features/live/view/40_create_audio_room_screen.dart';
 import 'package:sayphi/mainApp/components/mainButton.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/user/view/15_terms_and_condition_screen.dart';
 
 class GoLiveInfoScreen extends StatelessWidget {
-  const GoLiveInfoScreen({Key? key}) : super(key: key);
+  final LiveType liveType;
+  const GoLiveInfoScreen({Key? key, required this.liveType}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +79,14 @@ class GoLiveInfoScreen extends StatelessWidget {
                   ),
                   Spacer(),
                   MainButton(
-                    onPress: (){},
+                    onPress: (){
+
+                      if(liveType == LiveType.AUDIO){
+                        /// closing the consent screen
+                        Get.off(()=>CreateAudioRoomScreen());
+                      }
+
+                    },
                     label: 'Start Stream'
                   ),
                   SizedBox(height: 20),

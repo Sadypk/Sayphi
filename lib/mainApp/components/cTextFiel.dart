@@ -3,14 +3,16 @@ import 'package:sayphi/mainApp/resources/appColor.dart';
 
 class CTextField extends StatelessWidget {
   final String? hintText;
+  final TextEditingController controller;
   const CTextField({Key? key,
-    this.hintText
-
+    this.hintText,
+    required this.controller
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       decoration: InputDecoration(
         fillColor: Colors.white,
         filled: true,

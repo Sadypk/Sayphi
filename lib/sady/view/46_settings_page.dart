@@ -1,8 +1,4 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:sayphi/app.dart';
 import 'package:sayphi/mainApp/components/mainButton.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
@@ -24,28 +20,32 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       backgroundColor: AppColor.SCAFFOLD_BG_PINK,
       appBar: AppBar(
-        title: Text('Profile settings', style: TextStyle(color: AppColor.TEXT_COLOR),),
+        title: Text('Profile settings', style: TextStyle(color: AppColor.TEXT_COLOR, fontSize: 16, fontFamily: CFontFamily.REGULAR),),
         centerTitle: true,
       ),
       body: ListView(
         children: [
           //Boost and subscription
           SizedBox(height: 10,),
-          Container(
-            height: 80,
+          Card(
             margin: EdgeInsets.symmetric(horizontal: 20),
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              color: Colors.white
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Boost and subscription', style: TextStyle(color: AppColor.PRIMARY, fontSize: 16),),
-                SizedBox(height: 5,),
-                Text('Boost and buy subscriptions for your id to get a first class dating experience', style: TextStyle(fontSize: 12, color: AppColor.TEXT_LIGHT), textAlign: TextAlign.center,),
-              ],
+            elevation: 3,
+            child: Container(
+              height: 80,
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                color: Colors.white
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Boost and subscription', style: TextStyle(color: AppColor.PRIMARY, fontSize: 16),),
+                  SizedBox(height: 5,),
+                  Text('Boost and buy subscriptions for your id to get a first class dating experience', style: TextStyle(fontSize: 12, color: AppColor.TEXT_LIGHT), textAlign: TextAlign.center,),
+                ],
+              ),
             ),
           ),
 
@@ -53,21 +53,25 @@ class _SettingsPageState extends State<SettingsPage> {
           SizedBox(height: 20,),
 
           //User rank / Received credit
-          Container(
-            height: 80,
+          Card(
             margin: EdgeInsets.symmetric(horizontal: 20),
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
-                color: Colors.white
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('User rank / Received credit', style: TextStyle(color: AppColor.PRIMARY, fontSize: 16),),
-                SizedBox(height: 5,),
-                Text('To update your user rank and get more credits purchase your suitable pack', style: TextStyle(fontSize: 12, color: AppColor.TEXT_LIGHT), textAlign: TextAlign.center,),
-              ],
+            elevation: 3,
+            child: Container(
+              height: 80,
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  color: Colors.white
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('User rank / Received credit', style: TextStyle(color: AppColor.PRIMARY, fontSize: 16),),
+                  SizedBox(height: 5,),
+                  Text('To update your user rank and get more credits purchase your suitable pack', style: TextStyle(fontSize: 12, color: AppColor.TEXT_LIGHT), textAlign: TextAlign.center,),
+                ],
+              ),
             ),
           ),
 
