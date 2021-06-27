@@ -66,12 +66,12 @@ class _BroadcastPageState extends State<BroadcastPage> {
       },
     ));
 
-    await _engine.joinChannel(Env.agoraTOKEN, 'gg', null, 0);
+    await _engine.joinChannel('006f726ff5849cf45de913d6c7fd8cfce34IABSPrEN2HrCSZHcKAWl8enrFi0QLDaHE8rPwpW65tHa2Qx+f9gAAAAAEAAY899JHQLaYAEAAQAZAtpg', 'test', null, 0);
   }
 
 
   Future<void> _initAgoraRtcEngine() async {
-    _engine = await RtcEngine.createWithConfig(RtcEngineConfig(Env.agoraID));
+    _engine = await RtcEngine.createWithConfig(RtcEngineConfig('f726ff5849cf45de913d6c7fd8cfce34'));
     await _engine.enableVideo();
 
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
