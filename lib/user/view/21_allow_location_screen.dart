@@ -1,9 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sayphi/mainApp/components/loader.dart';
+import 'package:sayphi/mainApp/components/mainButton.dart';
+import 'package:sayphi/mainApp/helpers/snack.dart';
+import 'package:sayphi/mainApp/view/home.dart';
 import 'package:sayphi/user/repository/mapRepository.dart';
+import 'package:sayphi/user/repository/userRepo.dart';
 
 class AllowLocationScreen extends StatefulWidget {
   const AllowLocationScreen({Key? key}) : super(key: key);
@@ -27,6 +32,7 @@ class _AllowLocationScreenState extends State<AllowLocationScreen> {
         position: location
       ));
     });
+    _currentLocation = location;
     await _updateCameraPosition(location);
   }
 
@@ -89,6 +95,33 @@ class _AllowLocationScreenState extends State<AllowLocationScreen> {
         onMapCreated: (GoogleMapController controller) => _controller.complete(controller),
         markers: _gMarkers,
         onTap: changeLocation,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Padding(
+        padding: EdgeInsets.symmetric(horizontal: Get.width * .2 , vertical: 20),
+        child: MainButton(
+          onPress: () async{
+
+            if(_currentLocation != null){
+
+              UserRepo.updateProfile(
+                userLocationName: await MapRepo.getAddressFromLatLng(_currentLocation!),
+                latitude: _currentLocation!.latitude,
+                longitude: _currentLocation!.longitude
+              );
+
+              Get.offAll(()=>Home());
+            }else{
+              Snack.top(
+                title: 'Wait!',
+                message: 'Please choose a location to continue'
+              );
+            }
+
+
+          },
+          label: 'Select Location',
+        ),
       ),
     );
   }

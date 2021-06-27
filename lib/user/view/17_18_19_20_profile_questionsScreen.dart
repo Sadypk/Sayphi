@@ -6,6 +6,7 @@ import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/appConst.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/mainApp/view/home.dart';
+import 'package:sayphi/user/repository/userRepo.dart';
 
 class ProfileQuestionsScreen extends StatefulWidget {
   const ProfileQuestionsScreen({Key? key}) : super(key: key);
@@ -34,7 +35,29 @@ class _ProfileQuestionsScreenState extends State<ProfileQuestionsScreen> with Si
   ];
 
   void navigateNext(){
-    final nextPageIndex = _tabController.index + 1;
+
+    final _tabIndex = _tabController.index;
+    final nextPageIndex = _tabIndex + 1;
+
+    /// save height and activity
+    if(_tabIndex == 0){
+     /* UserRepo.updateProfile(
+
+      ),*/
+    }
+    /// save hobby and opinion on smoking
+    else if(_tabIndex == 1){
+
+    }
+    /// what is the user looking for and is user religious
+    else if(_tabIndex == 2){
+
+    }
+    /// users highest degree
+    else if(_tabIndex == 3){
+
+    }
+
     setState(() {
       progress += .25;
     });

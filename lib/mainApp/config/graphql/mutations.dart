@@ -6,7 +6,6 @@ class GMutation{
     $lastname: String
     $genderId: ID
     $showGender: Boolean
-    $name: String
     $dob: String
     $nickName: String
     $ethnicityID: ID
@@ -29,6 +28,7 @@ class GMutation{
     $smoking: Boolean
     $pets: Boolean
     $religion: ID
+    $password: String
 ){
   updateUser(
     userInput : {
@@ -36,12 +36,12 @@ class GMutation{
       last_name: $lastname
       gender: $genderId
       show_gender_in_profile: $showGender
-      name: $name
       date_of_birth: $dob
       nick_name: $nickName
       ethnicity: $ethnicityID
       profile_image: $profileImage
       complete: $isComplete
+      password: $password
       filters:{
         location: {
           name: $locationName

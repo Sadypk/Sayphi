@@ -2,16 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sayphi/mainApp/components/mainButton.dart';
+import 'package:sayphi/mainApp/helpers/snack.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
+import 'package:sayphi/user/repository/userRepo.dart';
 import 'package:sayphi/user/view/11_12_13_upload_pics_screen.dart';
 
 
 class NameAndBirthdayScreen extends StatelessWidget {
   const NameAndBirthdayScreen({Key? key}) : super(key: key);
+
+
   @override
   Widget build(BuildContext context) {
-    final birthdayController = TextEditingController();
+    final _birthdayController = TextEditingController();
+    final _nameController = TextEditingController();
+    String? _birthdayData;
+
 
     _buildName(){
       return Column(
@@ -40,6 +47,7 @@ class NameAndBirthdayScreen extends StatelessWidget {
                 )
             ),
             child: TextField(
+              controller: _nameController,
               decoration: InputDecoration(
                   hintText: 'Enter your name',
                   border: OutlineInputBorder(
@@ -93,7 +101,8 @@ class NameAndBirthdayScreen extends StatelessWidget {
                 )
               );
               if(newDateTime != null){
-                birthdayController.text = DateFormat().add_yMMMMEEEEd().format(newDateTime);
+                _birthdayData = newDateTime.millisecondsSinceEpoch.toString();
+                _birthdayController.text = DateFormat('dd MMM yyyy').format(newDateTime);
               }
             },
             child: Container(
@@ -104,7 +113,7 @@ class NameAndBirthdayScreen extends StatelessWidget {
               ),
               child: TextField(
                 enabled: false,
-                controller: birthdayController,
+                controller: _birthdayController,
                 decoration: InputDecoration(
                     hintText: 'Choose your birthday',
                     border: OutlineInputBorder(
@@ -121,25 +130,43 @@ class NameAndBirthdayScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColor.SCAFFOLD_BG_PINK,
       appBar: AppBar(),
-      body: Container(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildName(),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildName(),
 
-            Divider(
-              color: AppColor.BORDER_COLOR,
-              height: 100,
-            ),
+              Divider(
+                color: AppColor.BORDER_COLOR,
+                height: 100,
+              ),
 
-            _buildBirthday(),
+              _buildBirthday(),
 
-            SizedBox(height: 20),
-            MainButton(onPress: (){
-              Get.to(()=> UploadPhotoViewScreen());
-            }, label: 'Continue')
-          ],
+              SizedBox(height: 20),
+              MainButton(onPress: (){
+                if(_nameController.text != '' && _birthdayData != null){
+
+                  UserRepo.updateProfile(
+                    nickName: _nameController.text,
+                    dob: _birthdayData
+                  );
+
+                  Get.off(()=> UploadPhotoViewScreen());
+                }else{
+
+                  print(_nameController.text);
+                  print(_birthdayData);
+
+                  Snack.top(
+                    message: 'Please fill up necessary fields'
+                  );
+                }
+              }, label: 'Continue')
+            ],
+          ),
         ),
       ),
     );

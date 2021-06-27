@@ -177,7 +177,7 @@ class _InterestedInAndEthnicityChooseScreenState extends State<InterestedInAndEt
                     ethnicityId: userEthnicity!.id
                   );
 
-                  Get.to(()=> NameAndBirthdayScreen());
+                  Get.off(()=> NameAndBirthdayScreen());
                 }else{
                   Snack.top(
                     message: 'Please choose the options to continue'

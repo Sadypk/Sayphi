@@ -19,8 +19,8 @@ class LoginWithMobileEmailScreen extends StatefulWidget {
 
 class _LoginWithMobileEmailScreenState extends State<LoginWithMobileEmailScreen> {
 
-  final _valueController = TextEditingController();
-  final _passController = TextEditingController();
+  final _valueController = TextEditingController(text: '01915949303');
+  final _passController = TextEditingController(text: '12341234');
 
 
   @override
@@ -89,11 +89,7 @@ class _LoginWithMobileEmailScreenState extends State<LoginWithMobileEmailScreen>
                           MainButton(
                               onPress: () async{
 
-                                final error = await AuthRepo.loginWithEmailOrNumberAndPassword(_valueController.text, _passController.text);
-
-                                if(!error){
-                                  Get.to(() => Home());
-                                }
+                                await AuthRepo.loginWithEmailOrNumberAndPassword(_valueController.text, _passController.text);
 
                               },
                               btnColor: Colors.white,

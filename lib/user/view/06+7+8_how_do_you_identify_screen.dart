@@ -134,7 +134,7 @@ class _UserGenderSetScreenState extends State<UserGenderSetScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          selectedGender!.gender.capitalize!,
+                          selectedGender!.gender!.capitalize!,
                           style: TextStyle(
                             fontSize: 18,
                             fontFamily: CFontFamily.REGULAR
@@ -212,7 +212,7 @@ class _UserGenderSetScreenState extends State<UserGenderSetScreen> {
                   showGender: showGenderOnProfile
                 );
 
-                Get.to(()=>InterestedInAndEthnicityChooseScreen());
+                Get.off(()=>InterestedInAndEthnicityChooseScreen());
               }else{
                 Snack.top(
                   message: 'Please choose a gender to continue'
@@ -280,7 +280,7 @@ class _UserGenderSetScreenState extends State<UserGenderSetScreen> {
                         List<GenderModel> temp = [];
 
                         if(_searchValue.value != ''){
-                          temp = data.where((element) => element.gender.toLowerCase().contains(_searchValue.value.toLowerCase())).toList();
+                          temp = data.where((element) => element.gender!.toLowerCase().contains(_searchValue.value.toLowerCase())).toList();
                         }else{
                           temp = data;
                         }
@@ -303,7 +303,7 @@ class _UserGenderSetScreenState extends State<UserGenderSetScreen> {
                               child: Container(
                                 padding: EdgeInsets.symmetric(vertical: 8),
                                 child: Text(
-                                  _gender.gender.capitalize!,
+                                  _gender.gender!.capitalize!,
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontFamily: CFontFamily.REGULAR

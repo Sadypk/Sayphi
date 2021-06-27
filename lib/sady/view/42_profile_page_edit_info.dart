@@ -1,12 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
+import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/mainApp/view/widgets/primary_color_button.dart';
 import 'package:sayphi/sady/view/43_profile_page_photos.dart';
 import 'package:sayphi/sady/view/44_profile_page_add_prompt.dart';
+import 'package:sayphi/user/view_model/userViewModel.dart';
 
 class ProfilePageEditInfo extends StatefulWidget {
+  final int tab;
+  ProfilePageEditInfo({this.tab = 0});
   @override
   _ProfilePageEditInfoState createState() => _ProfilePageEditInfoState();
 }
@@ -30,16 +35,16 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
 
   @override
   void initState() {
-    // TODO: implement initState
-    tabController  = TabController(length: 3, vsync: this);
     super.initState();
+
+    tabController  = TabController(length: 3, vsync: this, initialIndex: widget.tab);
   }
 
 
 
   @override
   Widget build(BuildContext context) {
-    editors(String title, String hint, TextEditingController controller){
+    editors(String title, String? hint, TextEditingController controller, [bool obscure = false]){
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -50,9 +55,10 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
           Flexible(
             flex: 6,
             child: TextFormField(
+              obscureText: obscure,
               controller: controller,
               decoration: InputDecoration(
-                hintText: hint,
+                hintText: hint ?? title,
               ),
             ))
         ],
@@ -62,154 +68,163 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
     return Scaffold(
       backgroundColor: AppColor.SCAFFOLD_BG_PINK,
       appBar: AppBar(
-        title: Text('Edit Profile', style: TextStyle(color: Colors.black87),),
+        title: Text('Edit Profile', style: TextStyle(color: AppColor.TEXT_COLOR, fontFamily: CFontFamily.REGULAR)),
         centerTitle: true,
         actions: [
-          Center(child: Text('Save  ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.PRIMARY),)),
+
+          TextButton(
+            onPressed: (){
+
+            },
+            child: Text('Save', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.PRIMARY))
+          )
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            TabBar(
-              controller: tabController,
-              indicatorColor: AppColor.PRIMARY,
-              labelColor: AppColor.TEXT_COLOR,
-              indicatorWeight: 4,
-              labelStyle: TextStyle(fontSize: 18),
-              tabs: [
-                Tab(text: 'Detail',),
-                Tab(text: 'Photos',),
-                Tab(text: 'Prompts',),]
-            ),
-            Expanded(
-              child: TabBarView(
-                controller: tabController,
-                children: [
-                  ListView(
+      body: Obx((){
+        final _user = UserViewModel.user.value;
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [
+              TabBar(
+                  controller: tabController,
+                  indicatorColor: AppColor.PRIMARY,
+                  labelColor: AppColor.TEXT_COLOR,
+                  indicatorWeight: 4,
+                  labelStyle: TextStyle(fontSize: 18),
+                  tabs: [
+                    Tab(text: 'Detail',),
+                    Tab(text: 'Photos',),
+                    Tab(text: 'Prompts',),]
+              ),
+              Expanded(
+                child: TabBarView(
+                    controller: tabController,
                     children: [
-                      SizedBox(height: 20,),
-
-                      //Form
-                      Text('Edit personal profile', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                      SizedBox(height: 10,),
-                      editors('Name', 'Katerina Aleria', _nameController),
-                      editors('Email', 'Katerina@gmail.com', _emailController),
-                      editors('Password', '********', _nameController),
-                      Divider(height: 40,),
-                      Text('Edit public profile', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                      SizedBox(height: 10,),
-                      editors('Age', '28', _nameController),
-                      editors('City', 'Khulna', _nameController),
-                      editors('Ethnicity', 'Asian', _nameController),
-                      editors('Religion', 'Muslim', _nameController),
-                      editors('Height', '168 cm', _nameController),
-                      editors('Occupation', 'UI Designer', _nameController),
-                      editors('School', 'School name here', _nameController),
-                      editors('College', 'College name here', _nameController),
-                      editors('Relationship goals', 'Prefer not to say', _nameController),
-                      editors('Relationship status', 'Married', _nameController),
-
-
-                      Divider(height: 40,),
-
-
-                      //My Gifts
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                      ListView(
                         children: [
-                          Text('My Gifts', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                          Text('View all gifts', style: TextStyle(fontSize: 12, color: AppColor.PRIMARY),)
+                          SizedBox(height: 20,),
+
+                          //Form
+                          Text('Edit personal profile', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                          SizedBox(height: 10,),
+                          editors('Name', _user.name , _nameController),
+                          editors('Email/ Phone', _user.emailOrPhone, _emailController),
+                          editors('Password', '********', _passwordController, true),
+                          Divider(height: 40,),
+                          Text('Edit public profile', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                          SizedBox(height: 10,),
+                          editors('Age', '69' , _ageController),
+                          editors('City', _user.filters.location!.name, _cityController),
+                          editors('Ethnicity', _user.ethnicity!.ethnicity , _ethnicityController),
+                          editors('Religion', 'Religion' , _religionController),
+                          editors('Height', '168 cm', _heightController),
+                          editors('Occupation', 'UI Designer', _occupationController),
+                          editors('School', 'School name here', _schoolController),
+                          editors('College', 'College name here', _collegeController),
+                          editors('Relationship goals', 'Prefer not to say', _relationshipGoalsController),
+                          editors('Relationship status', 'Married', _relationshipStatusController),
+
+
+                          Divider(height: 40,),
+
+
+                          //My Gifts
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text('My Gifts', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                              Text('View all gifts', style: TextStyle(fontSize: 12, color: AppColor.PRIMARY),)
+                            ],
+                          ),
+                          SizedBox(height: 15,),
+                          Container(
+                            height: 80,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (BuildContext context, int index){
+                                  return Container(
+                                    height: 80,
+                                    width: 80,
+                                    margin: EdgeInsets.only(right: 10),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: Color(0xffE8E8E8),
+                                        border: Border.all(color: AppColor.BORDER_COLOR, width: 0.5)
+                                    ),
+                                    child: Center(child: Icon(
+                                      CupertinoIcons.gift_fill ,
+                                      color: AppColor.PRIMARY,
+                                      size: 36,
+                                    ),),
+                                  );
+                                }),
+                          ),
+
+
+                          Divider(height: 40,),
+
+
+                          //Watch an ad
+                          Text('Watch an ad to get credit', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                          SizedBox(height: 15,),
+                          PrimaryColorButton(iconData: Icons.videocam, label: 'Watch video',),
+
+
+
+
+                          Divider(height: 40,),
+
+
+                          //Go live
+                          Text('Go live to get credits', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                          SizedBox(height: 5,),
+                          Text('Go live for 60 minutes minimum streaming to get 100 credits', style: TextStyle(fontSize: 12),),
+                          SizedBox(height: 15,),
+                          PrimaryColorButton(iconData: Icons.ondemand_video_rounded, label: 'Go live'),
+
+
+
+                          Divider(height: 40,),
+
+
+
+                          //Connect instagram
+                          Text('Connect Instagram', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                          SizedBox(height: 5,),
+                          Text('Connect Instagram to add your latest photos to your profile, Don\'t worry we don\'t share any information.', style: TextStyle(fontSize: 12),),
+                          SizedBox(height: 15,),
+                          PrimaryColorButton(iconData: FontAwesomeIcons.instagram, label: 'Connect Instagram', ),
+
+
+
+                          Divider(height: 40,),
+
+
+
+                          //Connect spotify
+                          Text('Connect Spotify', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                          SizedBox(height: 5,),
+                          Text('Connect Spotify to be updated,Don\'t worry we don\'t share any information.', style: TextStyle(fontSize: 12),),
+                          SizedBox(height: 15,),
+                          PrimaryColorButton(iconData: FontAwesomeIcons.spotify, label: 'Go live'),
+
+
+
+
+                          SizedBox(height: 30,)
                         ],
                       ),
-                      SizedBox(height: 15,),
-                      Container(
-                        height: 80,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (BuildContext context, int index){
-                            return Container(
-                              height: 80,
-                              width: 80,
-                              margin: EdgeInsets.only(right: 10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Color(0xffE8E8E8),
-                                border: Border.all(color: AppColor.BORDER_COLOR, width: 0.5)
-                              ),
-                              child: Center(child: Icon(
-                                CupertinoIcons.gift_fill ,
-                                color: AppColor.PRIMARY,
-                                size: 36,
-                              ),),
-                            );
-                          }),
-                      ),
-
-
-                      Divider(height: 40,),
-
-
-                      //Watch an ad
-                      Text('Watch an ad to get credit', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                      SizedBox(height: 15,),
-                      PrimaryColorButton(iconData: Icons.videocam, label: 'Watch video',),
-
-
-
-
-                      Divider(height: 40,),
-
-
-                      //Go live
-                      Text('Go live to get credits', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                      SizedBox(height: 5,),
-                      Text('Go live for 60 minutes minimum streaming to get 100 credits', style: TextStyle(fontSize: 12),),
-                      SizedBox(height: 15,),
-                      PrimaryColorButton(iconData: Icons.ondemand_video_rounded, label: 'Go live'),
-
-
-
-                      Divider(height: 40,),
-
-
-
-                      //Connect instagram
-                      Text('Connect Instagram', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                      SizedBox(height: 5,),
-                      Text('Connect Instagram to add your latest photos to your profile, Don\'t worry we don\'t share any information.', style: TextStyle(fontSize: 12),),
-                      SizedBox(height: 15,),
-                      PrimaryColorButton(iconData: FontAwesomeIcons.instagram, label: 'Connect Instagram', ),
-
-
-
-                      Divider(height: 40,),
-
-
-
-                      //Connect spotify
-                      Text('Connect Spotify', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                      SizedBox(height: 5,),
-                      Text('Connect Spotify to be updated,Don\'t worry we don\'t share any information.', style: TextStyle(fontSize: 12),),
-                      SizedBox(height: 15,),
-                      PrimaryColorButton(iconData: FontAwesomeIcons.spotify, label: 'Go live'),
-
-
-
-
-                      SizedBox(height: 30,)
-                    ],
-                  ),
-                  ProfilePagePhotos(),
-                  ProfilePageAddPrompt()
-                ]
-              ),
-            )
-          ],
-        ),
-      ),
+                      ProfilePagePhotos(),
+                      ProfilePageAddPrompt()
+                    ]
+                ),
+              )
+            ],
+          ),
+        );
+      }),
     );
   }
 }

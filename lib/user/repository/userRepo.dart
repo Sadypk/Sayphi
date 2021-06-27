@@ -1,6 +1,10 @@
+import 'package:sayphi/authentication/repository/authRepo.dart';
 import 'package:sayphi/mainApp/config/graphql/apiConfig.dart';
 import 'package:sayphi/mainApp/config/graphql/mutations.dart';
+import 'package:sayphi/mainApp/config/graphql/queries.dart';
 import 'package:sayphi/mainApp/model/apiResponse.dart';
+import 'package:sayphi/user/model/promptModel.dart';
+import 'package:sayphi/user/view_model/userViewModel.dart';
 
 class UserRepo{
   static Future<bool> updateProfile({
@@ -8,7 +12,6 @@ class UserRepo{
     String? lastname,
     String?  genderId,
     bool? showGender,
-    String? name,
     String? dob,
     String? nickName,
     String? ethnicityId,
@@ -30,7 +33,8 @@ class UserRepo{
     int? childrenRangeEnd,
     bool? smoking,
     bool? pets,
-    String? religionId
+    String? religionId,
+    String? password
 }) async{
 
     Map<String, dynamic> variables = {};
@@ -40,12 +44,12 @@ class UserRepo{
     if(lastname !=null) variables.putIfAbsent('lastname', () => lastname);
     if(genderId !=null) variables.putIfAbsent('genderId', () => genderId);
     if(showGender !=null) variables.putIfAbsent('showGender', () => showGender);
-    if(name !=null) variables.putIfAbsent('name', () => name);
     if(dob !=null) variables.putIfAbsent('dob', () => dob);
     if(nickName !=null) variables.putIfAbsent('nickName', () => nickName);
     if(ethnicityId !=null) variables.putIfAbsent('ethnicityID', () => ethnicityId);
     if(profileImage !=null) variables.putIfAbsent('profileImage', () => profileImage);
     if(isComplete !=null) variables.putIfAbsent('isComplete', () => isComplete);
+    if(password !=null) variables.putIfAbsent('password', () => password);
 
     /// FILTER
     if(userLocationName !=null) variables.putIfAbsent('locationName', () => userLocationName);
@@ -66,6 +70,8 @@ class UserRepo{
     if(pets !=null) variables.putIfAbsent('pets', () => pets);
     if(religionId !=null) variables.putIfAbsent('religion', () => religionId);
 
+
+
     ApiResponse _response = await Api.mutate(
       queryName: GMutation.UPDATE_USER_NAME,
       query: GMutation.UPDATE_USER,
@@ -73,6 +79,23 @@ class UserRepo{
       auth: true
     );
 
+    /// updating user profile by verifying the token
+    AuthRepo.verifyToken(UserViewModel.userToken);
+
     return _response.error;
+  }
+
+  static Future<List<PromptModel>> getAllPrompts() async{
+    ApiResponse _response = await Api.query(
+        queryName: GQueries.GET_ALL_PROMPTS_NAME,
+        query: GQueries.GET_ALL_PROMPTS,
+        auth: true
+    );
+
+    if(_response.error){
+      return [];
+    }else{
+      return List.from(_response.data.map((prompt) => PromptModel.fromJson(prompt)));
+    }
   }
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sayphi/mainApp/components/mainButton.dart';
+import 'package:sayphi/mainApp/helpers/snack.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
+import 'package:sayphi/user/repository/userRepo.dart';
 import 'package:sayphi/user/view/15_terms_and_condition_screen.dart';
 
 class SetPasswordScreen extends StatefulWidget {
@@ -16,6 +18,9 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
 
   FocusNode _focusNode1 = FocusNode();
   FocusNode _focusNode2 = FocusNode();
+
+  final password = TextEditingController();
+  final confPassword = TextEditingController();
 
   @override
   void initState() {
@@ -71,6 +76,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                 ),
                 child: TextField(
                   focusNode: _focusNode1,
+                  controller: password,
                   decoration: InputDecoration(
                     labelText: 'Enter password',
                     labelStyle: TextStyle(
@@ -91,6 +97,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                     )
                   ),
                   child: TextField(
+                    controller: confPassword,
                     focusNode: _focusNode2,
                     decoration: InputDecoration(
                       labelText: 'Confirm password',
@@ -107,7 +114,25 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
               SizedBox(height: 32),
               MainButton(
                 onPress: (){
-                  Get.to(()=>TermsAndConditionAgreementScreen());
+
+                  FocusScope.of(context).unfocus();
+
+                  if(password.text == confPassword.text && password.text.length > 5 && confPassword.text.length > 5){
+
+                    UserRepo.updateProfile(
+                      password: password.text,
+                      isComplete: true
+                    );
+
+                    Get.to(()=>TermsAndConditionAgreementScreen());
+
+                  }else{
+                    Snack.top(
+                        message: 'Please choose the options to continue'
+                    );
+                  }
+
+
                 },
                 label: 'Continue'
               )

@@ -51,6 +51,7 @@ class Api{
 
 
       if(response.data![queryName]['error']){
+        Snack.showError(message: response.data![queryName]['msg']);
         return ApiResponse(
           error: true,
           message: response.data![queryName]['msg']
@@ -102,6 +103,7 @@ class Api{
       logger.i(response, variables);
 
       if(response.data![queryName]['error']){
+        Snack.showError(message: response.data![queryName]['msg']);
         return ApiResponse(
             error: true,
             message: response.data![queryName]['msg']

@@ -32,7 +32,6 @@ class App extends StatelessWidget {
       // home: GetStartedScreen(),
 
       /// Use this for custom routing
-      // home: UserGenderSetScreen(),
       home: AgoraStreaming(),
     );
   }

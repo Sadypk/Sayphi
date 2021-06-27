@@ -1,6 +1,6 @@
 class GenderModel{
   String id;
-  String gender;
+  String? gender;
   GenderModel({
     required this.id,
     required this.gender
