@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sayphi/01_getStarted.dart';
+import 'package:sayphi/features/agora_streaming/view/agora_streaming.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 
@@ -31,7 +32,8 @@ class App extends StatelessWidget {
       // home: GetStartedScreen(),
 
       /// Use this for custom routing
-      home: UserGenderSetScreen(),
+      // home: UserGenderSetScreen(),
+      home: AgoraStreaming(),
     );
   }
 }
