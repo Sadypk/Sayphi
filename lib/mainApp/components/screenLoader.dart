@@ -8,13 +8,29 @@ import 'package:sayphi/mainApp/resources/appColor.dart';
 
 class ScreenLoader extends StatelessWidget {
   final Widget child;
-  const ScreenLoader({Key? key, required this.child}) : super(key: key);
+  final bool? loader;
+  const ScreenLoader({Key? key, required this.child, this.loader}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: ()=> FocusScope.of(context).unfocus(),
-      child: Obx(()=>LoadingOverlay(
+      child: loader != null ? LoadingOverlay(
+        isLoading: loader!,
+        progressIndicator: SpinKitDualRing(
+            color: AppColor.PRIMARY
+        ),
+        color: AppColor.DARK_GREY.withOpacity(.45),
+        child: WillPopScope(
+            onWillPop: () async => loader! ? false : true,
+            child: NotificationListener<OverscrollIndicatorNotification>(
+                onNotification: (OverscrollIndicatorNotification overScroll) {
+                  overScroll.disallowGlow();
+                  return false;
+                },
+                child: child)
+        ),
+      ) : Obx(()=>LoadingOverlay(
         isLoading: Api.apiLoading.value,
         progressIndicator: SpinKitDualRing(
             color: AppColor.PRIMARY

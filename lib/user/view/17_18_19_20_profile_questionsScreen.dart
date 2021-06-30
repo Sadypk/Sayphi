@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:sayphi/mainApp/model/questionAnswerModel.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/appConst.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/mainApp/view/home.dart';
+import 'package:sayphi/mainApp/view_model/appViewModel.dart';
 import 'package:sayphi/user/repository/userRepo.dart';
 
 class ProfileQuestionsScreen extends StatefulWidget {
@@ -28,10 +30,10 @@ class _ProfileQuestionsScreenState extends State<ProfileQuestionsScreen> with Si
   }
 
   final _pages = [
-    HeightAndActivity(),
-    HobbyAndSmoking(),
-    LookingForAndReligion(),
-    HighestDegree(),
+    QuestionAnswerPage1(),
+    QuestionAnswerPage2(),
+    QuestionAnswerPage3(),
+    QuestionAnswerPage4(),
   ];
 
   void navigateNext(){
@@ -39,23 +41,55 @@ class _ProfileQuestionsScreenState extends State<ProfileQuestionsScreen> with Si
     final _tabIndex = _tabController.index;
     final nextPageIndex = _tabIndex + 1;
 
-    /// save height and activity
     if(_tabIndex == 0){
-     /* UserRepo.updateProfile(
 
-      ),*/
-    }
-    /// save hobby and opinion on smoking
-    else if(_tabIndex == 1){
+      double userHeight = (QuestionAnswerPage1.heightFeet * 30.48) + (QuestionAnswerPage1.heightInch * 2.54);
 
-    }
-    /// what is the user looking for and is user religious
-    else if(_tabIndex == 2){
+      UserRepo.updateProfile(
+        userHeight: userHeight.toInt(),
+        questionID: QuestionAnswerPage1.selectedAnswer == '' ? null : AppViewModel.appQuestionAnswers[0].id,
+        questionAnswer: QuestionAnswerPage1.selectedAnswer == '' ? null : QuestionAnswerPage1.selectedAnswer,
+      );
+    } else if(_tabIndex == 1){
 
-    }
-    /// users highest degree
-    else if(_tabIndex == 3){
+      if( QuestionAnswerPage2.answer1 != ''){
 
+        UserRepo.updateProfile(
+          questionID: QuestionAnswerPage2.answer1 == '' ? null : AppViewModel.appQuestionAnswers[1].id,
+          questionAnswer: QuestionAnswerPage2.answer1 == '' ? null : QuestionAnswerPage2.answer1,
+        );
+      }
+
+      if( QuestionAnswerPage2.answer2 != ''){
+        UserRepo.updateProfile(
+          questionID: QuestionAnswerPage2.answer2 == '' ? null : AppViewModel.appQuestionAnswers[2].id,
+          questionAnswer: QuestionAnswerPage2.answer2 == '' ? null : QuestionAnswerPage2.answer2,
+        );
+      }
+
+    } else if(_tabIndex == 2){
+
+      if( QuestionAnswerPage3.answer1 != ''){
+        UserRepo.updateProfile(
+          questionID: QuestionAnswerPage3.answer1 == '' ? null : AppViewModel.appQuestionAnswers[3].id,
+          questionAnswer: QuestionAnswerPage3.answer1 == '' ? null : QuestionAnswerPage3.answer1,
+        );
+      }
+
+      if( QuestionAnswerPage3.answer2 != ''){
+        UserRepo.updateProfile(
+          questionID: QuestionAnswerPage3.answer2 == '' ? null : AppViewModel.appQuestionAnswers[4].id,
+          questionAnswer: QuestionAnswerPage3.answer2 == '' ? null : QuestionAnswerPage3.answer2,
+        );
+      }
+
+    } else if(_tabIndex == 3){
+      if( QuestionAnswerPage4.answer1 != ''){
+        UserRepo.updateProfile(
+          questionID: QuestionAnswerPage4.answer1 == '' ? null : AppViewModel.appQuestionAnswers[5].id,
+          questionAnswer: QuestionAnswerPage4.answer1 == '' ? null : QuestionAnswerPage4.answer1,
+        );
+      }
     }
 
     setState(() {
@@ -151,19 +185,32 @@ class _ProfileQuestionsScreenState extends State<ProfileQuestionsScreen> with Si
   }
 }
 
-class HeightAndActivity extends StatefulWidget {
-  const HeightAndActivity({Key? key}) : super(key: key);
+
+class QuestionAnswerPage1 extends StatefulWidget {
+
+  static int heightFeet = 4;
+
+  static int heightInch = 4;
+
+  static String selectedAnswer = '';
+
+
+  const QuestionAnswerPage1({Key? key}) : super(key: key);
 
   @override
-  _HeightAndActivityState createState() => _HeightAndActivityState();
+  _QuestionAnswerPage1State createState() => _QuestionAnswerPage1State();
 }
 
-class _HeightAndActivityState extends State<HeightAndActivity> {
-  int _heightFeet = 4;
+class _QuestionAnswerPage1State extends State<QuestionAnswerPage1> {
 
-  int _heightInch = 4;
+  late QuestionAnswerModel _questionAnswer;
 
-  int _selectedActivity = 10000;
+
+  @override
+  void initState() {
+    super.initState();
+    _questionAnswer = AppViewModel.appQuestionAnswers[0];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -199,10 +246,10 @@ class _HeightAndActivityState extends State<HeightAndActivity> {
                   child: NumberPicker(
                     zeroPad: true,
                     infiniteLoop: true,
-                    value: _heightFeet,
+                    value: QuestionAnswerPage1.heightFeet,
                     minValue: 2,
                     maxValue: 10,
-                    onChanged: (value) => setState(() => _heightFeet = value),
+                    onChanged: (value) => setState(() => QuestionAnswerPage1.heightFeet = value),
                     selectedTextStyle: TextStyle(
                       color: AppColor.PRIMARY,
                       fontSize: 24,
@@ -225,10 +272,10 @@ class _HeightAndActivityState extends State<HeightAndActivity> {
                   child: NumberPicker(
                     zeroPad: true,
                     infiniteLoop: true,
-                    value: _heightInch,
+                    value: QuestionAnswerPage1.heightInch,
                     minValue: 0,
                     maxValue: 12,
-                    onChanged: (value) => setState(() => _heightInch = value),
+                    onChanged: (value) => setState(() => QuestionAnswerPage1.heightInch = value),
                     selectedTextStyle: TextStyle(
                       color: AppColor.PRIMARY,
                       fontSize: 24,
@@ -250,7 +297,7 @@ class _HeightAndActivityState extends State<HeightAndActivity> {
         ///activity chooser
 
         Text(
-          'How active are you?',
+          _questionAnswer.question,
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 20,
@@ -261,40 +308,48 @@ class _HeightAndActivityState extends State<HeightAndActivity> {
         SizedBox(height: 20),
 
         SizedBox(
-          height: Get.height * .2,
+          height: Get.height * .35,
           child: ListView.builder(
             shrinkWrap: true,
             padding: EdgeInsets.zero,
-            itemCount: 10,
-            itemBuilder: (_, index) => InkWell(
-              onTap: (){
-                setState(() {
-                  _selectedActivity = index;
-                });
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if(_selectedActivity == index) Icon(
-                      Icons.check_circle,
-                      color: AppColor.PRIMARY,
-                      size: 20,
-                    ),
-                    if(_selectedActivity == index) SizedBox(width: 4),
-                    Text(
-                      'Option $index',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: _selectedActivity == index ? CFontFamily.MEDIUM : CFontFamily.REGULAR,
-                          color: _selectedActivity == index ? AppColor.PRIMARY : null
+            itemCount: _questionAnswer.options.length,
+            itemBuilder: (_, index) {
+
+              final option = _questionAnswer.options[index];
+
+              final isSelected = QuestionAnswerPage1.selectedAnswer == option;
+
+
+              return InkWell(
+                onTap: (){
+                  setState(() {
+                    QuestionAnswerPage1.selectedAnswer = option;
+                  });
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if(isSelected) Icon(
+                        Icons.check_circle,
+                        color: AppColor.PRIMARY,
+                        size: 20,
                       ),
-                    )
-                  ],
+                      if(isSelected) SizedBox(width: 4),
+                      Text(
+                        option,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: isSelected ? CFontFamily.MEDIUM : CFontFamily.REGULAR,
+                            color: isSelected ? AppColor.PRIMARY : null
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         )
       ],
@@ -302,17 +357,31 @@ class _HeightAndActivityState extends State<HeightAndActivity> {
   }
 }
 
-class HobbyAndSmoking extends StatefulWidget {
-  const HobbyAndSmoking({Key? key}) : super(key: key);
+class QuestionAnswerPage2 extends StatefulWidget {
+
+  static String answer1 = '';
+  static String answer2 = '';
+
+  const QuestionAnswerPage2({Key? key}) : super(key: key);
 
   @override
-  _HobbyAndSmokingState createState() => _HobbyAndSmokingState();
+  _QuestionAnswerPage2State createState() => _QuestionAnswerPage2State();
 }
 
-class _HobbyAndSmokingState extends State<HobbyAndSmoking> {
+class _QuestionAnswerPage2State extends State<QuestionAnswerPage2> {
 
-  int _selectedHobby = 10000;
-  int _selectedOpinion = 10000;
+
+  late QuestionAnswerModel _questionAnswer1;
+  late QuestionAnswerModel _questionAnswer2;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _questionAnswer1 = AppViewModel.appQuestionAnswers[1];
+    _questionAnswer2 = AppViewModel.appQuestionAnswers[2];
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -322,52 +391,55 @@ class _HobbyAndSmokingState extends State<HobbyAndSmoking> {
         SizedBox(width: double.infinity),
 
         Text(
-          'What is your hobby?',
+        _questionAnswer1.question,
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 20,
               fontFamily: CFontFamily.MEDIUM
           ),
         ),
-
         SizedBox(height: 20),
-
-        /// hobby picker
         SizedBox(
           height: Get.height * .2,
           child: ListView.builder(
             shrinkWrap: true,
             padding: EdgeInsets.zero,
-            itemCount: 10,
-            itemBuilder: (_, index) => InkWell(
-              onTap: (){
-                setState(() {
-                  _selectedHobby = index;
-                });
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if(_selectedHobby == index) Icon(
-                      Icons.check_circle,
-                      color: AppColor.PRIMARY,
-                      size: 20,
-                    ),
-                    if(_selectedHobby == index) SizedBox(width: 4),
-                    Text(
-                      'Hobby $index',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: _selectedHobby == index ? CFontFamily.MEDIUM : CFontFamily.REGULAR,
-                          color: _selectedHobby == index ? AppColor.PRIMARY : null
+            itemCount: _questionAnswer1.options.length,
+            itemBuilder: (_, index) {
+
+              final option = _questionAnswer1.options[index];
+              final isSelected = QuestionAnswerPage2.answer1 == option;
+
+              return InkWell(
+                onTap: (){
+                  setState(() {
+                    QuestionAnswerPage2.answer1 = option;
+                  });
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if(isSelected) Icon(
+                        Icons.check_circle,
+                        color: AppColor.PRIMARY,
+                        size: 20,
                       ),
-                    )
-                  ],
+                      if(isSelected) SizedBox(width: 4),
+                      Text(
+                        option,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: isSelected ? CFontFamily.MEDIUM : CFontFamily.REGULAR,
+                            color: isSelected ? AppColor.PRIMARY : null
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ),
 
@@ -379,51 +451,55 @@ class _HobbyAndSmokingState extends State<HobbyAndSmoking> {
         ///activity chooser
 
         Text(
-          'What is your opinion on smoking?',
+          _questionAnswer2.question,
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 20,
               fontFamily: CFontFamily.MEDIUM
           ),
         ),
-
         SizedBox(height: 20),
-
         SizedBox(
           height: Get.height * .2,
           child: ListView.builder(
             shrinkWrap: true,
             padding: EdgeInsets.zero,
-            itemCount: 10,
-            itemBuilder: (_, index) => InkWell(
-              onTap: (){
-                setState(() {
-                  _selectedOpinion = index;
-                });
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if(_selectedOpinion == index) Icon(
-                      Icons.check_circle,
-                      color: AppColor.PRIMARY,
-                      size: 20,
-                    ),
-                    if(_selectedOpinion == index) SizedBox(width: 4),
-                    Text(
-                      'Opinion $index',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: _selectedOpinion == index ? CFontFamily.MEDIUM : CFontFamily.REGULAR,
-                          color: _selectedOpinion == index ? AppColor.PRIMARY : null
+            itemCount: _questionAnswer2.options.length,
+            itemBuilder: (_, index) {
+
+              final option = _questionAnswer2.options[index];
+              final isSelected = QuestionAnswerPage2.answer2 == option;
+
+              return InkWell(
+                onTap: (){
+                  setState(() {
+                    QuestionAnswerPage2.answer2 = option;
+                  });
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if(isSelected) Icon(
+                        Icons.check_circle,
+                        color: AppColor.PRIMARY,
+                        size: 20,
                       ),
-                    )
-                  ],
+                      if(isSelected) SizedBox(width: 4),
+                      Text(
+                        option,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: isSelected ? CFontFamily.MEDIUM : CFontFamily.REGULAR,
+                            color: isSelected ? AppColor.PRIMARY : null
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ),
       ],
@@ -431,16 +507,31 @@ class _HobbyAndSmokingState extends State<HobbyAndSmoking> {
   }
 }
 
-class LookingForAndReligion extends StatefulWidget {
-  const LookingForAndReligion({Key? key}) : super(key: key);
+class QuestionAnswerPage3 extends StatefulWidget {
+
+  static String answer1 = '';
+  static String answer2 = '';
+
+  const QuestionAnswerPage3({Key? key}) : super(key: key);
 
   @override
-  _LookingForAndReligionState createState() => _LookingForAndReligionState();
+  _QuestionAnswerPage3State createState() => _QuestionAnswerPage3State();
 }
 
-class _LookingForAndReligionState extends State<LookingForAndReligion> {
-  int _selectedLookingFor = 10000;
-  int _selectedReligionLevel = 10000;
+class _QuestionAnswerPage3State extends State<QuestionAnswerPage3> {
+
+
+  late QuestionAnswerModel _questionAnswer1;
+  late QuestionAnswerModel _questionAnswer2;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _questionAnswer1 = AppViewModel.appQuestionAnswers[3];
+    _questionAnswer2 = AppViewModel.appQuestionAnswers[4];
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -450,52 +541,55 @@ class _LookingForAndReligionState extends State<LookingForAndReligion> {
         SizedBox(width: double.infinity),
 
         Text(
-          'What are you looking for?',
+          _questionAnswer1.question,
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 20,
               fontFamily: CFontFamily.MEDIUM
           ),
         ),
-
         SizedBox(height: 20),
-
-        /// hobby picker
         SizedBox(
           height: Get.height * .2,
           child: ListView.builder(
             shrinkWrap: true,
             padding: EdgeInsets.zero,
-            itemCount: 10,
-            itemBuilder: (_, index) => InkWell(
-              onTap: (){
-                setState(() {
-                  _selectedLookingFor = index;
-                });
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if(_selectedLookingFor == index) Icon(
-                      Icons.check_circle,
-                      color: AppColor.PRIMARY,
-                      size: 20,
-                    ),
-                    if(_selectedLookingFor == index) SizedBox(width: 4),
-                    Text(
-                      'Looking $index',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: _selectedLookingFor == index ? CFontFamily.MEDIUM : CFontFamily.REGULAR,
-                          color: _selectedLookingFor == index ? AppColor.PRIMARY : null
+            itemCount: _questionAnswer1.options.length,
+            itemBuilder: (_, index) {
+
+              final option = _questionAnswer1.options[index];
+              final isSelected = QuestionAnswerPage3.answer1 == option;
+
+              return InkWell(
+                onTap: (){
+                  setState(() {
+                    QuestionAnswerPage3.answer1 = option;
+                  });
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if(isSelected) Icon(
+                        Icons.check_circle,
+                        color: AppColor.PRIMARY,
+                        size: 20,
                       ),
-                    )
-                  ],
+                      if(isSelected) SizedBox(width: 4),
+                      Text(
+                        option,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: isSelected ? CFontFamily.MEDIUM : CFontFamily.REGULAR,
+                            color: isSelected ? AppColor.PRIMARY : null
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ),
 
@@ -507,51 +601,55 @@ class _LookingForAndReligionState extends State<LookingForAndReligion> {
         ///activity chooser
 
         Text(
-          'Are you religious?',
+          _questionAnswer2.question,
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 20,
               fontFamily: CFontFamily.MEDIUM
           ),
         ),
-
         SizedBox(height: 20),
-
         SizedBox(
           height: Get.height * .2,
           child: ListView.builder(
             shrinkWrap: true,
             padding: EdgeInsets.zero,
-            itemCount: 10,
-            itemBuilder: (_, index) => InkWell(
-              onTap: (){
-                setState(() {
-                  _selectedReligionLevel = index;
-                });
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if(_selectedReligionLevel == index) Icon(
-                      Icons.check_circle,
-                      color: AppColor.PRIMARY,
-                      size: 20,
-                    ),
-                    if(_selectedReligionLevel == index) SizedBox(width: 4),
-                    Text(
-                      'Level $index',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: _selectedReligionLevel == index ? CFontFamily.MEDIUM : CFontFamily.REGULAR,
-                          color: _selectedReligionLevel == index ? AppColor.PRIMARY : null
+            itemCount: _questionAnswer2.options.length,
+            itemBuilder: (_, index) {
+
+              final option = _questionAnswer2.options[index];
+              final isSelected = QuestionAnswerPage3.answer2 == option;
+
+              return InkWell(
+                onTap: (){
+                  setState(() {
+                    QuestionAnswerPage3.answer2 = option;
+                  });
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if(isSelected) Icon(
+                        Icons.check_circle,
+                        color: AppColor.PRIMARY,
+                        size: 20,
                       ),
-                    )
-                  ],
+                      if(isSelected) SizedBox(width: 4),
+                      Text(
+                        option,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: isSelected ? CFontFamily.MEDIUM : CFontFamily.REGULAR,
+                            color: isSelected ? AppColor.PRIMARY : null
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ),
       ],
@@ -559,15 +657,28 @@ class _LookingForAndReligionState extends State<LookingForAndReligion> {
   }
 }
 
-class HighestDegree extends StatefulWidget {
-  const HighestDegree({Key? key}) : super(key: key);
+class QuestionAnswerPage4 extends StatefulWidget {
+
+  static String answer1 = '';
+
+  const QuestionAnswerPage4({Key? key}) : super(key: key);
 
   @override
-  _HighestDegreeState createState() => _HighestDegreeState();
+  _QuestionAnswerPage4State createState() => _QuestionAnswerPage4State();
 }
 
-class _HighestDegreeState extends State<HighestDegree> {
-  int _selectedDegree = 10000;
+class _QuestionAnswerPage4State extends State<QuestionAnswerPage4> {
+
+
+  late QuestionAnswerModel _questionAnswer1;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _questionAnswer1 = AppViewModel.appQuestionAnswers[5];
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -577,57 +688,58 @@ class _HighestDegreeState extends State<HighestDegree> {
         SizedBox(width: double.infinity),
 
         Text(
-          'What is your highest degree?',
+          _questionAnswer1.question,
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 20,
               fontFamily: CFontFamily.MEDIUM
           ),
         ),
-
         SizedBox(height: 20),
-
-        /// hobby picker
         SizedBox(
-          height: Get.height * .5,
+          height: Get.height * .4,
           child: ListView.builder(
             shrinkWrap: true,
             padding: EdgeInsets.zero,
-            itemCount: 10,
-            itemBuilder: (_, index) => InkWell(
-              onTap: (){
-                setState(() {
-                  _selectedDegree = index;
-                });
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if(_selectedDegree == index) Icon(
-                      Icons.check_circle,
-                      color: AppColor.PRIMARY,
-                      size: 20,
-                    ),
-                    if(_selectedDegree == index) SizedBox(width: 4),
-                    Text(
-                      'Degree $index',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: _selectedDegree == index ? CFontFamily.MEDIUM : CFontFamily.REGULAR,
-                          color: _selectedDegree == index ? AppColor.PRIMARY : null
+            itemCount: _questionAnswer1.options.length,
+            itemBuilder: (_, index) {
+
+              final option = _questionAnswer1.options[index];
+              final isSelected = QuestionAnswerPage4.answer1 == option;
+
+              return InkWell(
+                onTap: (){
+                  setState(() {
+                    QuestionAnswerPage4.answer1 = option;
+                  });
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if(isSelected) Icon(
+                        Icons.check_circle,
+                        color: AppColor.PRIMARY,
+                        size: 20,
                       ),
-                    )
-                  ],
+                      if(isSelected) SizedBox(width: 4),
+                      Text(
+                        option,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: isSelected ? CFontFamily.MEDIUM : CFontFamily.REGULAR,
+                            color: isSelected ? AppColor.PRIMARY : null
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ),
       ],
     );
   }
 }
-
-

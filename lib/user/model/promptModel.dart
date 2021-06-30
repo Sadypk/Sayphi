@@ -1,14 +1,18 @@
-class PromptModel{
+class UserPromptModel{
   String id;
   String prompt;
+  String answer;
 
-  PromptModel({
+  UserPromptModel({
     required this.id,
-    required this.prompt
+    required this.prompt,
+    required this.answer
 });
 
-  factory PromptModel.fromJson(Map<String, dynamic> json) => PromptModel(
-    id: json['_id'],
-    prompt: json['prompt']
+  factory UserPromptModel.fromJson(Map<String, dynamic> json) => UserPromptModel(
+    id: json['prompt']['_id'],
+    prompt: json['prompt']['prompt'],
+    answer: json['answer'],
+
   );
 }

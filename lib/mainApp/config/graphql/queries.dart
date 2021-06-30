@@ -13,6 +13,16 @@ class GQueries{
     }
   ''';
 
+  static const LOGIN_WITH_ID_TOKEN_NAME = 'userLoginWithIdToken';
+  static const LOGIN_WITH_ID_TOKEN = r'''
+  query($idToken: String){
+  userLoginWithIdToken(idToken: $idToken){
+    error
+    msg
+    token
+  }
+}
+  ''';
 
   static const GET_ALL_GENDERS = r'''
   query{
@@ -42,15 +52,18 @@ query{
   ''';
   static const GET_ALL_ETHNICITY_NAME = 'getAllEthnicity';
 
-  static const GET_ALL_PROMPTS_NAME = 'getUserPrompts';
-  static const GET_ALL_PROMPTS = r'''
+  static const GET_ALL_USER_PROMPTS_NAME = 'getUserPrompts';
+  static const GET_ALL_USER_PROMPTS = r'''
 query{
   getUserPrompts{
     error
     msg
     data{
-      _id
-      prompt
+      prompt{
+        _id
+        prompt
+      }
+      answer
     }
   }
 }
@@ -66,6 +79,7 @@ query($token: String){
       _id
       phone_or_email
       nick_name
+      height
       profile_image
       complete
       date_of_birth
@@ -116,7 +130,7 @@ query($token: String){
         pets
         religion{
           _id
-          ethnicity
+          religion
         }
       }
     }
@@ -124,4 +138,32 @@ query($token: String){
 }
 ''';
   static const VERIFY_TOKEN_NAME = 'verifyUser';
+
+  static const GET_ALL_QUESTIONS_NAME = 'getAllQuestion';
+  static const GET_ALL_QUESTIONS = r'''
+  query{
+  getAllQuestion{
+    error
+    msg
+    data{
+      _id
+      question
+      answers
+    }
+  }
+}
+  ''';
+
+  static const GET_ALL_PROMPTS_NAME = 'getAllPrompt';
+  static const GET_ALL_PROMPTS = r'''
+  query{
+  getAllPrompt{
+    error
+    msg
+    data{
+      _id
+      prompt
+    }
+  }
+}''';
 }

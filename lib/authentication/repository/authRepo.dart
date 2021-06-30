@@ -42,7 +42,6 @@ class AuthRepo{
     if(response.error){
       return true;
     }else{
-
       await completeUserAuth(response.data);
       return false;
     }
@@ -64,6 +63,23 @@ class AuthRepo{
 
 
     return user;
+  }
+
+  static loginWithToken(String idToken) async{
+    ApiResponse _response = await Api.query(
+        queryName: GQueries.LOGIN_WITH_ID_TOKEN_NAME,
+        query: GQueries.LOGIN_WITH_ID_TOKEN,
+        variables: {
+          'idToken' : idToken
+        }
+    );
+
+    if(_response.error){
+      return true;
+    }else{
+      await completeUserAuth(_response.data);
+      return false;
+    }
   }
 
 }

@@ -6,7 +6,8 @@ import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/mainApp/view/widgets/primary_color_button.dart';
 import 'package:sayphi/sady/view/43_profile_page_photos.dart';
-import 'package:sayphi/sady/view/44_profile_page_add_prompt.dart';
+import 'package:sayphi/user/repository/userRepo.dart';
+import 'package:sayphi/user/view/44_profile_page_add_prompt.dart';
 import 'package:sayphi/user/view_model/userViewModel.dart';
 
 class ProfilePageEditInfo extends StatefulWidget {
@@ -20,7 +21,6 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  TextEditingController _ageController = TextEditingController();
   TextEditingController _cityController = TextEditingController();
   TextEditingController _ethnicityController = TextEditingController();
   TextEditingController _religionController = TextEditingController();
@@ -44,7 +44,7 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
 
   @override
   Widget build(BuildContext context) {
-    editors(String title, String? hint, TextEditingController controller, [bool obscure = false]){
+    editors(String title, String? hint, [TextEditingController? controller, bool obscure = false, TextInputType? type]){
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -55,10 +55,18 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
           Flexible(
             flex: 6,
             child: TextFormField(
+              keyboardType: type,
               obscureText: obscure,
+              enabled: controller == null ? false : true,
               controller: controller,
+              style: TextStyle(
+                color: AppColor.TEXT_LIGHT
+              ),
               decoration: InputDecoration(
                 hintText: hint ?? title,
+                hintStyle: TextStyle(
+                  color: AppColor.TEXT_LIGHT
+                )
               ),
             ))
         ],
@@ -74,6 +82,12 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
 
           TextButton(
             onPressed: (){
+
+              UserRepo.updateProfile(
+                nickName: _nameController.text == '' ? null : _nameController.text,
+                userLocationName: _cityController.text == '' ? null : _cityController.text,
+                userHeight: _heightController.text == '' ? null : int.parse(_heightController.text)
+              );
 
             },
             child: Text('Save', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.PRIMARY))
@@ -109,16 +123,16 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
                           Text('Edit personal profile', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                           SizedBox(height: 10,),
                           editors('Name', _user.name , _nameController),
-                          editors('Email/ Phone', _user.emailOrPhone, _emailController),
+                          editors('Email/ Phone', _user.emailOrPhone),
                           editors('Password', '********', _passwordController, true),
                           Divider(height: 40,),
                           Text('Edit public profile', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                           SizedBox(height: 10,),
-                          editors('Age', '69' , _ageController),
+                          editors('Age', '69'),
                           editors('City', _user.filters.location!.name, _cityController),
                           editors('Ethnicity', _user.ethnicity!.ethnicity , _ethnicityController),
                           editors('Religion', 'Religion' , _religionController),
-                          editors('Height', '168 cm', _heightController),
+                          editors('Height', '168 cm', _heightController, false, TextInputType.number),
                           editors('Occupation', 'UI Designer', _occupationController),
                           editors('School', 'School name here', _schoolController),
                           editors('College', 'College name here', _collegeController),

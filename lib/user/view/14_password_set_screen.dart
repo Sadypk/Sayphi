@@ -128,7 +128,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
 
                   }else{
                     Snack.top(
-                        message: 'Please choose the options to continue'
+                      message: 'Please choose the options to continue'
                     );
                   }
 

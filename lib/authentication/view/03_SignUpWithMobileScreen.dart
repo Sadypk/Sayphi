@@ -1,6 +1,7 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sayphi/authentication/view/05_verify_otp_code.dart';
 import 'package:sayphi/mainApp/components/shaderBgBody.dart';
@@ -12,7 +13,16 @@ import '../../mainApp/resources/appColor.dart';
 import '../../mainApp/resources/appImages.dart';
 import '../../mainApp/resources/fontStyle.dart';
 
-class SignUpWithMobileScreen extends StatelessWidget {
+class SignUpWithMobileScreen extends StatefulWidget {
+  @override
+  _SignUpWithMobileScreenState createState() => _SignUpWithMobileScreenState();
+}
+
+class _SignUpWithMobileScreenState extends State<SignUpWithMobileScreen> {
+
+  final _phoneController = TextEditingController();
+  String countryCode = '+39';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +80,7 @@ class SignUpWithMobileScreen extends StatelessWidget {
                           child: Row(
                             children: [
                               CountryCodePicker(
-                                onChanged: print,
+                                onChanged: (code) => countryCode = code.dialCode!,
                                 // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
                                 initialSelection: 'IT',
                                 favorite: ['+39','FR'],
@@ -90,6 +100,11 @@ class SignUpWithMobileScreen extends StatelessWidget {
 
                               Expanded(
                                 child: TextField(
+                                  controller: _phoneController,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
                                   decoration: InputDecoration(
                                     hintText: 'Enter number',
                                     contentPadding: EdgeInsets.only(left: 12)
@@ -105,7 +120,10 @@ class SignUpWithMobileScreen extends StatelessWidget {
 
                         MainButton(
                           onPress: (){
-                            Get.to(()=> VerifyOtpScreen());
+
+                            if(_phoneController.text != ''){
+                              Get.to(()=> VerifyOtpScreen(phoneNumber: countryCode+'${_phoneController.text}'));
+                            }
                           },
                           btnColor: Colors.white,
                           label: 'Continue'

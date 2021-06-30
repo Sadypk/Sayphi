@@ -2,7 +2,6 @@ import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:flutter/material.dart';
-import 'package:sayphi/mainApp/util/env.dart';
 
 class BroadcastPage extends StatefulWidget {
   final bool isBroadcaster;
@@ -66,7 +65,7 @@ class _BroadcastPageState extends State<BroadcastPage> {
       },
     ));
 
-    await _engine.joinChannel('006f726ff5849cf45de913d6c7fd8cfce34IABSPrEN2HrCSZHcKAWl8enrFi0QLDaHE8rPwpW65tHa2Qx+f9gAAAAAEAAY899JHQLaYAEAAQAZAtpg', 'test', null, 0);
+    await _engine.joinChannel('006f726ff5849cf45de913d6c7fd8cfce34IAAtnkB9q2rFi4GwvOg5QbJLU2cW6EFCnWASTcDifp9Aj+LcsooAAAAAEAAY899JORLaYAEAAQA1Etpg', 'test1', null, 0);
   }
 
 

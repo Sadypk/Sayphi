@@ -8,7 +8,7 @@ class GMutation{
     $showGender: Boolean
     $dob: String
     $nickName: String
-    $ethnicityID: ID
+    $userEthnicityID: ID
     $profileImage: String
     $isComplete: Boolean
     $locationName: String
@@ -27,21 +27,32 @@ class GMutation{
     $childrenEnd: Int
     $smoking: Boolean
     $pets: Boolean
-    $religion: ID
+    $filterReligion: ID
     $password: String
+    $userHeight: Int
+    $userReligion: ID
+    $filterEthnicity: ID
+    $questionID: ID
+    $questionAnswer: String
 ){
   updateUser(
     userInput : {
       first_name: $firstname
       last_name: $lastname
+      password: $password
       gender: $genderId
       show_gender_in_profile: $showGender
       date_of_birth: $dob
       nick_name: $nickName
-      ethnicity: $ethnicityID
+      ethnicity: $userEthnicityID
+      religion: $userReligion
+      height: $userHeight
       profile_image: $profileImage
       complete: $isComplete
-      password: $password
+      question_answer:[{
+        question: $questionID
+        answer: $questionAnswer
+      }]
       filters:{
         location: {
           name: $locationName
@@ -69,10 +80,51 @@ class GMutation{
         }
         smoking: $smoking
         pets: $pets
-        religion: $religion
+        religion: $filterReligion
+        ethnicity: $filterEthnicity
       }
     }
   ){
+    error
+    msg
+  }
+}
+  ''';
+
+  static const USER_ADD_PROMPT_NAME = 'addUserPrompt';
+  static const USER_ADD_PROMPT = r'''
+  mutation($id: ID $answer: String){
+  addUserPrompt(prompt: $id answer: $answer){
+    error
+    msg
+  }
+}
+  ''';
+
+  static const USER_UPDATE_PROMPT_NAME = 'updateUserPrompt';
+  static const USER_UPDATE_PROMPT = r'''
+  mutation($id: ID $answer: String){
+  updateUserPrompt(prompt: $id answer: $answer){
+    error
+    msg
+  }
+}
+  ''';
+
+  static const USER_DELETE_PROMPT_NAME = 'deleteUserPrompt';
+  static const USER_DELETE_PROMPT = r'''
+mutation($id : ID){
+  deleteUserPrompt(prompt : $id){
+    error
+    msg
+  }
+}
+  ''';
+
+  static const USER_ADD_IMAGE_NAME = 'addImageToUserProfile';
+  static const USER_ADD_IMAGE = r'''
+  mutation($link: String){
+  addImageToUserProfile(image: $link){
     error
     msg
   }

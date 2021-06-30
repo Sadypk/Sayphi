@@ -15,8 +15,8 @@ class _AgoraStreamingState extends State<AgoraStreaming> {
     await [Permission.camera, Permission.microphone].request();
 
     Get.to(() => BroadcastPage(
-          isBroadcaster: isBroadcaster,
-        ));
+      isBroadcaster: isBroadcaster,
+    ));
   }
 
   @override

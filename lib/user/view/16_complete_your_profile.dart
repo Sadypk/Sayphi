@@ -5,10 +5,32 @@ import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/appImages.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/mainApp/view/home.dart';
+import 'package:sayphi/mainApp/view_model/appViewModel.dart';
+import 'package:sayphi/user/repository/getBasicData.dart';
 import 'package:sayphi/user/view/17_18_19_20_profile_questionsScreen.dart';
 
-class CompleteYourProfileScreen extends StatelessWidget {
+class CompleteYourProfileScreen extends StatefulWidget {
   const CompleteYourProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  _CompleteYourProfileScreenState createState() => _CompleteYourProfileScreenState();
+}
+
+class _CompleteYourProfileScreenState extends State<CompleteYourProfileScreen> {
+
+  bool dataLoading = true;
+
+  Future<void> getQuestions() async{
+    AppViewModel.appQuestionAnswers = await BasicDataRepo.getAllQuestions();
+
+    dataLoading = false;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getQuestions();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +60,9 @@ class CompleteYourProfileScreen extends StatelessWidget {
             SizedBox(height: Get.height * .15,),
             MainButton(
               onPress: (){
-                Get.to(()=>ProfileQuestionsScreen());
+                if(!dataLoading){
+                  Get.to(()=>ProfileQuestionsScreen());
+                }
               },
               label: 'Complete profile'
             ),

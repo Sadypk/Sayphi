@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:sayphi/mainApp/components/cTextFiel.dart';
 import 'package:sayphi/mainApp/components/emptyList.dart';
 import 'package:sayphi/mainApp/components/loader.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
-import 'package:sayphi/sady/view/45_profile_page_add_prompt_list.dart';
+import 'package:sayphi/user/view/45_profile_page_add_prompt_list.dart';
 import 'package:sayphi/user/model/promptModel.dart';
 import 'package:sayphi/user/repository/userRepo.dart';
 
@@ -64,7 +65,7 @@ class _ProfilePageAddPromptState extends State<ProfilePageAddPrompt> {
         //prompt list I guess
         FutureBuilder(
           future: UserRepo.getAllPrompts(),
-          builder: (_, AsyncSnapshot<List<PromptModel>> snapshot){
+          builder: (_, AsyncSnapshot<List<UserPromptModel>> snapshot){
             if(snapshot.hasData && snapshot.data != null){
               final data = snapshot.data!;
               return data.length > 0 ? Expanded(
@@ -86,41 +87,58 @@ class _ProfilePageAddPromptState extends State<ProfilePageAddPrompt> {
 }
 
 class PromptListTile extends StatelessWidget {
-  final PromptModel prompt;
-  const PromptListTile({Key? key, required this.prompt}) : super(key: key);
+  final UserPromptModel prompt;
+  PromptListTile({Key? key, required this.prompt}) : super(key: key);
 
+  final _textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Container(
-        height: 80,
-        width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: AppColor.TEXT_LIGHT, width: 0.5),
-            borderRadius: BorderRadius.circular(5)
+          color: Colors.white,
+          border: Border.all(color: AppColor.TEXT_LIGHT, width: 0.5),
+          borderRadius: BorderRadius.circular(5)
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: ExpansionTile(
+          title: Text(prompt.prompt, style: TextStyle(color: AppColor.PRIMARY, fontSize: 16)),
+          subtitle: Text(prompt.answer, style: TextStyle(fontSize: 16, color: AppColor.TEXT_LIGHT)),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(FontAwesomeIcons.edit, size: 15, color: Color(0xff666666),),
+              SizedBox(width: 7,),
+              GestureDetector(
+                onTap: (){
+                  UserRepo.deletePrompt(prompt.id);
+                },
+                child: Icon(Icons.delete, size: 20, color: AppColor.PRIMARY,)),
+            ],
+          ),
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('A book everyone should read', style: TextStyle(color: AppColor.PRIMARY, fontSize: 16),),
-                Text('Sherlock Holmes', style: TextStyle(fontSize: 16),)
-              ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CTextField(
+                controller: _textController,
+                hintText: 'Your Answer',
+              ),
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(FontAwesomeIcons.edit, size: 15, color: Color(0xff666666),),
-                SizedBox(width: 7,),
-                Icon(Icons.delete, size: 20, color: AppColor.PRIMARY,),
-              ],
+
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(primary: AppColor.PRIMARY),
+                onPressed: (){
+
+                  if(_textController.text != ''){
+                    FocusScope.of(context).unfocus();
+                    UserRepo.updatePrompt(prompt.id, _textController.text);
+                    _textController.clear();
+                  }
+
+                },
+                child: Text('Save')
             )
           ],
         ),

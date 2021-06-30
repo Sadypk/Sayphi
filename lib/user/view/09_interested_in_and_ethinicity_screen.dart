@@ -174,7 +174,7 @@ class _InterestedInAndEthnicityChooseScreenState extends State<InterestedInAndEt
 
                   UserRepo.updateProfile(
                     interestedIn: interestedGender,
-                    ethnicityId: userEthnicity!.id
+                    userEthnicityID: userEthnicity!.id
                   );
 
                   Get.off(()=> NameAndBirthdayScreen());

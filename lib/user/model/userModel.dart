@@ -14,6 +14,7 @@ class UserModel {
     this.gender,
     required this.filters,
     required this.emailOrPhone,
+    this.height,
   });
 
   String id;
@@ -22,6 +23,7 @@ class UserModel {
   String? profileImage;
   bool isProfileComplete;
   int? dateOfBirth;
+  int? height;
   List<ImageModel> images;
   List<VideoModel> videos;
   bool showGenderInProfile;
@@ -33,13 +35,14 @@ class UserModel {
     id: json["_id"],
     emailOrPhone: json["phone_or_email"],
     name: json["nick_name"],
+    height: json["height"],
     profileImage: json["profile_image"],
     isProfileComplete: json["complete"] == null ? false : json["complete"],
-    dateOfBirth: int.parse(json["date_of_birth"]),
+    dateOfBirth: json["date_of_birth"] == null ? null : int.parse(json["date_of_birth"]),
     images: json["images"] == null ? [] : List<ImageModel>.from(json["images"].map((x) => ImageModel.fromJson(x))),
     videos: json["videos"] == null ? [] : List<VideoModel>.from(json["videos"].map((x) => VideoModel.fromJson(x))),
-    showGenderInProfile: json["show_gender_in_profile"] ? false : json["show_gender_in_profile"],
-    ethnicity: EthnicityModel.fromJson(json["ethnicity"]),
+    showGenderInProfile: json["show_gender_in_profile"] == null ?  false : json["show_gender_in_profile"],
+    ethnicity: json["ethnicity"] == null ? null : EthnicityModel.fromJson(json["ethnicity"]),
     gender: json["gender"] == null ? null : GenderModel.fromJson(json["gender"]),
     filters: UserFilterModel.fromJson(json["filters"]),
   );
@@ -47,7 +50,7 @@ class UserModel {
 
 class ImageModel{
   String image;
-  String status;
+  bool status;
 
   ImageModel({
     required this.image,

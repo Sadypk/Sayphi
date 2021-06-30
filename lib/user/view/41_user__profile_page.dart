@@ -62,7 +62,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     borderRadius: BorderRadius.circular(7),
                     image: DecorationImage(
                       image: CachedNetworkImageProvider(
-                        Demo.PROFILE_IMAGE
+                        _user.profileImage == null || _user.profileImage == '' ? Demo.PROFILE_IMAGE : _user.profileImage!
                       ),
                       fit: BoxFit.cover
                     ),
@@ -204,7 +204,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
             //Height
             SizedBox(height: 30,),
-            _buildDetailSection('Height', '168 cm'),
+            _buildDetailSection('Height', '${_user.height ?? 'None specified' } ${_user.height == null ? '' : ' cm'}'),
 
             //Education
             SizedBox(height: 20,),

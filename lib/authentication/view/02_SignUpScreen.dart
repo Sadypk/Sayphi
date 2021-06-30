@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -57,13 +59,13 @@ class SignUpScreen extends StatelessWidget {
                       icon: FontAwesomeIcons.facebook,
                       label: 'facebook',
                     ),
-                    AuthButton(
+                    if(Platform.isAndroid)AuthButton(
                       onPress: (){},
                       color: Color(0xff4285F4),
                       icon: FontAwesomeIcons.google,
                       label: 'gmail',
                     ),
-                    AuthButton(
+                    if(Platform.isIOS)AuthButton(
                       onPress: (){},
                       color: Color(0xffDBDBDB),
                       icon: FontAwesomeIcons.apple,

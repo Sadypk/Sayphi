@@ -10,9 +10,10 @@ import 'package:sayphi/mainApp/components/customBottomNav/lib/fancy_bottom_navig
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/mainApp/util/localStorage.dart';
-import 'package:sayphi/sady/view/41_profile_page.dart';
+import 'package:sayphi/user/view/41_user__profile_page.dart';
 import 'package:sayphi/sady/view/48_more_button_page_(button_6).dart';
 import 'package:sayphi/user/view/22_fullWidthDialog.dart';
+import 'package:sayphi/user/view_model/userViewModel.dart';
 
 import '../../demo_files.dart';
 
@@ -80,11 +81,11 @@ class _HomeState extends State<Home> {
             onTap: (){
               Get.to(()=> UserProfilePage());
             },
-            child: CircleAvatar(
+            child: Obx(()=> CircleAvatar(
               backgroundImage: CachedNetworkImageProvider(
-                Demo.PROFILE_IMAGE
+                UserViewModel.user.value.profileImage == null || UserViewModel.user.value.profileImage == '' ? Demo.PROFILE_IMAGE : UserViewModel.user.value.profileImage!
               ),
-            ),
+            )),
           ),
         ),
         actions: [
