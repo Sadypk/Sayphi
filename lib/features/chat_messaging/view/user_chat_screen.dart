@@ -1,17 +1,19 @@
+import 'package:dash_chat/dash_chat.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'package:sayphi/demo_files.dart';
+import 'package:get/get.dart';
 import 'package:sayphi/features/chat_messaging/repository/chatRepo.dart';
+import 'package:sayphi/features/chat_messaging/view_model/chatViewModel.dart';
+import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/user/view_model/userViewModel.dart';
 
 class UserChatScreen extends StatefulWidget {
 
 
-  final String toUser;
+  final String toUserId;
   final String toUserImage;
+  final String toUserName;
 
-  const UserChatScreen({Key? key, required this.toUser, required this.toUserImage}) : super(key: key);
+  const UserChatScreen({Key? key, required this.toUserId, required this.toUserImage, required this.toUserName}) : super(key: key);
 
   @override
   _UserChatScreenState createState() => _UserChatScreenState();
@@ -19,30 +21,59 @@ class UserChatScreen extends StatefulWidget {
 
 class _UserChatScreenState extends State<UserChatScreen> {
 
-  late types.User _user;
+  ChatUser _fromUser = ChatUser(
+    uid: UserViewModel.user.value.id,
+    name: UserViewModel.user.value.name,
+    avatar: UserViewModel.user.value.profileImage
+  );
+
+  late ChatUser _toUser;
 
   @override
   void initState() {
     super.initState();
-
-    final appUser = UserViewModel.user.value;
-
-    _user = types.User(
-      id: appUser.id,
-      firstName: appUser.name,
-      imageUrl: appUser.profileImage ?? Demo.PROFILE_IMAGE,
+    _toUser = ChatUser(
+      uid: widget.toUserId,
+      name: widget.toUserName,
+      avatar: widget.toUserImage,
     );
+
+    ChatRepo.getChat(widget.toUserId);
+
   }
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: Chat(
-        user: _user,
-        messages: [],
-        onSendPressed: (message) => ChatRepo.sendMessage(message.text, widget.toUser),
-      ),
+      appBar: AppBar(),
+      body: Obx((){
+
+        List<ChatMessage> _messages = [];
+
+        ChatViewModel.currentChat.forEach((msg) {
+          _messages.add(ChatMessage(
+            text: msg.message,
+            user: msg.fromUser == _toUser.uid ? _fromUser : _toUser,
+            createdAt: msg.createdAt
+          ));
+        });
+
+
+        _messages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+
+        return Theme(
+          data: ThemeData(
+            accentColor: AppColor.PRIMARY
+          ),
+          child: DashChat(
+            messages: _messages,
+            user: _toUser,
+            sendOnEnter: true,
+            onSend: (ChatMessage chatMessage) => ChatRepo.sendMessage(chatMessage.text!, _toUser)
+          ),
+        );
+      }),
     );
   }
 }

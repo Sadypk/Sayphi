@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:sayphi/features/chat_messaging/model/messagModel.dart';
+import 'package:sayphi/features/chat_messaging/repository/chatRepo.dart';
+import 'package:sayphi/features/chat_messaging/view_model/chatViewModel.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/features/chat_messaging/view/widgets/chat_head.dart';
@@ -7,8 +11,19 @@ import 'package:sayphi/features/chat_messaging/view/widgets/chat_head.dart';
 import '../../../demo_files.dart';
 import 'widgets/messageListView.dart';
 
-class ChatMainScreen extends StatelessWidget {
+class ChatMainScreen extends StatefulWidget {
+  @override
+  _ChatMainScreenState createState() => _ChatMainScreenState();
+}
+
+class _ChatMainScreenState extends State<ChatMainScreen> {
   final TextEditingController searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    ChatRepo.init();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,8 +116,48 @@ class ChatMainScreen extends StatelessWidget {
                 Expanded(
                   child: TabBarView(
                     children: [
-                      MessageListView(messageList: []),
-                      MessageListView(messageList: []),
+                      Obx((){
+
+                        List<List<MessageModel>> listMessages = [];
+
+                        List<String> toUserIDs = [];
+
+                        ChatViewModel.allChat.forEach((element) {
+
+                          if(!toUserIDs.contains(element.toUserId)){
+                            toUserIDs.add(element.toUserId);
+                          }
+
+                        });
+
+                        toUserIDs.forEach((element) {
+                          listMessages.add(ChatViewModel.allChat.where((message) => message.toUserId == element).toList());
+                        });
+
+                        return MessageListView(messageList: listMessages);
+
+                      }),
+                      Obx((){
+
+                        List<List<MessageModel>> listMessages = [];
+
+                        List<String> toUserIDs = [];
+
+                        ChatViewModel.allChat.forEach((element) {
+
+                          if(!toUserIDs.contains(element.toUserId)){
+                            toUserIDs.add(element.toUserId);
+                          }
+
+                        });
+
+                        toUserIDs.forEach((element) {
+                          listMessages.add(ChatViewModel.allChat.where((message) => message.toUserId == element).toList());
+                        });
+
+                        return MessageListView(messageList: listMessages);
+
+                      }),
                     ],
                   ),
                 ),
@@ -116,6 +171,12 @@ class ChatMainScreen extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+
+        IconButton(onPressed: (){
+
+          ChatRepo.init();
+
+        }, icon: Icon(Icons.api)),
 
         SizedBox(height: 12),
 

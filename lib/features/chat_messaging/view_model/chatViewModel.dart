@@ -1,8 +1,10 @@
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:get/get.dart';
+import 'package:sayphi/features/chat_messaging/model/messagModel.dart';
 
 class ChatViewModel{
 
-  static final allChat = <types.Message>[].obs;
+  static final allChat = <MessageModel>[].obs;
+
+  static final currentChat = <MessageModel>[].obs;
 
 }

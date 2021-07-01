@@ -71,6 +71,8 @@ class Api{
       }
 
     }catch(e){
+      if(showLoad) swapLoad();
+
       print(e.toString());
       Snack.showError(message: e.toString());
       return ApiResponse(

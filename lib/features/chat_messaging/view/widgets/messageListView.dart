@@ -1,14 +1,16 @@
+import 'package:dash_chat/dash_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sayphi/demo_files.dart';
+import 'package:sayphi/features/chat_messaging/model/messagModel.dart';
 import 'package:sayphi/features/chat_messaging/view/user_chat_screen.dart';
+import 'package:sayphi/features/chat_messaging/view_model/chatViewModel.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/features/chat_messaging/view/widgets/chat_head.dart';
 
 class MessageListView extends StatelessWidget {
 
-  final List messageList;
+  final List<List<MessageModel>> messageList;
   const MessageListView({required this.messageList});
 
   @override
@@ -16,26 +18,29 @@ class MessageListView extends StatelessWidget {
     return ListView.builder(
       padding: EdgeInsets.zero,
       shrinkWrap: true,
-      itemCount: Demo.DEMO_USERS.length,
+      itemCount: messageList.length,
       scrollDirection: Axis.vertical,
-      itemBuilder: (_, index) => MessageListTile(isRead: index%2 == 0, image: Demo.DEMO_USERS[index])
+      itemBuilder: (_, index) => MessageListTile(messages: messageList[index])
     );
   }
 }
 
 class MessageListTile extends StatelessWidget {
-  final bool isRead;
-  final String image;
+  final List<MessageModel> messages;
   const MessageListTile({Key? key,
-    this.isRead = false,
-    required this.image
+    required this.messages
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    messages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+    final lastMessage = messages.last;
+    return InkWell(
       onTap: (){
-        Get.to(()=> UserChatScreen(toUser: '1234', toUserImage: Demo.PROFILE_IMAGE));
+
+        ChatViewModel.currentChat.value = messages;
+
+        Get.to(()=> UserChatScreen(toUserId: lastMessage.toUserId, toUserImage: lastMessage.toUserImage, toUserName: lastMessage.toUserName));
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 12),
@@ -46,7 +51,7 @@ class MessageListTile extends StatelessWidget {
           children: [
             Expanded(
               flex: 2,
-              child: ChatHeader(image: image)),
+              child: ChatHeader(image: lastMessage.toUserImage)),
             Expanded(
               flex: 6,
               child: Column(
@@ -54,7 +59,7 @@ class MessageListTile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(
-                    'Arya Stark',
+                    lastMessage.toUserName,
                     style: TextStyle(
                       fontSize: 16,
                       fontFamily: CFontFamily.MEDIUM
@@ -64,12 +69,12 @@ class MessageListTile extends StatelessWidget {
                     height: 8,
                   ),
                   Text(
-                    'Fear cuts deeper than swords',
+                    lastMessage.message,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 14,
                       fontFamily: CFontFamily.MEDIUM,
-                      color: isRead ? AppColor.TEXT_LIGHT : AppColor.TEXT_COLOR
+                      color: AppColor.TEXT_LIGHT
                     )
                   ),
                 ],
@@ -83,7 +88,7 @@ class MessageListTile extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    '18:31',
+                    DateFormat('hh: MM').format(lastMessage.createdAt),
                     style: TextStyle(fontSize: 12, fontFamily: CFontFamily.MEDIUM),
                   ),
                   SizedBox(

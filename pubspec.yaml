@@ -34,7 +34,7 @@ dependencies:
   numberpicker: ^2.1.1
   language_picker: ^0.4.1
 
-  flutter_chat_ui: ^1.1.5
+  dash_chat: ^1.1.16
 
   #maps
   geolocator: ^7.0.3
