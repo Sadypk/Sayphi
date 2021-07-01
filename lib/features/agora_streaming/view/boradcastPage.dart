@@ -8,12 +8,12 @@ import 'package:get/get.dart';
 import 'package:sayphi/features/live/repository/videoLiveRepo.dart';
 import 'package:sayphi/mainApp/config/graphql/apiConfig.dart';
 import 'package:sayphi/mainApp/util/env.dart';
+import 'package:sayphi/user/view_model/userViewModel.dart';
 
 class BroadcastPage extends StatefulWidget {
   final bool isBroadcaster;
 
-  const BroadcastPage(
-      {Key? key, required this.isBroadcaster})
+  const BroadcastPage({Key? key, required this.isBroadcaster})
       : super(key: key);
 
   @override
@@ -21,7 +21,8 @@ class BroadcastPage extends StatefulWidget {
 }
 
 class _BroadcastPageState extends State<BroadcastPage> {
-  final _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  final _chars =
+      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
   Random _rnd = Random();
   final _users = <int>[];
   late RtcEngine _engine;
@@ -43,16 +44,22 @@ class _BroadcastPageState extends State<BroadcastPage> {
     initializeAgora();
   }
 
-
-
-  String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
-      length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+  String getRandomString(int length) => String.fromCharCodes(
+        Iterable.generate(
+          length,
+          (_) => _chars.codeUnitAt(
+            _rnd.nextInt(_chars.length),
+          ),
+        ),
+      );
 
   Future<void> initializeAgora() async {
     String channelName = getRandomString(10);
-    print('============================================================$channelName');
+    // String channelName = 'newChannelTest';
+    print('============================$channelName');
     String token = await VideoLiveRepo.createChannel(channelName);
-    print('============================================================$token');
+    // String token = '006f59ab6f25ce04087b630ea416be702b6IADxihwzC+CF0+EpW5loVljaMv5zJtpfqAxBmilyk2Yxgm+Da1Amd9o0IgBRe3KzF0bfYAQAAQCnAt5gAgCnAt5gAwCnAt5gBACnAt5g';
+    print('============================$token');
     await _initAgoraRtcEngine();
 
     _engine.setEventHandler(RtcEngineEventHandler(
@@ -82,9 +89,11 @@ class _BroadcastPageState extends State<BroadcastPage> {
       },
     ));
 
-    await _engine.joinChannel(token, channelName, null, 0);
+    await _engine.joinChannelWithUserAccount(
+        token,
+        channelName,
+        UserViewModel.user.value.id);
   }
-
 
   Future<void> _initAgoraRtcEngine() async {
     _engine = await RtcEngine.createWithConfig(RtcEngineConfig(Env.agoraID));
@@ -100,16 +109,20 @@ class _BroadcastPageState extends State<BroadcastPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(()=>Scaffold(
-      body: !Api.apiLoading.value?Center(
-        child: Stack(
-          children: <Widget>[
-            _broadcastView(),
-            _toolbar(),
-          ],
-        ),
-      ):SizedBox(),
-    ));
+    return Scaffold(
+      body: Obx(
+        () => Api.apiLoading.value
+            ? SizedBox()
+            : Center(
+                child: Stack(
+                  children: <Widget>[
+                    _broadcastView(),
+                    _toolbar(),
+                  ],
+                ),
+              ),
+      ),
+    );
   }
 
   Widget _toolbar() {
