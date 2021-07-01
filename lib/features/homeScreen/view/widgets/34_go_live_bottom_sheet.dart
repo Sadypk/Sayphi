@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sayphi/features/agora_streaming/view/agora_streaming.dart';
 import 'package:sayphi/features/live/view/35_go_live_info_screen.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
@@ -63,8 +64,9 @@ class GoLiveBtn extends StatelessWidget {
     return InkWell(
       onTap: (){
         /// closing the bottom sheet
-        Get.back();
-        Get.to(()=>GoLiveInfoScreen(liveType: type));
+       // Get.back();
+        // Get.to(()=>GoLiveInfoScreen(liveType: type));
+        Get.to(()=>AgoraStreaming());
       },
       borderRadius: BorderRadius.circular(8),
       child: Container(

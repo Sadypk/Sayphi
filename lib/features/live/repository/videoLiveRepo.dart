@@ -6,6 +6,7 @@ class VideoLiveRepo{
   static Future<String> createChannel(String channelName) async{
 
     final _response = await Api.mutate(
+      auth: true,
       queryName: GMutation.CREATE_CHANNEL_NAME,
       query: GMutation.CREATE_CHANNEL,
       variables: {

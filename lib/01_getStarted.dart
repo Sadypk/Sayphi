@@ -42,7 +42,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
             children: [
               /// TITLE IMAGE
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(18),
                 child: Image.asset(
                   Images.COUPLE_HOLDING_HANDS,
                   color: Colors.white,

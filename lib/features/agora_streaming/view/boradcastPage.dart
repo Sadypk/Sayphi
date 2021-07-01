@@ -4,7 +4,10 @@ import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sayphi/features/live/repository/videoLiveRepo.dart';
+import 'package:sayphi/mainApp/config/graphql/apiConfig.dart';
+import 'package:sayphi/mainApp/util/env.dart';
 
 class BroadcastPage extends StatefulWidget {
   final bool isBroadcaster;
@@ -47,8 +50,9 @@ class _BroadcastPageState extends State<BroadcastPage> {
 
   Future<void> initializeAgora() async {
     String channelName = getRandomString(10);
-    print(channelName);
+    print('============================================================$channelName');
     String token = await VideoLiveRepo.createChannel(channelName);
+    print('============================================================$token');
     await _initAgoraRtcEngine();
 
     _engine.setEventHandler(RtcEngineEventHandler(
@@ -83,7 +87,7 @@ class _BroadcastPageState extends State<BroadcastPage> {
 
 
   Future<void> _initAgoraRtcEngine() async {
-    _engine = await RtcEngine.createWithConfig(RtcEngineConfig('f726ff5849cf45de913d6c7fd8cfce34'));
+    _engine = await RtcEngine.createWithConfig(RtcEngineConfig(Env.agoraTOKEN));
     await _engine.enableVideo();
 
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
@@ -96,16 +100,16 @@ class _BroadcastPageState extends State<BroadcastPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
+    return Obx(()=>Scaffold(
+      body: !Api.apiLoading.value?Center(
         child: Stack(
           children: <Widget>[
             _broadcastView(),
             _toolbar(),
           ],
         ),
-      ),
-    );
+      ):SizedBox(),
+    ));
   }
 
   Widget _toolbar() {
