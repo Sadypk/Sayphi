@@ -27,7 +27,6 @@ class AuthRepo{
 
   }
 
-
   static Future<bool> loginWithEmailOrNumberAndPassword(String value, String password) async{
 
     ApiResponse response = await Api.query(

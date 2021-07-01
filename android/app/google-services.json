@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "867118650675-h77dlv3b2m7kg8akbql9k85uqrp8ap5n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lavishyields.sayphi",
+            "certificate_hash": "8914e23ee1ec846360cd44b7b411a904b785ccd7"
+          }
+        },
+        {
           "client_id": "867118650675-kaspt8l6gincmgaju9km9glrhprbdkr2.apps.googleusercontent.com",
           "client_type": 3
         }
