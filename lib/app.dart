@@ -29,10 +29,10 @@ class App extends StatelessWidget {
         scaffoldBackgroundColor: AppColor.SCAFFOLD_BACKGROUND,
         fontFamily: CFontFamily.LIGHT
       ),
-      home: GetStartedScreen(),
+      // home: GetStartedScreen(),
 
       /// Use this for custom routing
-      // home: AgoraStreaming(),
+      home: AgoraStreaming(),
     );
   }
 }

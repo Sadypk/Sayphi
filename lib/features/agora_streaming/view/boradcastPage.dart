@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:flutter/material.dart';
+import 'package:sayphi/features/live/repository/videoLiveRepo.dart';
 
 class BroadcastPage extends StatefulWidget {
   final bool isBroadcaster;
@@ -15,6 +18,8 @@ class BroadcastPage extends StatefulWidget {
 }
 
 class _BroadcastPageState extends State<BroadcastPage> {
+  final _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  Random _rnd = Random();
   final _users = <int>[];
   late RtcEngine _engine;
   bool muted = false;
@@ -35,7 +40,15 @@ class _BroadcastPageState extends State<BroadcastPage> {
     initializeAgora();
   }
 
+
+
+  String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
+      length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+
   Future<void> initializeAgora() async {
+    String channelName = getRandomString(10);
+    print(channelName);
+    String token = await VideoLiveRepo.createChannel(channelName);
     await _initAgoraRtcEngine();
 
     _engine.setEventHandler(RtcEngineEventHandler(
@@ -65,7 +78,7 @@ class _BroadcastPageState extends State<BroadcastPage> {
       },
     ));
 
-    await _engine.joinChannel('006f726ff5849cf45de913d6c7fd8cfce34IAAtnkB9q2rFi4GwvOg5QbJLU2cW6EFCnWASTcDifp9Aj+LcsooAAAAAEAAY899JORLaYAEAAQA1Etpg', 'test1', null, 0);
+    await _engine.joinChannel(token, channelName, null, 0);
   }
 
 
