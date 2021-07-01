@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 
 class AnimationModel{
@@ -13,12 +14,12 @@ class AnimationModel{
   });
 }
 
-class SmartPicks extends StatefulWidget {
+class SmartPicksScreen extends StatefulWidget {
   @override
-  _SmartPicksState createState() => _SmartPicksState();
+  _SmartPicksScreenState createState() => _SmartPicksScreenState();
 }
 
-class _SmartPicksState extends State<SmartPicks> with TickerProviderStateMixin{
+class _SmartPicksScreenState extends State<SmartPicksScreen> with TickerProviderStateMixin{
   double initial = 0.8;
   double end = 1;
 
@@ -110,6 +111,9 @@ class _SmartPicksState extends State<SmartPicks> with TickerProviderStateMixin{
   @override
   void dispose() {
     controller1.dispose();
+    controller2.dispose();
+    controller3.dispose();
+    controller4.dispose();
     super.dispose();
   }
 
@@ -131,8 +135,9 @@ class _SmartPicksState extends State<SmartPicks> with TickerProviderStateMixin{
       appBar: AppBar(
         backgroundColor: Colors.pink,
         elevation: 0,
+        automaticallyImplyLeading: false,
         actions: [
-          IconButton(onPressed: (){}, icon: Icon(Icons.cancel, color: Colors.white,))
+          IconButton(onPressed: Get.back, icon: Icon(Icons.cancel, color: Colors.white,))
         ],
       ),
       body: Container(

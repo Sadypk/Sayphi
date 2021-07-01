@@ -131,7 +131,7 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
                           editors('Age', '69'),
                           editors('City', _user.filters.location!.name, _cityController),
                           editors('Ethnicity', _user.ethnicity!.ethnicity , _ethnicityController),
-                          editors('Religion', 'Religion' , _religionController),
+                          editors('Religion', _user.religion!.religion , _religionController),
                           editors('Height', '168 cm', _heightController, false, TextInputType.number),
                           editors('Occupation', 'UI Designer', _occupationController),
                           editors('School', 'School name here', _schoolController),

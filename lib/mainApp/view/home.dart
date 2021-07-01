@@ -10,7 +10,7 @@ import 'package:sayphi/mainApp/components/customBottomNav/lib/fancy_bottom_navig
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/mainApp/util/localStorage.dart';
-import 'package:sayphi/user/view/41_user__profile_page.dart';
+import 'package:sayphi/user/view/41_user_profile_page.dart';
 import 'package:sayphi/sady/view/48_more_button_page_(button_6).dart';
 import 'package:sayphi/user/view/22_fullWidthDialog.dart';
 import 'package:sayphi/user/view_model/userViewModel.dart';

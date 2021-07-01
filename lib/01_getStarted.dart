@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:sayphi/authentication/view/04_LoginWithMobileEmailScreen.dart';
 import 'package:sayphi/mainApp/components/mainButton.dart';
 import 'package:sayphi/mainApp/components/shaderBgBody.dart';
+import 'package:sayphi/mainApp/repository/appRepo.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/appImages.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
@@ -19,6 +20,13 @@ class GetStartedScreen extends StatefulWidget {
 }
 
 class _GetStartedScreenState extends State<GetStartedScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    AppRepo.init();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

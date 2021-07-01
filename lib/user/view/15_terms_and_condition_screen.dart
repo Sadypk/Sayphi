@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:sayphi/mainApp/components/mainButton.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
+import 'package:sayphi/mainApp/view_model/appViewModel.dart';
 
 import '16_complete_your_profile.dart';
 
@@ -49,7 +50,7 @@ class TermsAndConditionAgreementScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 12),
                   Text(
-                    'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard.',
+                    AppViewModel.termsAndConditions.header,
                     style: TextStyle(
                       fontFamily: CFontFamily.REGULAR,
                       color: AppColor.TEXT_LIGHT,
@@ -60,23 +61,14 @@ class TermsAndConditionAgreementScreen extends StatelessWidget {
                   /// basic info`s suggestions about image uploads
                   SizedBox(height: 20),
 
-                  TermsWidget(
-                    title: 'Be yourself',
-                    subTitle: 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
-                  ),
-                  TermsWidget(
-                    title: 'Stay safe',
-                    subTitle: 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
-                  ),
-                  TermsWidget(
-                    title: 'Respect people',
-                    subTitle: 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
+                  Wrap(
+                    children: AppViewModel.termsAndConditions.policies.map((e) => TermsWidget(title: e.title, subTitle: e.description)).toList()
                   ),
 
 
                   SizedBox(height: 20),
                   Text(
-                    'Sayphie and our partners use technologies such as device recognition to store or access information on your device., and to process personal information such as gender and age',
+                    AppViewModel.termsAndConditions.footer,
                     style: TextStyle(
                       fontStyle: FontStyle.italic,
                       fontFamily: CFontFamily.MEDIUM,

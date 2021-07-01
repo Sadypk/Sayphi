@@ -7,6 +7,7 @@ class Env{
   static late String agoraTOKEN;
   static late String twilioID;
   static late String twilioTOKEN;
+  static late String googleKey;
 
   static Future<void> init() async{
     await load();
@@ -15,5 +16,6 @@ class Env{
     agoraTOKEN = env['agora_TOKEN']!;
     twilioID = env['twilio_ID']!;
     twilioTOKEN = env['twilio_TOKEN']!;
+    googleKey = env['GOOGLE_API_KEY']!;
   }
 }

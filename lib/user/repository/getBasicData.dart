@@ -5,6 +5,7 @@ import 'package:sayphi/mainApp/model/promtModel.dart';
 import 'package:sayphi/mainApp/model/questionAnswerModel.dart';
 import 'package:sayphi/user/model/ethnicityModel.dart';
 import 'package:sayphi/user/model/genderModel.dart';
+import 'package:sayphi/user/model/religionModel.dart';
 
 class BasicDataRepo{
 
@@ -62,5 +63,20 @@ class BasicDataRepo{
     }else{
       return List.from(_response.data.map((gender) => PromptModel.fromJson(gender)));
     }
+  }
+
+  static Future<List<ReligionModel>> getAllReligion() async{
+
+    ApiResponse _response = await Api.query(
+        queryName: GQueries.GET_ALL_RELIGION_NAME,
+        query: GQueries.GET_ALL_RELIGION
+    );
+
+    if(_response.error){
+      return [];
+    }else{
+      return List.from(_response.data.map((gender) => ReligionModel.fromJson(gender)));
+    }
+
   }
 }

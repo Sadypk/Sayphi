@@ -1,4 +1,6 @@
+import 'package:sayphi/mainApp/model/questionAnswerModel.dart';
 import 'package:sayphi/user/model/genderModel.dart';
+import 'package:sayphi/user/model/religionModel.dart';
 
 class UserModel {
   UserModel({
@@ -15,6 +17,8 @@ class UserModel {
     required this.filters,
     required this.emailOrPhone,
     this.height,
+    this.qa = const [],
+    this.religion
   });
 
   String id;
@@ -30,12 +34,15 @@ class UserModel {
   EthnicityModel? ethnicity;
   GenderModel? gender;
   UserFilterModel filters;
+  List<UserQuestionAnswerModel> qa;
+  ReligionModel? religion;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
     id: json["_id"],
     emailOrPhone: json["phone_or_email"],
     name: json["nick_name"],
     height: json["height"],
+    qa : List.from(json['question_answer'].map((data) => UserQuestionAnswerModel.fromJson(data))),
     profileImage: json["profile_image"],
     isProfileComplete: json["complete"] == null ? false : json["complete"],
     dateOfBirth: json["date_of_birth"] == null ? null : int.parse(json["date_of_birth"]),
@@ -45,7 +52,24 @@ class UserModel {
     ethnicity: json["ethnicity"] == null ? null : EthnicityModel.fromJson(json["ethnicity"]),
     gender: json["gender"] == null ? null : GenderModel.fromJson(json["gender"]),
     filters: UserFilterModel.fromJson(json["filters"]),
+    religion: json['religion'] == null ? null : ReligionModel.fromJson(json['religion'])
   );
+}
+
+class UserQuestionAnswerModel{
+  QuestionAnswerModel qa;
+  String answer;
+
+  UserQuestionAnswerModel({
+    required this.qa,
+    required this.answer
+});
+
+  factory UserQuestionAnswerModel.fromJson(Map<String, dynamic> json) => UserQuestionAnswerModel(
+    qa: QuestionAnswerModel.fromJson(json['question']),
+    answer: json['answer']
+  );
+
 }
 
 class ImageModel{
@@ -120,7 +144,7 @@ class UserFilterModel {
   RangeModel? children;
   bool smoking;
   bool pets;
-  EthnicityModel? religion;
+  ReligionModel? religion;
 
   factory UserFilterModel.fromJson(Map<String, dynamic> json) => UserFilterModel(
     location: json["location"] == null ? null : LocationModel.fromJson(json["location"]),
@@ -134,7 +158,7 @@ class UserFilterModel {
     children: RangeModel.fromJson(json["children"]),
     smoking: json["smoking"] ?? false,
     pets: json["pets"] ?? false,
-    religion: json["religion"] == null ? null : EthnicityModel.fromJson(json["religion"]),
+    religion: json["religion"] == null ? null : ReligionModel.fromJson(json["religion"]),
   );
 }
 
