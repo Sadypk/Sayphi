@@ -21,6 +21,5 @@ main() async{
   /// starting local storage
   await LocalStorage.init();
 
-
   runApp(App());
 }

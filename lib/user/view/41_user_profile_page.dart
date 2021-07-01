@@ -7,8 +7,8 @@ import 'package:sayphi/demo_files.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/appImages.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
-import 'package:sayphi/sady/view/42_profile_page_edit_info.dart';
-import 'package:sayphi/sady/view/46_settings_page.dart';
+import 'package:sayphi/user/view/42_profile_page_edit_info.dart';
+import 'package:sayphi/user/view/46_settings_page.dart';
 import 'package:sayphi/user/view_model/userViewModel.dart';
 
 class UserProfilePage extends StatefulWidget {
@@ -40,11 +40,28 @@ class _UserProfilePageState extends State<UserProfilePage> {
         backgroundColor: AppColor.SCAFFOLD_BG_PINK,
         appBar: AppBar(
           backgroundColor: Colors.white,
-          leading: IconButton(icon: Icon(Icons.settings, color: AppColor.DARK_GREY,), onPressed: (){Get.to(SettingsPage());},),
+          centerTitle: true,
+          title: Text(
+            'Profile',
+            style: TextStyle(
+              fontFamily: CFontFamily.MEDIUM,
+              color: AppColor.TEXT_COLOR
+            ),
+          ),
+          leading: IconButton(
+            onPressed: (){
+              Get.to(()=>SettingsPage());
+            },
+            icon: Icon(Icons.settings, color: AppColor.DARK_GREY,),
+
+          ),
           actions: [
-            IconButton(onPressed: (){
-              Get.to(()=>ProfilePageEditInfo());
-            }, icon: Icon(Icons.person_remove_alt_1_rounded, color: AppColor.DARK_GREY,)),
+            IconButton(
+              onPressed: (){
+                Get.to(()=>ProfilePageEditInfo()
+              );
+            },
+              icon: Icon(Icons.person_remove_alt_1_rounded, color: AppColor.DARK_GREY,)),
           ],
         ),
         body: ListView(
@@ -207,20 +224,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
             _buildDetailSection('Height', '${_user.height ?? 'None specified' } ${_user.height == null ? '' : ' cm'}'),
 
             //Education
-            SizedBox(height: 20,),
-            _buildDetailSection('Education', 'Masters'),
-
-            //Religion
-            SizedBox(height: 20,),
-            _buildDetailSection('Religion', 'Muslim'),
-
-            //Ethnicity
-            SizedBox(height: 20,),
-            _buildDetailSection('Ethnicity', 'Asian'),
-
-            //Relationship goals
-            SizedBox(height: 20,),
-            _buildDetailSection('Relationship goals', 'Prefer not to say'),
+            Wrap(
+              children: _user.qa.map((e) => Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 20,width: double.infinity),
+                  _buildDetailSection(e.qa.question, e.answer),
+                ],
+              )).toList(),
+            ),
             SizedBox(height: 30,),
           ],
         ),

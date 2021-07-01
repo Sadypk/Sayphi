@@ -101,8 +101,8 @@ class ChatMainScreen extends StatelessWidget {
                 Expanded(
                   child: TabBarView(
                     children: [
-                      MessageListView(),
-                      MessageListView(),
+                      MessageListView(messageList: []),
+                      MessageListView(messageList: []),
                     ],
                   ),
                 ),

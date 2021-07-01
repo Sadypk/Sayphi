@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
+import 'package:sayphi/user/view/49_smart_picks.dart';
 
 class MoreButtonPage extends StatefulWidget {
   @override
@@ -31,7 +33,11 @@ class _MoreButtonPageState extends State<MoreButtonPage> {
         child: ListView(
           children: [
             SizedBox(height: 15,),
-            listTile('Smart picks'),
+            GestureDetector(
+              onTap: (){
+                Get.to(()=> SmartPicksScreen());
+              },
+              child: listTile('Smart picks')),
             listTile('Daily surprise'),
             listTile('All stories'),
             listTile('Followers'),

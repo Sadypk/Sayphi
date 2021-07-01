@@ -52,6 +52,20 @@ query{
   ''';
   static const GET_ALL_ETHNICITY_NAME = 'getAllEthnicity';
 
+  static const GET_ALL_RELIGION = r'''
+query{
+  getAllReligion{
+    error
+    msg
+    data{
+      _id
+      religion
+    }
+  }
+}
+  ''';
+  static const GET_ALL_RELIGION_NAME = 'getAllReligion';
+
   static const GET_ALL_USER_PROMPTS_NAME = 'getUserPrompts';
   static const GET_ALL_USER_PROMPTS = r'''
 query{
@@ -83,6 +97,14 @@ query($token: String){
       profile_image
       complete
       date_of_birth
+      question_answer{
+        question{
+          _id
+          question
+          answers
+        }
+        answer
+      }
     	images{
         image
         status
@@ -96,7 +118,10 @@ query($token: String){
         _id
         ethnicity
       }
-      
+      religion{
+        _id
+        religion
+      }
       gender{
         _id
         gender
@@ -165,5 +190,25 @@ query($token: String){
       prompt
     }
   }
-}''';
+}
+''';
+
+  static const GET_POLICY_NAME = 'getPolicy';
+  static const GET_POLICY = r'''
+  query($type: String){
+  getPolicy(type: $type){
+    error
+    msg
+    data{
+      _id
+      header
+      footer
+      policies{
+        title
+        description
+      }
+    }
+  }
+}
+  ''';
 }

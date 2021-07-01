@@ -130,4 +130,15 @@ mutation($id : ID){
   }
 }
   ''';
+
+  static const CREATE_CHANNEL_NAME = 'createChannel';
+  static const CREATE_CHANNEL = r'''
+  mutation($channelName: String){
+  createChannel(channelName: $channelName){
+    error
+    msg
+    token
+  }
+}
+  ''';
 }
