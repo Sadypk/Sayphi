@@ -87,7 +87,7 @@ class _BroadcastPageState extends State<BroadcastPage> {
 
 
   Future<void> _initAgoraRtcEngine() async {
-    _engine = await RtcEngine.createWithConfig(RtcEngineConfig(Env.agoraTOKEN));
+    _engine = await RtcEngine.createWithConfig(RtcEngineConfig(Env.agoraID));
     await _engine.enableVideo();
 
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
