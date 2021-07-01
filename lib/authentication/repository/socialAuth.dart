@@ -24,15 +24,30 @@ class SocialAuth{
   }
 
   static Future<GoogleSignInAccount?> googleAuth() async{
-    GoogleSignIn _googleSignIn = GoogleSignIn(
-      scopes: [
-        'email',
-        'https://www.googleapis.com/auth/contacts.readonly',
-      ],
-    );
+    GoogleSignIn _googleSignIn = GoogleSignIn();
     try {
       GoogleSignInAccount? account = await _googleSignIn.signIn();
       if(account != null){
+
+        GoogleSignInAuthentication googleSignInAuthentication = await account.authentication;
+        AuthCredential credential = GoogleAuthProvider.credential(
+          idToken: googleSignInAuthentication.idToken,
+          accessToken: googleSignInAuthentication.accessToken
+        );
+
+        UserCredential? authCredential;
+        try {
+          authCredential = await auth.signInWithCredential(credential);
+
+        } on FirebaseAuthException catch (e) {
+          Snack.showError(title: 'Authentication Error', message: e.message);
+        }
+
+        if(authCredential != null){
+          final idToken = await auth.currentUser!.getIdToken();
+          await AuthRepo.loginWithToken(idToken);
+        }
+
         return account;
       }else{
         return null;
@@ -56,7 +71,6 @@ class SocialAuth{
     if (authCredential != null) {
       final idToken = await auth.currentUser!.getIdToken();
       await AuthRepo.loginWithToken(idToken);
-
     }
 
   }

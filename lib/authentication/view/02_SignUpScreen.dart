@@ -1,12 +1,10 @@
 import 'dart:io';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sayphi/authentication/repository/socialAuth.dart';
 import 'package:sayphi/authentication/view/04_LoginWithMobileEmailScreen.dart';
 import 'package:sayphi/mainApp/components/shaderBgBody.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
@@ -19,40 +17,6 @@ import '../../mainApp/resources/stringResources.dart';
 import '03_SignUpWithMobileScreen.dart';
 
 class SignUpScreen extends StatelessWidget {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-
-  Future handleGoogleSignIn() async {
-    String googleResults = '';
-    try {
-      GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
-      if (googleSignInAccount != null) {
-        GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
-        AuthCredential credential = GoogleAuthProvider.credential(
-            idToken: googleSignInAuthentication.idToken,
-            accessToken: googleSignInAuthentication.accessToken);
-        print(credential.token);
-        // var existingAccount = await UserProfileDataRepository().checkExistingFacebookEmail(googleSignInAccount.email, 'facebook');
-        var existingAccount;
-        if (existingAccount == null) {
-          /// creating new user
-          //login result
-          UserCredential result = await _auth.signInWithCredential(credential);
-          print(result.user!.displayName);
-          print(result.user!.photoURL);
-          print(result.user!.email);
-        } else {
-          return 'An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.';
-        }
-      }
-    } on FirebaseAuthException catch (eErrorData) {
-      googleResults = eErrorData.message!;
-      return googleResults;
-    }
-    return googleResults;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,9 +53,7 @@ class SignUpScreen extends StatelessWidget {
                       ),
                       if (Platform.isAndroid)
                         AuthButton(
-                          onPress: () {
-                            handleGoogleSignIn();
-                          },
+                          onPress: SocialAuth.googleAuth,
                           color: Color(0xff4285F4),
                           icon: FontAwesomeIcons.google,
                           label: 'gmail',
