@@ -123,17 +123,6 @@ class _SuperLikeOptionScreenState extends State<SuperLikeOptionScreen> {
                   ),
                 ),
 
-                /// follow user
-                CardWrap(
-                  onPressed: (){},
-                  child: Text(
-                    'Follow person',
-                    style: TextStyle(
-                        fontSize: 18
-                    ),
-                  )
-                ),
-
               ],
             ),
           ),
@@ -295,7 +284,7 @@ class UserImageView extends StatelessWidget {
                 ),
                 SizedBox(width: 4),
                 Text(
-                  '123',
+                  'Follow',
                   style: TextStyle(
                     color: Colors.white
                   ),

@@ -1,6 +1,9 @@
 class GMutation{
-  static const String UPDATE_USER_NAME = 'updateUser';
-  static const String UPDATE_USER = r'''
+
+  GMutation._();
+
+  static const UPDATE_USER_NAME = 'updateUser';
+  static const UPDATE_USER = r'''
   mutation(
     $firstname: String
     $lastname: String
@@ -138,6 +141,16 @@ mutation($id : ID){
     error
     msg
     token
+  }
+}
+  ''';
+
+  static const USER_ADD_DAY_NAME = 'addDay';
+  static const USER_ADD_DAY = r'''
+  mutation($image: String){
+  addDay(image: $image){
+    error
+    msg
   }
 }
   ''';

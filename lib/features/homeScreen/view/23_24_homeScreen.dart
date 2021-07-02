@@ -2,11 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:like_button/like_button.dart';
 import 'package:sayphi/demo_files.dart';
+import 'package:sayphi/features/dayStory/repository/dayStoryRepo.dart';
+import 'package:sayphi/features/dayStory/view/wdigets/homeScreenDayBar.dart';
 import 'package:sayphi/features/homeScreen/view/widgets/circularBtn.dart';
+import 'package:sayphi/mainApp/components/loader.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
-import 'package:sayphi/mainApp/resources/appConst.dart';
 import 'package:sayphi/mainApp/resources/appImages.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:tcard/tcard.dart';
@@ -26,29 +27,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool showStory = true;
 
+  bool pageLoad = true;
+
+  getData()async{
+    await DayStoryRepo.init();
+    setState(() {
+      pageLoad = false;
+    });
+  }
+
+  @override
+  void initState() {
+    if(mounted){
+      super.initState();
+      getData();
+    }else{
+      return ;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-
-
-    /// friends stories
-    _buildStoryPart(){
-      return Container(
-        height: Get.height * .12,
-        margin: EdgeInsets.only(left: 20, right: 20, top: 12),
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          shrinkWrap: true,
-          padding: EdgeInsets.zero,
-          itemCount: Demo.DEMO_USERS.length,
-          itemBuilder: (_, index) => UserDayAvatar(
-            imageLink: Demo.DEMO_USERS[index],
-            name: 'user_$index',
-            isOwn: index == 0
-          ),
-        ),
-      );
-    }
 
     /// main swiper widget
     _buildCards(){
@@ -248,10 +247,10 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return Scaffold(
-      body: CustomScrollView(
+      body: pageLoad ? Loader() : CustomScrollView(
         slivers: [
           SliverList(delegate: SliverChildListDelegate([
-            _buildStoryPart(),
+            HomeScreenDayBar(),
             _buildCards(),
             _buildUserInfo(true),
             _buildUserBluh()
@@ -262,58 +261,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class UserDayAvatar extends StatelessWidget {
-  final String imageLink;
-  final String name;
-  final bool isOwn;
-  final bool isWatched;
-  final bool userOnline;
-
-
-  const UserDayAvatar({Key? key,
-  required this.imageLink,
-  required this.name,
-  this.isOwn = false,
-  this.isWatched = false,
-  this.userOnline = false
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 12),
-      child: Stack(
-        children: [
-          Column(
-            children: [
-              CircleAvatar(
-                radius: 27,
-                backgroundColor: isWatched ? Colors.transparent : AppColor.PRIMARY,
-                child: CircleAvatar(
-                  radius: 25,
-                  backgroundImage: CachedNetworkImageProvider(imageLink),
-                ),
-              ),
-              SizedBox(height: 8),
-              Text(
-                isOwn ? 'Your Story' : name
-              )
-            ],
-          ),
-          if(isOwn)Positioned(
-            bottom: 24,
-            right: 0,
-            child: Icon(
-              Icons.add_circle_rounded,
-              color: AppColor.PRIMARY,
-              size: 20,
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
 
 class UserSwiperCard extends StatelessWidget {
   final String image;

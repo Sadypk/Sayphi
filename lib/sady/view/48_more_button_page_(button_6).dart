@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
+import 'package:sayphi/sady/view/54_followers.dart';
 import 'package:sayphi/user/view/49_smart_picks.dart';
 
 class MoreButtonPage extends StatefulWidget {
@@ -40,7 +41,11 @@ class _MoreButtonPageState extends State<MoreButtonPage> {
               child: listTile('Smart picks')),
             listTile('Daily surprise'),
             listTile('All stories'),
-            listTile('Followers'),
+            GestureDetector(
+              onTap: (){
+                Get.to(()=>FollowersScreen());
+              },
+              child: listTile('Followers')),
             listTile('My favorite'),
             listTile('Top ranked people'),
             listTile('Know me better: Challenge questions'),

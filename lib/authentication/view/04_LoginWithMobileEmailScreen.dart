@@ -34,6 +34,21 @@ class _LoginWithMobileEmailScreenState extends State<LoginWithMobileEmailScreen>
             child: Column(
               children: [
 
+                //TODO remove this
+                Row(
+                  children: [
+                    IconButton(onPressed: ()async{
+                      await AuthRepo.loginWithEmailOrNumberAndPassword('immortal.shuvro@gmail.com', '12345678');
+
+
+                    }, icon: Icon(Icons.person_add_alt_1)),
+                    IconButton(onPressed: ()async{
+                      await AuthRepo.loginWithEmailOrNumberAndPassword('01915949303', '12341234');
+
+                    }, icon: Icon(Icons.person_add_alt_1)),
+                  ],
+                ),
+
                 ///top image
                 Expanded(
                     flex: 35,

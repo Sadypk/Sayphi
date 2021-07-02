@@ -38,7 +38,7 @@ class _ProfilePagePhotosState extends State<ProfilePagePhotos> {
                   File? image = await ImageHelper.selectPic();
                   if(image != null){
                     _setState((){loading = true;});
-                    final link = await FireStorage.storeFile(image);
+                    final link = await FStorage.storeFile(image);
                     if(_user.profileImage == null || _user.profileImage == ''){
                       await UserRepo.updateProfile(profileImage: link);
                     }else{

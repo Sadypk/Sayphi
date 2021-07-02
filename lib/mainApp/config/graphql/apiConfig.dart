@@ -12,7 +12,7 @@ class Api{
   Api._();
 
   static RxBool apiLoading = false.obs;
-  static void swapLoad() => apiLoading.value = !apiLoading.value;
+  static void swapLoad(bool value) => apiLoading.value = value;
 
   static GraphQLClient getClient([String? token]){
     HttpLink link = HttpLink(
@@ -37,7 +37,7 @@ class Api{
     try{
       final _client = getClient(auth ? UserViewModel.userToken : null);
 
-      if(showLoad) swapLoad();
+      if(showLoad) swapLoad(true);
 
       final response = await _client.query(
         QueryOptions(
@@ -45,7 +45,7 @@ class Api{
           variables: variables
         )
       );
-      if(showLoad) swapLoad();
+      if(showLoad) swapLoad(false);
 
       logger.i(response, variables);
 
@@ -71,7 +71,7 @@ class Api{
       }
 
     }catch(e){
-      if(showLoad) swapLoad();
+      if(showLoad) swapLoad(false);
 
       print(e.toString());
       Snack.showError(message: e.toString());
@@ -92,7 +92,7 @@ class Api{
     try{
       final _client = getClient(auth ? UserViewModel.userToken : null);
 
-      if(showLoad) swapLoad();
+      if(showLoad) swapLoad(true);
 
       final response = await _client.mutate(
           MutationOptions(
@@ -100,7 +100,7 @@ class Api{
             variables: variables
           )
       );
-      if(showLoad) swapLoad();
+      if(showLoad) swapLoad(false);
 
       logger.i(response, variables);
 
@@ -125,6 +125,7 @@ class Api{
       }
 
     }catch(e){
+      if(showLoad) swapLoad(false);
       print(e.toString());
       Snack.showError(message: e.toString());
       return ApiResponse(

@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
@@ -8,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:sayphi/features/live/repository/videoLiveRepo.dart';
 import 'package:sayphi/mainApp/config/graphql/apiConfig.dart';
 import 'package:sayphi/mainApp/util/env.dart';
+import 'package:sayphi/user/view_model/userViewModel.dart';
 
 class BroadcastPage extends StatefulWidget {
   final bool isBroadcaster;
@@ -80,9 +80,12 @@ class _BroadcastPageState extends State<BroadcastPage> {
           _users.remove(uid);
         });
       },
+
     ));
 
-    await _engine.joinChannel(token, channelName, null, 0);
+    print(channelName);
+
+    await _engine.joinChannelWithUserAccount(token, channelName, UserViewModel.user.value.id);
   }
 
 

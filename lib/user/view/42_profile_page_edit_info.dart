@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/mainApp/view/widgets/primary_color_button.dart';
-import 'package:sayphi/sady/view/43_profile_page_photos.dart';
+import 'package:sayphi/user/view/43_profile_page_photos.dart';
 import 'package:sayphi/user/repository/userRepo.dart';
 import 'package:sayphi/user/view/44_profile_page_add_prompt.dart';
 import 'package:sayphi/user/view_model/userViewModel.dart';

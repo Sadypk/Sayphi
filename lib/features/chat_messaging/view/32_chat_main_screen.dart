@@ -134,6 +134,9 @@ class _ChatMainScreenState extends State<ChatMainScreen> {
                           listMessages.add(ChatViewModel.allChat.where((message) => message.toUserId == element).toList());
                         });
 
+
+                        listMessages.sort((a,b) => a.last.createdAt.compareTo(b.last.createdAt));
+
                         return MessageListView(messageList: listMessages);
 
                       }),
@@ -171,12 +174,6 @@ class _ChatMainScreenState extends State<ChatMainScreen> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-
-        IconButton(onPressed: (){
-
-          ChatRepo.init();
-
-        }, icon: Icon(Icons.api)),
 
         SizedBox(height: 12),
 

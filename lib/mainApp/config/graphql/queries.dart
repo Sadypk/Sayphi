@@ -1,4 +1,8 @@
 class GQueries{
+
+  GQueries._();
+
+
   static const LOGIN_WITH_EMAIL_OR_NUMBER_AND_PASSWORD_NAME =  'userLogin';
   static const LOGIN_WITH_EMAIL_OR_NUMBER_AND_PASSWORD = r'''
       query($data: String $password: String){
@@ -206,6 +210,41 @@ query($token: String){
       policies{
         title
         description
+      }
+    }
+  }
+}
+  ''';
+
+  static const USER_GET_DAYS_NAME = 'getMyDays';
+  static const USER_GET_DAYS = r'''
+  query{
+  getMyDays{
+    error
+    msg
+    data{
+      _id
+      image
+      createdAt
+    }
+  }
+}
+  ''';
+
+  static const GET_ALL_DAYS_NAME = 'getFollowersWithDays';
+  static const GET_ALL_DAYS = r'''
+  query{
+  getFollowersWithDays{
+    error
+    msg
+    data{
+      _id
+      nick_name
+      profile_image
+      days{
+        _id
+        image
+        createdAt
       }
     }
   }
