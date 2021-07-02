@@ -15,13 +15,13 @@ class MessageListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return messageList.length > 0 ? ListView.builder(
       padding: EdgeInsets.zero,
       shrinkWrap: true,
       itemCount: messageList.length,
       scrollDirection: Axis.vertical,
       itemBuilder: (_, index) => MessageListTile(messages: messageList[index])
-    );
+    ) : Center(child: Text('No Chat Found'));
   }
 }
 

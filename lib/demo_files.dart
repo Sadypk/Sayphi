@@ -1,5 +1,5 @@
 class Demo{
-  static const PROFILE_IMAGE = 'https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=634&q=80';
+  static const PROFILE_IMAGE = 'https://appvital.com/images/profile/file-uploader-api-profile-avatar-2.jpg';
 
   static const DEMO_USERS = [
     'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=634&q=80',

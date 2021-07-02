@@ -11,7 +11,7 @@ import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/mainApp/util/localStorage.dart';
 import 'package:sayphi/user/view/41_user_profile_page.dart';
-import 'package:sayphi/sady/view/48_more_button_page_(button_6).dart';
+import 'package:sayphi/mainApp/view/48_more_button_page_(button_6).dart';
 import 'package:sayphi/user/view/22_fullWidthDialog.dart';
 import 'package:sayphi/user/view_model/userViewModel.dart';
 
@@ -89,17 +89,14 @@ class _HomeState extends State<Home> {
           ),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: IconButton(
-              onPressed: (){
-                Get.to(()=>MoreButtonPage());
-              },
-              icon: Icon(
-                Icons.more_horiz,
-                color: AppColor.DARK_GREY,
-              ),
-            )
+          IconButton(
+            onPressed: (){
+              Get.to(()=>MoreButtonPage());
+            },
+            icon: Icon(
+              Icons.more_horiz,
+              color: AppColor.DARK_GREY,
+            ),
           )
         ],
       );

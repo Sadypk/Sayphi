@@ -250,4 +250,34 @@ query($token: String){
   }
 }
   ''';
+
+  static const USER_FOLLOWERS_NAME = 'getUserFollowers';
+  static const USER_FOLLOWERS = r'''
+  query{
+  getUserFollowers{
+    error
+    msg
+    data{
+      _id
+      nick_name
+      profile_image
+    }
+  }
+}
+  ''';
+
+  static const USER_FOLLOWING_NAME = 'getUserFollows';
+  static const USER_FOLLOWING = r'''
+  query{
+  getUserFollows{
+    error
+    msg
+    data{
+      _id
+      nick_name
+      profile_image
+    }
+  }
+}
+  ''';
 }

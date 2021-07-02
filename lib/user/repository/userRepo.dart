@@ -4,6 +4,7 @@ import 'package:sayphi/mainApp/config/graphql/mutations.dart';
 import 'package:sayphi/mainApp/config/graphql/queries.dart';
 import 'package:sayphi/mainApp/helpers/snack.dart';
 import 'package:sayphi/mainApp/model/apiResponse.dart';
+import 'package:sayphi/mainApp/model/otherUserModel.dart';
 import 'package:sayphi/user/model/promptModel.dart';
 import 'package:sayphi/user/view_model/userViewModel.dart';
 
@@ -190,5 +191,37 @@ class UserRepo{
       /// updating user profile by verifying the token
       AuthRepo.verifyToken(UserViewModel.userToken);
     }
+  }
+
+  static Future<List<OtherUserModel>> getFollowers() async{
+
+    final _response = await Api.query(
+      queryName: GQueries.USER_FOLLOWERS_NAME,
+      query: GQueries.USER_FOLLOWERS,
+      auth: true
+    );
+
+    if(_response.error){
+      return [];
+    }else{
+      return List.from(_response.data.map((user) => OtherUserModel.fromJson(user)));
+    }
+
+  }
+
+  static Future<List<OtherUserModel>> getFollowings() async{
+
+    final _response = await Api.query(
+      queryName: GQueries.USER_FOLLOWING_NAME,
+      query: GQueries.USER_FOLLOWING,
+      auth: true
+    );
+
+    if(_response.error){
+      return [];
+    }else{
+      return List.from(_response.data.map((user) => OtherUserModel.fromJson(user)));
+    }
+
   }
 }
