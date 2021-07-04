@@ -18,13 +18,29 @@ class UserModel {
     required this.emailOrPhone,
     this.height,
     this.qa = const [],
-    this.religion
+    this.religion,
+    this.school,
+    this.college,
+    this.occupation,
+    this.relationshipGoal,
+    this.relationshipStatus,
+    this.spotifyId,
+    this.instagramId,
+    this.status = 'ok',
   });
 
   String id;
   String? name;
+  String status;
   String? emailOrPhone;
   String? profileImage;
+  String? school;
+  String? college;
+  String? occupation;
+  String? relationshipGoal;
+  String? relationshipStatus;
+  String? spotifyId;
+  String? instagramId;
   bool isProfileComplete;
   int? dateOfBirth;
   int? height;
@@ -44,6 +60,14 @@ class UserModel {
     height: json["height"],
     qa : List.from(json['question_answer'].map((data) => UserQuestionAnswerModel.fromJson(data))),
     profileImage: json["profile_image"],
+    occupation: json["occupation"],
+    school: json["school"],
+    college: json["college"],
+    relationshipGoal: json["relationshipGoal"],
+    relationshipStatus: json["relationshipStatus"],
+    instagramId: json["instagramID"],
+    spotifyId: json["spotifyID"],
+    status: json["status"],
     isProfileComplete: json["complete"] == null ? false : json["complete"],
     dateOfBirth: json["date_of_birth"] == null ? null : int.parse(json["date_of_birth"]),
     images: json["images"] == null ? [] : List<ImageModel>.from(json["images"].map((x) => ImageModel.fromJson(x))),

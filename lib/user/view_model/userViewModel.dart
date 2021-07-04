@@ -15,7 +15,7 @@ class UserViewModel{
   }
 
   static Rx<UserModel> user = UserModel(id: '', emailOrPhone: '', isProfileComplete: false, images: [], showGenderInProfile: false, videos: [], filters: UserFilterModel(photoVerified: false)).obs;
-  static void setUserData(UserModel newUser) {
+  static void setUserData(UserModel newUser){
     user.value = newUser;
   }
 }

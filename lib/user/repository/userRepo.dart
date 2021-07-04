@@ -41,7 +41,15 @@ class UserRepo{
     String? password,
     String? filterEthnicity,
     String? questionID,
-    String? questionAnswer
+    String? questionAnswer,
+    String? school,
+    String? college,
+    String? occupation,
+    String? instaId,
+    String? spotifyId,
+    String? relationGoal,
+    String? relationStatus,
+    String? status,
 }) async{
 
     Map<String, dynamic> variables = {};
@@ -59,6 +67,14 @@ class UserRepo{
     if(password !=null) variables.putIfAbsent('password', () => password);
     if(userReligion !=null) variables.putIfAbsent('userReligion', () => userReligion);
     if(userHeight !=null) variables.putIfAbsent('userHeight', () => userHeight);
+    if(school !=null) variables.putIfAbsent('school', () => school);
+    if(college !=null) variables.putIfAbsent('college', () => college);
+    if(occupation !=null) variables.putIfAbsent('occupation', () => occupation);
+    if(relationGoal !=null) variables.putIfAbsent('relationshipGoal', () => relationGoal);
+    if(relationStatus !=null) variables.putIfAbsent('relationshipStatus', () => relationStatus);
+    if(instaId !=null) variables.putIfAbsent('instaId', () => instaId);
+    if(spotifyId !=null) variables.putIfAbsent('spotifyId', () => spotifyId);
+    if(status !=null) variables.putIfAbsent('status', () => status);
 
     /// FILTER
     if(userLocationName !=null) variables.putIfAbsent('locationName', () => userLocationName);
@@ -214,6 +230,54 @@ class UserRepo{
     final _response = await Api.query(
       queryName: GQueries.USER_FOLLOWING_NAME,
       query: GQueries.USER_FOLLOWING,
+      auth: true
+    );
+
+    if(_response.error){
+      return [];
+    }else{
+      return List.from(_response.data.map((user) => OtherUserModel.fromJson(user)));
+    }
+
+  }
+
+  static Future<void> likeUser(String userId) async{
+    await Api.mutate(
+      queryName: GMutation.LIKE_USER_NAME,
+      query: GMutation.LIKE_USER,
+      auth: true
+    );
+  }
+  
+  static Future<void> followUser(String userId) async{
+    await Api.mutate(
+      queryName: GMutation.FOLLOW_USER_NAME,
+      query: GMutation.FOLLOW_USER,
+      auth: true
+    );
+  }
+
+  static Future<List<OtherUserModel>> getUserLikes() async{
+
+    final _response = await Api.query(
+      queryName: GQueries.USER_LIKES_NAME,
+      query: GQueries.USER_LIKES,
+      auth: true
+    );
+
+    if(_response.error){
+      return [];
+    }else{
+      return List.from(_response.data.map((user) => OtherUserModel.fromJson(user)));
+    }
+
+  }
+
+  static Future<List<OtherUserModel>> getUserLikers() async{
+
+    final _response = await Api.query(
+      queryName: GQueries.USER_LIKERS_NAME,
+      query: GQueries.USER_LIKERS,
       auth: true
     );
 

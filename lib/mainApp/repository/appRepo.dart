@@ -10,10 +10,12 @@ class AppRepo{
     final _response = await Future.wait([
       getPolicy('TC'),
       getPolicy('Stream'),
+      getPolicy('Legal'),
     ]);
 
     AppViewModel.termsAndConditions = _response[0];
     AppViewModel.termsAndConditions = _response[1];
+    AppViewModel.legalAndPrivacy = _response[2];
 
   }
 
@@ -24,7 +26,8 @@ class AppRepo{
       query: GQueries.GET_POLICY,
       variables: {
         'type' : type
-      }
+      },
+      showLoad: false
     );
 
     return PolicyModel.fromJson(_response.data);

@@ -6,10 +6,12 @@ class PrimaryColorButton extends StatefulWidget {
   // final double width;
   final String label;
   final IconData iconData;
+  final VoidCallback onPress;
 
   PrimaryColorButton({
     required this.iconData,
     required this.label,
+    required this.onPress
     // required this.width,
     // required this.height
   });
@@ -21,21 +23,24 @@ class PrimaryColorButton extends StatefulWidget {
 class _PrimaryColorButtonState extends State<PrimaryColorButton> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      // margin: EdgeInsets.symmetric(horizontal: 20),
-      decoration: BoxDecoration(
-        color: AppColor.PRIMARY,
-        borderRadius: BorderRadius.circular(5)
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(widget.iconData, size: 18, color: Colors.white,),
-          SizedBox(width: 5,),
-          Text(widget.label, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white),)
-        ],
+    return GestureDetector(
+      onTap: widget.onPress,
+      child: Container(
+        height: 50,
+        // margin: EdgeInsets.symmetric(horizontal: 20),
+        decoration: BoxDecoration(
+          color: AppColor.PRIMARY,
+          borderRadius: BorderRadius.circular(5)
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(widget.iconData, size: 18, color: Colors.white,),
+            SizedBox(width: 5,),
+            Text(widget.label, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white),)
+          ],
+        ),
       ),
     );
   }

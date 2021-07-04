@@ -37,6 +37,14 @@ class GMutation{
     $filterEthnicity: ID
     $questionID: ID
     $questionAnswer: String
+    $school: String
+    $college: String
+    $occupation: String
+    $instaId: String
+    $spotifyId: String
+    $relationshipGoal: String
+    $relationshipStatus: String
+    $status: String
 ){
   updateUser(
     userInput : {
@@ -52,6 +60,14 @@ class GMutation{
       height: $userHeight
       profile_image: $profileImage
       complete: $isComplete
+      school: $school
+      college: $college
+      relationshipGoal: $relationshipGoal
+      relationshipStatus: $relationshipStatus
+      instagramID: $instaId
+      spotifyID: $spotifyId
+      occupation: $occupation
+      status: $status
       question_answer:[{
         question: $questionID
         answer: $questionAnswer
@@ -149,6 +165,26 @@ mutation($id : ID){
   static const USER_ADD_DAY = r'''
   mutation($image: String){
   addDay(image: $image){
+    error
+    msg
+  }
+}
+  ''';
+
+  static const LIKE_USER_NAME = 'userLikeUnlike';
+  static const LIKE_USER = r'''
+  mutation($userId: ID){
+  userLikeUnlike(_id: $userId){
+    error
+    msg
+  }
+}
+  ''';
+
+  static const FOLLOW_USER_NAME = 'userFollowUnfollow';
+  static const FOLLOW_USER = r'''
+  mutation($userId: ID){
+  userFollowUnfollow(_id: $userId){
     error
     msg
   }

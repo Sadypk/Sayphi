@@ -1,11 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:sayphi/authentication/repository/authRepo.dart';
 import 'package:sayphi/mainApp/components/screenLoader.dart';
 import 'package:sayphi/mainApp/components/shaderBgBody.dart';
-import 'package:sayphi/mainApp/view/home.dart';
-
 import '../../mainApp/components/mainButton.dart';
 import '../../mainApp/resources/appColor.dart';
 import '../../mainApp/resources/appImages.dart';

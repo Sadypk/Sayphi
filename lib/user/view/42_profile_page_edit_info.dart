@@ -19,8 +19,6 @@ class ProfilePageEditInfo extends StatefulWidget {
 
 class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTickerProviderStateMixin{
   TextEditingController _nameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
   TextEditingController _cityController = TextEditingController();
   TextEditingController _ethnicityController = TextEditingController();
   TextEditingController _religionController = TextEditingController();
@@ -30,6 +28,8 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
   TextEditingController _collegeController = TextEditingController();
   TextEditingController _relationshipGoalsController = TextEditingController();
   TextEditingController _relationshipStatusController = TextEditingController();
+  TextEditingController _instagramController = TextEditingController();
+  TextEditingController _spotifyController = TextEditingController();
 
   late TabController tabController;
 
@@ -44,7 +44,10 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
 
   @override
   Widget build(BuildContext context) {
-    editors(String title, String? hint, [TextEditingController? controller, bool obscure = false, TextInputType? type]){
+    editors(String title, String? hint, [TextEditingController? controller, bool obscure = false, bool enabled = true, TextInputType? type]){
+      if(controller == null){
+        enabled = false;
+      }
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -57,13 +60,13 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
             child: TextFormField(
               keyboardType: type,
               obscureText: obscure,
-              enabled: controller == null ? false : true,
+              enabled: enabled,
               controller: controller,
               style: TextStyle(
                 color: AppColor.TEXT_LIGHT
               ),
               decoration: InputDecoration(
-                hintText: hint ?? title,
+                hintText: hint ?? 'Enter your $title',
                 hintStyle: TextStyle(
                   color: AppColor.TEXT_LIGHT
                 )
@@ -86,7 +89,14 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
               UserRepo.updateProfile(
                 nickName: _nameController.text == '' ? null : _nameController.text,
                 userLocationName: _cityController.text == '' ? null : _cityController.text,
-                userHeight: _heightController.text == '' ? null : int.parse(_heightController.text)
+                userHeight: _heightController.text == '' ? null : int.parse(_heightController.text),
+                school: _schoolController.text == '' ? null : _schoolController.text,
+                college: _collegeController.text == '' ? null : _collegeController.text,
+                occupation: _occupationController.text == '' ? null : _occupationController.text,
+                relationStatus: _relationshipStatusController.text == '' ? null : _relationshipStatusController.text,
+                relationGoal: _relationshipGoalsController.text == '' ? null : _relationshipGoalsController.text,
+                instaId: _instagramController.text == '' ? null : _instagramController.text,
+                spotifyId: _spotifyController.text == '' ? null : _spotifyController.text,
               );
 
             },
@@ -124,20 +134,20 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
                           SizedBox(height: 10,),
                           editors('Name', _user.name , _nameController),
                           editors('Email/ Phone', _user.emailOrPhone),
-                          editors('Password', '********', _passwordController, true),
+                          editors('Password', '********'),
                           Divider(height: 40,),
                           Text('Edit public profile', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                           SizedBox(height: 10,),
                           editors('Age', '69'),
                           editors('City', _user.filters.location!.name, _cityController),
-                          editors('Ethnicity', _user.ethnicity!.ethnicity , _ethnicityController),
-                          editors('Religion', _user.religion!.religion , _religionController),
-                          editors('Height', '168 cm', _heightController, false, TextInputType.number),
-                          editors('Occupation', 'UI Designer', _occupationController),
-                          editors('School', 'School name here', _schoolController),
-                          editors('College', 'College name here', _collegeController),
-                          editors('Relationship goals', 'Prefer not to say', _relationshipGoalsController),
-                          editors('Relationship status', 'Married', _relationshipStatusController),
+                          editors('Ethnicity', _user.ethnicity == null ? null : _user.ethnicity!.ethnicity , _ethnicityController, false, false),
+                          editors('Religion', _user.religion == null ? null : _user.religion!.religion , _religionController, false, false),
+                          editors('Height', _user.height!.toString() , _heightController, false, true, TextInputType.number),
+                          editors('Occupation', _user.occupation, _occupationController),
+                          editors('School', _user.school, _schoolController),
+                          editors('College', _user.college, _collegeController),
+                          editors('Relationship goals', _user.relationshipGoal, _relationshipGoalsController),
+                          editors('Relationship status', _user.relationshipStatus, _relationshipStatusController),
 
 
                           Divider(height: 40,),
@@ -183,7 +193,9 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
                           //Watch an ad
                           Text('Watch an ad to get credit', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                           SizedBox(height: 15,),
-                          PrimaryColorButton(iconData: Icons.videocam, label: 'Watch video',),
+                          PrimaryColorButton(
+                            onPress: (){},
+                            iconData: Icons.videocam, label: 'Watch video',),
 
 
 
@@ -196,7 +208,9 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
                           SizedBox(height: 5,),
                           Text('Go live for 60 minutes minimum streaming to get 100 credits', style: TextStyle(fontSize: 12),),
                           SizedBox(height: 15,),
-                          PrimaryColorButton(iconData: Icons.ondemand_video_rounded, label: 'Go live'),
+                          PrimaryColorButton(
+                              onPress: (){},
+                              iconData: Icons.ondemand_video_rounded, label: 'Go live'),
 
 
 
@@ -209,7 +223,53 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
                           SizedBox(height: 5,),
                           Text('Connect Instagram to add your latest photos to your profile, Don\'t worry we don\'t share any information.', style: TextStyle(fontSize: 12),),
                           SizedBox(height: 15,),
-                          PrimaryColorButton(iconData: FontAwesomeIcons.instagram, label: 'Connect Instagram', ),
+                          PrimaryColorButton(
+                            onPress: () async{
+                              await showCupertinoDialog(context: context, builder: (_)=>CupertinoAlertDialog(
+                                title: Text(
+                                  'Enter your Instagram',
+                                ),
+                                content: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  child: Material(
+                                    child: SizedBox(
+                                      height: 40,
+                                      child: TextField(
+                                        controller: _instagramController,
+                                        decoration: InputDecoration(
+                                          hintText: 'Your instagram id'
+                                        )
+                                      )
+                                    ),
+                                  ),
+                                ),
+                                actions: [
+                                  CupertinoDialogAction(
+                                    child: Text(
+                                      'Cancel'
+                                    ),
+                                    isDestructiveAction: true,
+                                    onPressed: (){
+                                      Get.back(result: null);
+                                      _instagramController.clear();
+                                    },
+                                  ),
+                                  CupertinoDialogAction(
+                                    child: Text(
+                                      'Confirm'
+                                    ),
+                                    onPressed: (){
+                                      if(_instagramController.text != ''){
+                                        Get.back(result: _instagramController.text);
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ));
+                            },
+                            iconData: FontAwesomeIcons.instagram,
+                            label: _user.instagramId == null ? 'Connect Instagram' : _user.instagramId!,
+                          ),
 
 
 
@@ -222,7 +282,53 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
                           SizedBox(height: 5,),
                           Text('Connect Spotify to be updated,Don\'t worry we don\'t share any information.', style: TextStyle(fontSize: 12),),
                           SizedBox(height: 15,),
-                          PrimaryColorButton(iconData: FontAwesomeIcons.spotify, label: 'Go live'),
+                          PrimaryColorButton(
+                            onPress: ()async{
+                              await showCupertinoDialog(context: context, builder: (_)=>CupertinoAlertDialog(
+                                title: Text(
+                                  'Enter your Spotify id',
+                                ),
+                                content: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  child: Material(
+                                    child: SizedBox(
+                                        height: 40,
+                                        child: TextField(
+                                            controller: _spotifyController,
+                                            decoration: InputDecoration(
+                                                hintText: 'Your Spotify id'
+                                            )
+                                        )
+                                    ),
+                                  ),
+                                ),
+                                actions: [
+                                  CupertinoDialogAction(
+                                    child: Text(
+                                        'Cancel'
+                                    ),
+                                    isDestructiveAction: true,
+                                    onPressed: (){
+                                      Get.back(result: null);
+                                      _spotifyController.clear();
+                                    },
+                                  ),
+                                  CupertinoDialogAction(
+                                    child: Text(
+                                        'Confirm'
+                                    ),
+                                    onPressed: (){
+                                      if(_spotifyController.text != ''){
+                                        Get.back(result: _spotifyController.text);
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ));
+                            },
+                            iconData: FontAwesomeIcons.spotify,
+                              label: _user.spotifyId == null ? 'Connect Spotify' : _user.spotifyId!
+                          ),
 
 
 

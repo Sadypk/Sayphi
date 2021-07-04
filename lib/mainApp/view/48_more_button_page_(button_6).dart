@@ -7,6 +7,9 @@ import 'package:sayphi/user/view/54_followers.dart';
 import 'package:sayphi/user/view/55_my_following.dart';
 import 'package:sayphi/user/view/49_smart_picks.dart';
 
+import '60_extra_options.dart';
+import 'leaglAndPrivacyScreen.dart';
+
 class MoreButtonPage extends StatefulWidget {
   @override
   _MoreButtonPageState createState() => _MoreButtonPageState();
@@ -62,8 +65,16 @@ class _MoreButtonPageState extends State<MoreButtonPage> {
             listTile('Notifications'),
             listTile('Transactions'),
             listTile('Blocked people'),
-            listTile('Legal/Privacy'),
-            listTile('Extra'),
+            GestureDetector(
+              onTap: (){
+                Get.to(()=>LegalAndPrivacyScreen());
+              },
+              child: listTile('Legal/Privacy')),
+            GestureDetector(
+              onTap: (){
+                Get.to(()=>ExtraOptionsScreen());
+              },
+              child: listTile('Extra')),
           ],
         ),
       ),

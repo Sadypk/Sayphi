@@ -75,7 +75,8 @@ class _ChatMainScreenState extends State<ChatMainScreen> {
               itemCount: Demo.DEMO_USERS.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (_, index) {
-                return ChatHeader(image: Demo.DEMO_USERS[index], isActive: index%2==0);
+                return SizedBox();
+                // return ChatHeader(image: Demo.DEMO_USERS[index], isActive: index%2==0);
               },
             ),
           ),

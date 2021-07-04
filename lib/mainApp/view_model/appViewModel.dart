@@ -7,5 +7,6 @@ class AppViewModel{
 
   static late PolicyModel termsAndConditions;
   static late PolicyModel streamingConditions;
+  static late PolicyModel legalAndPrivacy;
 
 }

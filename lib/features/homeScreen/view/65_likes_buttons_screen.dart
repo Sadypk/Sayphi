@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sayphi/demo_files.dart';
 import 'package:sayphi/features/chat_messaging/view/widgets/chat_head.dart';
+import 'package:sayphi/mainApp/components/loader.dart';
+import 'package:sayphi/mainApp/model/otherUserModel.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
+import 'package:sayphi/user/repository/userRepo.dart';
 
 class LikesListScreen extends StatelessWidget {
   const LikesListScreen({Key? key}) : super(key: key);
@@ -13,11 +16,29 @@ class LikesListScreen extends StatelessWidget {
       padding: EdgeInsets.only(left: 20,top: 12),
       child: ListView(
         children: [
-          LikesInfoHorizontalList(title: 'My likes'),
-          LikesInfoHorizontalList(title: 'Who liked me'),
-          LikesInfoHorizontalList(title: 'Who visited me'),
-          LikesInfoHorizontalList(title: 'My Matches'),
-          LikesInfoHorizontalList(title: 'Who sent credits/ gifts'),
+          FutureBuilder(
+            future: UserRepo.getUserLikes(),
+            builder: (_, AsyncSnapshot<List<OtherUserModel>> snapshot){
+              if(snapshot.hasData && snapshot.data != null){
+                return LikesInfoHorizontalList(title: 'My likes', data: snapshot.data!);
+              }else{
+                return Loader();
+              }
+            },
+          ),
+          FutureBuilder(
+            future: UserRepo.getUserLikers(),
+            builder: (_, AsyncSnapshot<List<OtherUserModel>> snapshot){
+              if(snapshot.hasData && snapshot.data != null){
+                return LikesInfoHorizontalList(title: 'Who liked me', data: snapshot.data!);
+              }else{
+                return Loader();
+              }
+            },
+          ),
+          // LikesInfoHorizontalList(title: 'Who visited me'),
+          // LikesInfoHorizontalList(title: 'My Matches'),
+          // LikesInfoHorizontalList(title: 'Who sent credits/ gifts'),
         ],
       ),
     );
@@ -26,7 +47,8 @@ class LikesListScreen extends StatelessWidget {
 
 class LikesInfoHorizontalList extends StatelessWidget {
   final String title;
-  const LikesInfoHorizontalList({Key? key, required this.title}) : super(key: key);
+  final List<OtherUserModel> data;
+  const LikesInfoHorizontalList({Key? key, required this.title, required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,14 +68,14 @@ class LikesInfoHorizontalList extends StatelessWidget {
 
           SizedBox(
             height: Get.height * .1,
-            child: ListView.builder(
+            child: data.length > 0 ? ListView.builder(
               shrinkWrap: true,
-              itemCount: Demo.DEMO_USERS.length,
+              itemCount: data.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (_, index) {
-                return ChatHeader(image: Demo.DEMO_USERS[index], isActive: index%2==0);
+                return ChatHeader(user: data[index], isActive: index%2==0);
               },
-            ),
+            ) : Center(child: Text('Empty'))
           )
         ],
       ),

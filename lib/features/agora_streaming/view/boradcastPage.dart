@@ -51,7 +51,7 @@ class _BroadcastPageState extends State<BroadcastPage> {
   Future<void> initializeAgora() async {
     String channelName = getRandomString(10);
     print('============================================================$channelName');
-    String token = await VideoLiveRepo.createChannel(channelName);
+    String token = await LiveRepo.createChannel(channelName);
     print('============================================================$token');
     await _initAgoraRtcEngine();
 

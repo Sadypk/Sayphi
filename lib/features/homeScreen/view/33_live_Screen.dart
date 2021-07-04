@@ -43,8 +43,8 @@ class LiveScreen extends StatelessWidget {
                 children: [
                   TabBarView(
                     children: [
-                      LiveUserGrid(),
-                      LiveUserGrid(),
+                      LiveUserGrid(isVideo: true),
+                      LiveUserGrid(isVideo: false),
                     ],
                   ),
                   Positioned(

@@ -56,7 +56,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 8,left: 8),
-                    child: ChatHeader(image: Demo.PROFILE_IMAGE),
+                    // child: ChatHeader(image: Demo.PROFILE_IMAGE),
                   ),
                   CloseButton(
                     color: Colors.white,

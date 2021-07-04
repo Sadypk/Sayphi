@@ -1,20 +1,28 @@
 import 'package:get/get.dart';
+import 'package:sayphi/01_getStarted.dart';
 import 'package:sayphi/mainApp/config/graphql/apiConfig.dart';
 import 'package:sayphi/mainApp/config/graphql/queries.dart';
+import 'package:sayphi/mainApp/helpers/snack.dart';
 import 'package:sayphi/mainApp/model/apiResponse.dart';
 import 'package:sayphi/mainApp/util/localStorage.dart';
 import 'package:sayphi/mainApp/view/home.dart';
 import 'package:sayphi/user/model/userModel.dart';
+import 'package:sayphi/user/repository/userRepo.dart';
 import 'package:sayphi/user/view/06+7+8_how_do_you_identify_screen.dart';
 import 'package:sayphi/user/view/21_allow_location_screen.dart';
 import 'package:sayphi/user/view_model/userViewModel.dart';
 
 class AuthRepo{
 
+  static Future<void> logout() async{
+    await UserViewModel.setAuthToken('');
+    Get.offAll(()=>GetStartedScreen());
+  }
+
   static Future<void> completeUserAuth(String token) async{
     await UserViewModel.setAuthToken(token);
     final user = await verifyToken(token);
-
+    if(user.status == 'deleted') return ;
     if(user.isProfileComplete){
       if(LocalStorage.isFirstLogin.value){
         Get.offAll(()=>AllowLocationScreen());
@@ -25,6 +33,13 @@ class AuthRepo{
       Get.offAll(()=>UserGenderSetScreen());
     }
 
+    if(user.status == 'paused'){
+      UserRepo.updateProfile(status: 'ok');
+      Snack.top(
+          title: 'Success',
+          message: 'Your accunt has been re-activated'
+      );
+    }
   }
 
   static Future<bool> loginWithEmailOrNumberAndPassword(String value, String password) async{

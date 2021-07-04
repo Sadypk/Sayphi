@@ -13,39 +13,47 @@ class ScreenLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: ()=> FocusScope.of(context).unfocus(),
-      child: loader != null ? LoadingOverlay(
-        isLoading: loader!,
-        progressIndicator: SpinKitDualRing(
-            color: AppColor.PRIMARY
+
+    if(loader != null){
+      return GestureDetector(
+        onTap: ()=> FocusScope.of(context).unfocus(),
+        child: LoadingOverlay(
+          isLoading: loader!,
+          progressIndicator: SpinKitDualRing(
+              color: AppColor.PRIMARY
+          ),
+          color: AppColor.DARK_GREY.withOpacity(.45),
+          child: WillPopScope(
+              onWillPop: () async => loader! ? false : true,
+              child: NotificationListener<OverscrollIndicatorNotification>(
+                  onNotification: (OverscrollIndicatorNotification overScroll) {
+                    overScroll.disallowGlow();
+                    return false;
+                  },
+                  child: child)
+          ),
         ),
-        color: AppColor.DARK_GREY.withOpacity(.45),
-        child: WillPopScope(
-            onWillPop: () async => loader! ? false : true,
-            child: NotificationListener<OverscrollIndicatorNotification>(
-                onNotification: (OverscrollIndicatorNotification overScroll) {
-                  overScroll.disallowGlow();
-                  return false;
-                },
-                child: child)
-        ),
-      ) : Obx(()=>LoadingOverlay(
-        isLoading: Api.apiLoading.value,
-        progressIndicator: SpinKitDualRing(
-            color: AppColor.PRIMARY
-        ),
-        color: AppColor.DARK_GREY.withOpacity(.45),
-        child: WillPopScope(
-            onWillPop: () async => Api.apiLoading.value ? false : true,
-            child: NotificationListener<OverscrollIndicatorNotification>(
-                onNotification: (OverscrollIndicatorNotification overScroll) {
-                  overScroll.disallowGlow();
-                  return false;
-                },
-                child: child)
-        ),
-      )),
-    );
+      );
+    }else{
+      return GestureDetector(
+        onTap: ()=> FocusScope.of(context).unfocus(),
+        child: Obx(()=>LoadingOverlay(
+          isLoading: Api.apiLoading.value,
+          progressIndicator: SpinKitDualRing(
+              color: AppColor.PRIMARY
+          ),
+          color: AppColor.DARK_GREY.withOpacity(.45),
+          child: WillPopScope(
+              onWillPop: () async => Api.apiLoading.value ? false : true,
+              child: NotificationListener<OverscrollIndicatorNotification>(
+                  onNotification: (OverscrollIndicatorNotification overScroll) {
+                    overScroll.disallowGlow();
+                    return false;
+                  },
+                  child: child)
+          ),
+        )),
+      );
+    }
   }
 }

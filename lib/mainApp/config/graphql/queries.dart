@@ -130,6 +130,14 @@ query($token: String){
         _id
         gender
       }
+      occupation
+      school
+      college
+      relationshipGoal
+      relationshipStatus
+      instagramID
+      spotifyID
+      status
       filters{
         location {
           name
@@ -276,6 +284,68 @@ query($token: String){
       _id
       nick_name
       profile_image
+    }
+  }
+}
+  ''';
+
+  static const USER_LIKES_NAME = 'getUserLikes';
+  static const USER_LIKES = r'''
+  query{
+  getUserLikes{
+    error
+    msg
+    data{
+      _id
+      nick_name
+      profile_image
+    }
+  }
+}
+  ''';
+
+  static const USER_LIKERS_NAME = 'getUserLikers';
+  static const USER_LIKERS = r'''
+  query{
+  getUserLikers{
+    error
+    msg
+    data{
+      _id
+      nick_name
+      profile_image
+    }
+  }
+}
+  ''';
+
+
+  static const GET_LIVE_VIDEO_USERS_NAME = 'getLiveVideos';
+  static const GET_LIVE_VIDEO_USERS = r'''
+  query{
+  getLiveVideos{
+    error
+    msg
+    data{
+      _id
+      nick_name
+      profile_image
+      channel_name
+    }
+  }
+}
+  ''';
+  static const GET_LIVE_AUDIO_USERS_NAME = 'getLiveAudios';
+  static const GET_LIVE_AUDIO_USERS = r'''
+  query{
+  getLiveAudios{
+    error
+    msg
+    data{
+      _id
+      nick_name
+      profile_image
+      channel_name
     }
   }
 }

@@ -154,28 +154,46 @@ class _UserProfilePageState extends State<UserProfilePage> {
             SizedBox(height: 70,),
 
             //Occupation
-            Padding(
+            if(_user.occupation != null)Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Icon(FontAwesomeIcons.briefcase, color: AppColor.PRIMARY,  size: 14,),
                   SizedBox(width: 7,),
-                  Text('Fashion model at Myntra', style: TextStyle(fontSize: 14),)
+                  Text(
+                      _user.occupation!,
+                    style: TextStyle(fontSize: 14)
+                  )
                 ],
               ),
             ),
             SizedBox(height: 10,),
 
             //Education
-            Padding(
+            if(_user.school != null)Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Icon(FontAwesomeIcons.graduationCap, color: AppColor.PRIMARY,  size: 14,),
                   SizedBox(width: 7,),
-                  Text('Studied at University of Dhaka', style: TextStyle(fontSize: 14),)
+                  Text('Studied at ${_user.school!}', style: TextStyle(fontSize: 14),)
+                ],
+              ),
+            ),
+
+            SizedBox(height: 10,),
+
+            //Education
+            if(_user.college != null)Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(FontAwesomeIcons.graduationCap, color: AppColor.PRIMARY,  size: 14,),
+                  SizedBox(width: 7,),
+                  Text('Studied at ${_user.college!}', style: TextStyle(fontSize: 14),)
                 ],
               ),
             ),
