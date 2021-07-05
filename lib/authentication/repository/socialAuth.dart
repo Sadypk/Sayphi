@@ -4,7 +4,6 @@ import 'package:sayphi/authentication/model/faceBookUserDataModel.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sayphi/authentication/repository/authRepo.dart';
 import 'package:sayphi/mainApp/helpers/snack.dart';
-
 class SocialAuth{
 
   static final auth = FirebaseAuth.instance;
@@ -50,6 +49,40 @@ class SocialAuth{
 
         return account;
       }else{
+        return null;
+      }
+    } catch (error) {
+      print(error);
+      return null;
+    }
+  }
+
+  static Future<LoginResult?> faceBookAuth() async{
+    print('here');
+    final _fbInstance = FacebookAuth.instance;
+    try {
+      LoginResult account = await _fbInstance.login();
+      if(account.status == LoginStatus.success){
+        final AccessToken accessToken = account.accessToken!;
+        AuthCredential credential = FacebookAuthProvider.credential(accessToken.token);
+
+        UserCredential? authCredential;
+        try {
+          authCredential = await auth.signInWithCredential(credential);
+
+        } on FirebaseAuthException catch (e) {
+          Snack.showError(title: 'Authentication Error', message: e.message);
+        }
+
+        if(authCredential != null){
+          final idToken = await auth.currentUser!.getIdToken();
+          await AuthRepo.loginWithToken(idToken);
+        }
+        print(authCredential);
+        print(account);
+        return account;
+      }
+      else{
         return null;
       }
     } catch (error) {
