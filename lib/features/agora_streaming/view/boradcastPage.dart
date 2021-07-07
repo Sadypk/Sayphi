@@ -52,22 +52,16 @@ class _BroadcastPageState extends State<BroadcastPage> {
     super.dispose();
   }
 
-  getChat(){
-    LiveRepo.getLiveVideoChat(widget.channelName);
-  }
-
-  createChat(){
-    LiveRepo.createChat(widget.channelName);
-  }
-
   @override
   void initState() {
     super.initState();
     initializeAgora();
     if(widget.isBroadcaster){
-      createChat();
+      LiveRepo.createChat(widget.channelName);
+    }else{
+      LiveRepo.increaseViewCount(widget.channelName);
     }
-    getChat();
+    LiveRepo.getLiveVideoChat(widget.channelName);
   }
 
 
@@ -120,6 +114,9 @@ class _BroadcastPageState extends State<BroadcastPage> {
       await _engine.setClientRole(ClientRole.Audience);
     }
   }
+
+  final _controller = TextEditingController();
+  final _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -211,27 +208,35 @@ class _BroadcastPageState extends State<BroadcastPage> {
       bottom: 120,
       left: 20,
       right: 20,
-      child: Obx(()=>Container(
-        height: Get.height * .3,
-        child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: BroadcastPage.chat.length,
-          itemBuilder: (_, index) {
-            final chat = BroadcastPage.chat[index];
-            return ListTile(
-              leading: CircleAvatar(
-                backgroundImage: CachedNetworkImageProvider(chat.toUserImage),
-              ),
-              title: Text(
-                chat.fromUser
-              ),
-              subtitle: Text(
-                chat.message
-              ),
-            );
-          },
-        ),
-      ))
+      child: Obx((){
+        _scrollController.animateTo(
+          0.0,
+          curve: Curves.easeOut,
+          duration: const Duration(milliseconds: 300),
+        );
+        return Container(
+          height: Get.height * .3,
+          child: ListView.builder(
+            controller: _scrollController,
+            shrinkWrap: true,
+            itemCount: BroadcastPage.chat.length,
+            itemBuilder: (_, index) {
+              final chat = BroadcastPage.chat[index];
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: CachedNetworkImageProvider(chat.toUserImage),
+                ),
+                title: Text(
+                    chat.fromUser
+                ),
+                subtitle: Text(
+                    chat.message
+                ),
+              );
+            },
+          ),
+        );
+      })
     );
 
     sendMessageBar() => Positioned(
@@ -242,7 +247,11 @@ class _BroadcastPageState extends State<BroadcastPage> {
         color: Colors.white,
         margin: EdgeInsets.all(20),
         child: TextField(
-          onSubmitted: (msg) => LiveRepo.sendMessage(widget.channelName, msg),
+          controller: _controller,
+          onSubmitted: (msg) {
+            LiveRepo.sendMessage(widget.channelName, msg);
+            _controller.clear();
+          },
           decoration: InputDecoration(
             hintText: 'Write your message'
           ),
@@ -250,11 +259,34 @@ class _BroadcastPageState extends State<BroadcastPage> {
       ),
     );
 
+
+    _audioView() => Container(
+      child: Column(
+        children: [
+          Icon(
+            Icons.audiotrack,
+            size: 32,
+            color: AppColor.PRIMARY,
+          ),
+          SizedBox(height: 20),
+          Text(
+            'Audio Only',
+            style: TextStyle(
+              fontSize: 32,
+              fontFamily: CFontFamily.MEDIUM
+            ),
+          )
+        ],
+      )
+    );
+
+
     return Obx(()=>Scaffold(
       body: !Api.apiLoading.value?Center(
         child: Stack(
           children: <Widget>[
-            if(widget.isVideo)_broadcastView(),
+            SizedBox(width: double.infinity),
+            widget.isVideo ? _broadcastView() : _audioView(),
             widget.isBroadcaster ? _toolbar() : sendMessageBar(),
             _buildUserInfo(),
             _buildChat(),

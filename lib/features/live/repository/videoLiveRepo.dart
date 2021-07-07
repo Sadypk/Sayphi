@@ -87,7 +87,7 @@ class LiveRepo{
 
   static Future<void> createChat(String channelName) async{
     await _videoLiveInstance.doc(channelName).set({
-      'viewer' : 0,
+      'viewer' : 1,
       'chat' : []
     });
   }

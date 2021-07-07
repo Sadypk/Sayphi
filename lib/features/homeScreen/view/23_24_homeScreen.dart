@@ -106,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    flex: 8,
+                    flex: 75,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
 
                   Expanded(
-                      flex: 2,
+                      flex: 25,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
