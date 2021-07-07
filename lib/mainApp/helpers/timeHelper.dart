@@ -1,3 +1,5 @@
+import 'package:dash_chat/dash_chat.dart';
+
 class TimeHelper{
 
   static String getDayTime(String createdAt){
@@ -18,4 +20,9 @@ class TimeHelper{
     return '';
   }
 
+
+  static String? birthday(int birthday){
+
+    return DateFormat('dd MMM yyy').format(DateTime.fromMillisecondsSinceEpoch(birthday));
+  }
 }

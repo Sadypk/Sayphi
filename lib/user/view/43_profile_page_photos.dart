@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sayphi/mainApp/components/loader.dart';
 import 'package:sayphi/mainApp/config/firebase/fStorage.dart';
 import 'package:sayphi/mainApp/helpers/imageHelper.dart';
@@ -10,6 +12,8 @@ import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/user/model/userModel.dart';
 import 'package:sayphi/user/repository/userRepo.dart';
 import 'package:sayphi/user/view_model/userViewModel.dart';
+import 'package:video_player/video_player.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 class ProfilePagePhotos extends StatefulWidget {
   @override
@@ -122,35 +126,105 @@ class _ProfilePagePhotosState extends State<ProfilePagePhotos> {
 
 
           //Add videos
-          Text('Add videos', style: TextStyle(fontSize: 16),),
-          SizedBox(height: 10,),
+          Text('Add video', style: TextStyle(fontSize: 16),),
+          SizedBox(height: 10),
           Text('Add video into profile to get credit ', style: TextStyle(fontSize: 14),),
-/*
-          SizedBox(height: 10,),
+          SizedBox(height: 12),
           Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              previewCard('', true),
-              SizedBox(width: 15,),
-              previewCard('', true),
-              SizedBox(width: 15,),
-              previewCard('', true),
+              Stack(
+                children: [
+                  Builder(builder: (_){
+                    bool loading = false;
+                    return StatefulBuilder(builder: (BuildContext context, void Function(void Function()) _setState) {
+
+                      return GestureDetector(
+                        onTap: () async{
+                          File? video = await ImageHelper.selectVideo(ImageSource.camera);
+                          if(video != null){
+                            _setState((){loading = true;});
+                            final link = await FStorage.storeFile(video);
+                            await UserRepo.addVideo(link);
+                            _setState((){loading = false;});
+
+                          }
+                        },
+                        child: Container(
+                          height: Get.height * .19,
+                          width: Get.height * .135,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: AppColor.LIGHT_GREY,
+                              border: Border.all(color: Colors.grey),
+                          ),
+                          child: loading ? Loader() : Icon(Icons.videocam, color: Color(0xffA1A1A1), size: 30)
+                        ),
+                      );
+
+                    });
+                  }),
+                  if(true)Positioned(
+                      bottom: 10,
+                      right: 10,
+                      child: Container(
+                        height: 20,
+                        width: 20,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColor.PRIMARY
+                        ),
+                        child: Center(
+                          child: Icon(Icons.add, color: Colors.white, size: 16,),
+                        ),
+                      ))
+                ],
+              ),
+              SizedBox(width: 12),
+              if(_user.videos.length > 0)Builder(builder: (_){
+                bool _load = true;
+                VideoPlayerController _controller;
+
+                return StatefulBuilder(builder: (BuildContext context, void Function(void Function()) _setState) {
+
+                  File? thumb;
+
+                  getTemporaryDirectory().then((value) {
+                    final path = value.path;
+                    VideoThumbnail.thumbnailFile(
+                      video: _user.videos.last.video,
+                      thumbnailPath: path,
+                      imageFormat: ImageFormat.WEBP,
+                      maxHeight: 64, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
+                      quality: 75,
+                    ).then((value) {
+                      setState(() {
+                        thumb = File(value!);
+                        _load = false;
+                      });
+                    });
+                  });
+                  return Container(
+                    height: Get.height * .19,
+                    width: Get.height * .135,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: AppColor.LIGHT_GREY,
+                      border: Border.all(color: Colors.grey),
+                      image: _load && thumb != null ? DecorationImage(
+                        image: FileImage(thumb!)
+                      ) : null
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.video_collection
+                      ),
+                    ),
+                    // child: _load ? Loader() : VideoPlayer(_controller),
+                  );
+                },);
+              })
             ],
           ),
-          SizedBox(height: 10,),
-          Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              previewCard('',  true),
-              SizedBox(width: 15,),
-              previewCard('', true),
-              SizedBox(width: 15,),
-              previewCard('', true),
-            ],
-          ),
-*/
-
-
           SizedBox(height: 30,)
         ],
       );

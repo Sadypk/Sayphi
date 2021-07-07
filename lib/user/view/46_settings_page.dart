@@ -12,6 +12,7 @@ import 'package:sayphi/mainApp/resources/appConst.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/mainApp/util/env.dart';
 import 'package:sayphi/user/model/religionModel.dart';
+import 'package:sayphi/user/model/userModel.dart';
 import 'package:sayphi/user/repository/getBasicData.dart';
 import 'package:sayphi/user/repository/userRepo.dart';
 import 'package:sayphi/user/view_model/userViewModel.dart';
@@ -58,7 +59,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
         final _user = UserViewModel.user.value;
 
-        final _locationController = TextEditingController(text: _user.filters.location!.name ?? 'Search Nearby');
+        final _locationController = TextEditingController(text: _user.filters.location == null ? 'Search Nearby' : _user.filters.location!.name);
 
         return ListView(
           children: [
@@ -144,7 +145,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       );
                       if(place != null){
                         final _latlng = await RestApi.getLatLngFromPlaceID(place.placeId!);
-                        UserRepo.updateProfile(userLocationName: place.description, latitude: _latlng.latitude, longitude: _latlng.longitude);
+                        UserRepo.updateProfile(filterLocation: LocationModel(name: place.description!, coordinates: CoordinatesModel(lng: _latlng.longitude, lat: _latlng.latitude)));
                       }
                     },
                     child: Container(
@@ -181,16 +182,16 @@ class _SettingsPageState extends State<SettingsPage> {
                     children: [
                       Flexible(
                         child: InkWell(
-                          onTap: () => UserRepo.updateProfile(interestedIn: 'Men'),
+                          onTap: () => UserRepo.updateProfile(interestedIn: 'male'),
                           child: Container(
                             height: 40,
                             decoration: BoxDecoration(
-                                color: _user.filters.interestedIn=='Men'?AppColor.PRIMARY:Colors.white,
+                                color: _user.filters.interestedIn=='male'?AppColor.PRIMARY:Colors.white,
                                 borderRadius: BorderRadius.circular(6),
-                                border: Border.all(color: _user.filters.interestedIn=='Men'?Colors.transparent:AppColor.BORDER_COLOR.withOpacity(0.3), width: 1)
+                                border: Border.all(color: _user.filters.interestedIn=='male'?Colors.transparent:AppColor.BORDER_COLOR.withOpacity(0.3), width: 1)
                             ),
                             child: Center(
-                              child: Text('Men', style: TextStyle(fontSize: 12, color: _user.filters.interestedIn=='Men'?Colors.white:AppColor.TEXT_LIGHT),),
+                              child: Text('Men', style: TextStyle(fontSize: 12, color: _user.filters.interestedIn=='male'?Colors.white:AppColor.TEXT_LIGHT),),
                             ),
                           ),
                         ),
@@ -198,16 +199,16 @@ class _SettingsPageState extends State<SettingsPage> {
                       SizedBox(width: 10,),
                       Flexible(
                         child: InkWell(
-                          onTap: () => UserRepo.updateProfile(interestedIn: 'Women'),
+                          onTap: () => UserRepo.updateProfile(interestedIn: 'female'),
                           child: Container(
                             height: 40,
                             decoration: BoxDecoration(
-                                color: _user.filters.interestedIn=='Women'?AppColor.PRIMARY:Colors.white,
+                                color: _user.filters.interestedIn=='female'?AppColor.PRIMARY:Colors.white,
                                 borderRadius: BorderRadius.circular(6),
-                                border: Border.all(color: _user.filters.interestedIn=='Women'?Colors.transparent:AppColor.BORDER_COLOR.withOpacity(0.3), width: 1)
+                                border: Border.all(color: _user.filters.interestedIn=='female'?Colors.transparent:AppColor.BORDER_COLOR.withOpacity(0.3), width: 1)
                             ),
                             child: Center(
-                              child: Text('Women', style: TextStyle(fontSize: 12, color: _user.filters.interestedIn=='Women'?Colors.white:AppColor.TEXT_LIGHT),),
+                              child: Text('Women', style: TextStyle(fontSize: 12, color: _user.filters.interestedIn=='female'?Colors.white:AppColor.TEXT_LIGHT),),
                             ),
                           ),
                         ),
@@ -219,12 +220,12 @@ class _SettingsPageState extends State<SettingsPage> {
                           child: Container(
                             height: 40,
                             decoration: BoxDecoration(
-                                color: _user.filters.interestedIn=='Both'?AppColor.PRIMARY:Colors.white,
+                                color: _user.filters.interestedIn=='both'?AppColor.PRIMARY:Colors.white,
                                 borderRadius: BorderRadius.circular(6),
-                                border: Border.all(color: _user.filters.interestedIn=='Both'?Colors.transparent:AppColor.BORDER_COLOR.withOpacity(0.3), width: 1)
+                                border: Border.all(color: _user.filters.interestedIn=='both'?Colors.transparent:AppColor.BORDER_COLOR.withOpacity(0.3), width: 1)
                             ),
                             child: Center(
-                              child: Text('Both', style: TextStyle(fontSize: 12, color: _user.filters.interestedIn=='Both'?Colors.white:AppColor.TEXT_LIGHT),),
+                              child: Text('Both', style: TextStyle(fontSize: 12, color: _user.filters.interestedIn=='both'?Colors.white:AppColor.TEXT_LIGHT),),
                             ),
                           ),
                         ),
@@ -622,7 +623,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
                                       final _religion = snapshot.data![index];
 
-                                      final _isSelected = selectedValue!.id == _religion.id;
+
+                                      final _isSelected = selectedValue != null && selectedValue!.id == _religion.id;
 
                                       return GestureDetector(
                                         onTap: (){
@@ -672,7 +674,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
 
 
-                  }, _user.religion == null ? 'Asnwer' : _user.religion!.religion),
+                  }, _user.filters.religion == null ? 'Asnwer' : _user.filters.religion!.religion),
 
 
                   SizedBox(height: 10,),

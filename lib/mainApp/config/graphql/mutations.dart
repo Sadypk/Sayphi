@@ -14,9 +14,6 @@ class GMutation{
     $userEthnicityID: ID
     $profileImage: String
     $isComplete: Boolean
-    $locationName: String
-    $latitude: Float
-    $longitude: Float
     $interestedIn: String
     $filterBy: String
     $ageRangeStart: Int
@@ -45,6 +42,8 @@ class GMutation{
     $relationshipGoal: String
     $relationshipStatus: String
     $status: String
+    $userLocaion: locationInput
+    $filterLocation: locationInput
 ){
   updateUser(
     userInput : {
@@ -68,18 +67,13 @@ class GMutation{
       spotifyID: $spotifyId
       occupation: $occupation
       status: $status
+      address: $userLocaion
       question_answer:[{
         question: $questionID
         answer: $questionAnswer
       }]
       filters:{
-        location: {
-          name: $locationName
-          coordinates: {
-            lat: $latitude
-            lng: $longitude
-          }
-        }
+        location: $filterLocation
         interest: $interestedIn
         filter_by: $filterBy
         age_range: {
@@ -152,8 +146,8 @@ mutation($id : ID){
 
   static const CREATE_CHANNEL_NAME = 'createChannel';
   static const CREATE_CHANNEL = r'''
-  mutation($channelName: String){
-  createChannel(channelName: $channelName){
+  mutation($channelName: String $isVideo: Boolean $isAudio: Boolean){
+  createChannel(channelName: $channelName isVideoLive: $isVideo isAudioLive: $isAudio){
     error
     msg
     token
@@ -185,6 +179,61 @@ mutation($id : ID){
   static const FOLLOW_USER = r'''
   mutation($userId: ID){
   userFollowUnfollow(_id: $userId){
+    error
+    msg
+  }
+}
+  ''';
+
+  static const BLOCK_UNBLOCK_USER_NAME = 'userBlockUnblock';
+  static const BLOCK_UNBLOCK_USER = r'''
+  mutation($userID: ID){
+  userBlockUnblock(_id: $userID){
+    error
+    msg
+  }
+}
+  ''';
+
+  static const VISIT_USER_NAME = 'userVisit';
+  static const VISIT_USER = r'''
+  mutation($userID: ID){
+  userVisit(_id: $userID){
+    error
+    msg
+  }
+}
+  ''';
+
+  static const MATCH_UNMATCH_USER_NAME = 'addUserToMatchOrUnMatchList';
+  static const MATCH_UNMATCH_USER = r'''
+  mutation($userID: ID $match: Boolean){
+  addUserToMatchOrUnMatchList(user_id: $userID match: $match){
+    error
+    msg
+    data{
+      _id
+      nick_name
+      profile_image
+    }
+  }
+}
+  ''';
+
+  static const ADD_VIDEO_PROFILE_NAME ='addVideoToUserProfile';
+  static const ADD_VIDEO_PROFILE = r'''
+  mutation($videoLink: String){
+  addVideoToUserProfile(video: $videoLink){
+    error
+    msg
+  }
+}
+''';
+
+  static const CLOSE_LIVE_NAME = 'closeLive';
+  static const CLOSE_LIVE = r'''
+  mutation($closeLiveAudio: Boolean $closeLiveVideo: Boolean){
+  closeLive(isAudioLive: $closeLiveAudio isVideoLive: $closeLiveVideo){
     error
     msg
   }

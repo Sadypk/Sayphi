@@ -14,9 +14,6 @@ class _AgoraStreamingState extends State<AgoraStreaming> {
   Future<void> onJoin({required bool isBroadcaster}) async {
     await [Permission.camera, Permission.microphone].request();
 
-    Get.to(() => BroadcastPage(
-      isBroadcaster: isBroadcaster,
-    ));
   }
 
   @override

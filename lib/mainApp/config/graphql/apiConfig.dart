@@ -29,7 +29,7 @@ class Api{
 
   static Future<ApiResponse> query({
     bool auth = false,
-    bool showLoad = true,
+    bool showLoad = false,
     required String queryName,
     required String query,
     Map<String, dynamic> variables = const {}
@@ -85,8 +85,8 @@ class Api{
   static Future<ApiResponse> mutate({
     bool auth = false,
     bool showLoad = true,
-    required String queryName,
-    required String query,
+    required String mutationName,
+    required String mutation,
     Map<String, dynamic> variables = const {}
   }) async{
     try{
@@ -96,7 +96,7 @@ class Api{
 
       final response = await _client.mutate(
           MutationOptions(
-            document: gql(query),
+            document: gql(mutation),
             variables: variables
           )
       );
@@ -104,22 +104,22 @@ class Api{
 
       logger.i(response, variables);
 
-      if(response.data![queryName]['error']){
-        Snack.showError(message: response.data![queryName]['msg']);
+      if(response.data![mutationName]['error']){
+        Snack.showError(message: response.data![mutationName]['msg']);
         return ApiResponse(
             error: true,
-            message: response.data![queryName]['msg']
+            message: response.data![mutationName]['msg']
         );
       }else{
-        if(response.data![queryName].containsKey('token')){
+        if(response.data![mutationName].containsKey('token')){
           return ApiResponse(
               error: false,
-              data: response.data![queryName]['token']
+              data: response.data![mutationName]['token']
           );
         }else{
           return ApiResponse(
               error: false,
-              data: response.data![queryName]['data']
+              data: response.data![mutationName]['data']
           );
         }
       }

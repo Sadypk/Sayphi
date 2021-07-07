@@ -3,9 +3,11 @@ import 'package:get/get.dart';
 import 'package:sayphi/features/dayStory/view/51_view_all_stories.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
+import 'package:sayphi/mainApp/view/56_top_ranked_people.dart';
 import 'package:sayphi/user/view/54_followers.dart';
 import 'package:sayphi/user/view/55_my_following.dart';
 import 'package:sayphi/user/view/49_smart_picks.dart';
+import 'package:sayphi/user/view/blockedPeopleScreen.dart';
 
 import '60_extra_options.dart';
 import 'leaglAndPrivacyScreen.dart';
@@ -60,11 +62,19 @@ class _MoreButtonPageState extends State<MoreButtonPage> {
                 Get.to(()=>FollowingScreen());
               },
               child: listTile('Following')),
-            listTile('Top ranked people'),
+            GestureDetector(
+              onTap: (){
+                Get.to(()=>TopRankedPeopleScreen());
+              },
+              child: listTile('Top ranked people')),
             listTile('Know me better: Challenge questions'),
             listTile('Notifications'),
             listTile('Transactions'),
-            listTile('Blocked people'),
+            GestureDetector(
+              onTap: (){
+                Get.to(()=>BlockedPeopleScreen());
+              },
+              child: listTile('Blocked people')),
             GestureDetector(
               onTap: (){
                 Get.to(()=>LegalAndPrivacyScreen());

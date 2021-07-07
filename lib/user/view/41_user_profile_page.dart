@@ -118,7 +118,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                                 SizedBox(height: 5,),
                                 Text(
-                                  _user.filters.location!.name!,
+                                  _user.userLocation == null ? '' : _user.userLocation!.name,
                                   style: TextStyle(fontSize: 14),
                                 )
                               ],

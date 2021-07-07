@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sayphi/features/boost/view/69_boost_subscription_screen.dart';
 import 'package:sayphi/features/chat_messaging/view/32_chat_main_screen.dart';
 import 'package:sayphi/features/homeScreen/view/23_24_homeScreen.dart';
 import 'package:sayphi/features/homeScreen/view/33_live_Screen.dart';
@@ -29,7 +30,7 @@ class _HomeState extends State<Home> {
     ChatMainScreen(),
     LiveScreen(),
     LikesListScreen(),
-    Container(color: Colors.orangeAccent),
+    BoosSubscriptionScreen(),
   ];
 
   final _navItems = [

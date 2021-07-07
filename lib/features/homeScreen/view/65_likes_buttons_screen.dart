@@ -36,7 +36,16 @@ class LikesListScreen extends StatelessWidget {
               }
             },
           ),
-          // LikesInfoHorizontalList(title: 'Who visited me'),
+          FutureBuilder(
+            future: UserRepo.getUserVisitors(),
+            builder: (_, AsyncSnapshot<List<OtherUserModel>> snapshot){
+              if(snapshot.hasData && snapshot.data != null){
+                return LikesInfoHorizontalList(title: 'Who visited me', data: snapshot.data!);
+              }else{
+                return Loader();
+              }
+            },
+          ),
           // LikesInfoHorizontalList(title: 'My Matches'),
           // LikesInfoHorizontalList(title: 'Who sent credits/ gifts'),
         ],

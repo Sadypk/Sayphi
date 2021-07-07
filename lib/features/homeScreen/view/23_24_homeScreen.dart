@@ -2,14 +2,17 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sayphi/demo_files.dart';
 import 'package:sayphi/features/dayStory/repository/dayStoryRepo.dart';
 import 'package:sayphi/features/dayStory/view/wdigets/homeScreenDayBar.dart';
+import 'package:sayphi/features/homeScreen/model/matchedUserModel.dart';
+import 'package:sayphi/features/homeScreen/repository/homeRepository.dart';
 import 'package:sayphi/features/homeScreen/view/widgets/circularBtn.dart';
+import 'package:sayphi/features/homeScreen/viewModel/homeViewModel.dart';
 import 'package:sayphi/mainApp/components/loader.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/appImages.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
+import 'package:sayphi/user/repository/userRepo.dart';
 import 'package:tcard/tcard.dart';
 
 import '25_26_super_like_option_screen.dart';
@@ -21,16 +24,19 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
+final TCardController _controller = TCardController();
+
 class _HomeScreenState extends State<HomeScreen> {
 
-  final TCardController _controller = TCardController();
-
-  bool showStory = true;
 
   bool pageLoad = true;
 
   getData()async{
+    setState(() {
+      pageLoad = true;
+    });
     await DayStoryRepo.init();
+    HomeViewModel.addData(await HomeRepo.getMatchingUsers());
     setState(() {
       pageLoad = false;
     });
@@ -46,172 +52,165 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  processSwipe(int index, SwipInfo info){
+    final user = HomeViewModel.matchedUserList[_controller.index];
+    if(info.direction == SwipDirection.Right){
+      HomeRepo.matchUnMatchUser(user.id, false);
+    }else if(info.direction == SwipDirection.Left){
+      HomeRepo.matchUnMatchUser(user.id, true);
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
 
+
     /// main swiper widget
     _buildCards(){
-      return SizedBox(
-        height: Get.height * .5,
-        child: RotatedBox(
-          quarterTurns: 2,
-          child: TCard(
-            controller: _controller,
-            cards: Demo.DEMO_USERS.map((e) => UserSwiperCard(
-              image: e,
-            )).toList(),
-            onForward: (index, info){
-              setState(() {});
-              print(info.direction);
-              print(info.cardIndex);
-            },
-            onBack: (index, info){
-              setState(() {});
-              print(info.direction);
-              print(info.cardIndex);
-            },
-            onEnd: (){
-              setState(() {});
-              _controller.reset();
-            },
+      return Column(
+        children: [
+          SizedBox(
+            height: Get.height * .5,
+            child: HomeViewModel.matchedUserList.length > 0 ? RotatedBox(
+              quarterTurns: 2,
+              child: TCard(
+                controller: _controller,
+                cards: HomeViewModel.matchedUserList.map((matchedUser) => UserSwiperCard(matchedUser: matchedUser)).toList(),
+                onForward: processSwipe,
+                onBack: processSwipe,
+                onEnd: (){
+                  _controller.reset();
+                },
+              ),
+            ) : Center(child: Text('No matching user found'))
           ),
-        ),
-      );
-    }
 
-    /// showing the front up users info
-    _buildUserInfo(bool isUserLive){
-      return Padding(
-        padding : EdgeInsets.only(bottom: 12, left: 20, right: 20,top: 4),
-        child: GestureDetector(
-          onVerticalDragStart: (drag){
-            setState(() {
-              showStory = !showStory;
-            });
-          },
-          child: Container(
-            height: 100,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  offset: Offset(0,2),
-                  blurRadius: 1,
-                  spreadRadius: 1,
-                  color: AppColor.PRIMARY.withOpacity(.1)
-                )
-              ]
-            ),
-            padding: EdgeInsets.symmetric(horizontal: 16,vertical: 12),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 8,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      /// is user live ?
-                      if(isUserLive)Row(
-                        children: [
-                          Icon(
-                            Icons.surround_sound,
-                            color: AppColor.PRIMARY,
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            'Live now',
-                            style: TextStyle(
-                              fontFamily: CFontFamily.MEDIUM,
-                              color: AppColor.PRIMARY
-                            ),
-                          )
-                        ],
-                      ),
-
-                      /// user name
-                      Text(
-                        'User name ${_controller.index}',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontFamily: CFontFamily.BOLD,
-                        ),
-                      ),
-
-                      /// user location
-                      Text(
-                        'Las Vegas, CA',
-                        style: TextStyle(
-                          fontFamily: CFontFamily.REGULAR,
-                          color: AppColor.TEXT_LIGHT
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-
-                      /// VIP points
-                      Stack(
-                        children: [
-                          Image.asset(
-                            Images.ICON_HEXAGON,
-                            height: 54,
-                            width: 48,
-                          ),
-                          Positioned.fill(
-                            child: Center(
-                              child: Text(
-                                '${_controller.index * 12}',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontFamily: CFontFamily.MEDIUM
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-
-                      /// distance
-                      Row(
-                        children: [
-                          Icon(
-                            CupertinoIcons.location_fill,
-                            color: AppColor.PRIMARY,
-                            size: 14,
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            '${_controller.index * 7} Km',
-                            style: TextStyle(
+          if(HomeViewModel.matchedUserList.length > 0 ) Padding(
+            padding : EdgeInsets.only(bottom: 12, left: 20, right: 20,top: 4),
+            child: Container(
+              height: 100,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                        offset: Offset(0,2),
+                        blurRadius: 1,
+                        spreadRadius: 1,
+                        color: AppColor.PRIMARY.withOpacity(.1)
+                    )
+                  ]
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 16,vertical: 12),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 8,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        /// is user live ?
+                        if(true)Row(
+                          children: [
+                            Icon(
+                              Icons.surround_sound,
                               color: AppColor.PRIMARY,
-                              fontFamily: CFontFamily.REGULAR
                             ),
+                            SizedBox(width: 4),
+                            Text(
+                              'Live now',
+                              style: TextStyle(
+                                  fontFamily: CFontFamily.MEDIUM,
+                                  color: AppColor.PRIMARY
+                              ),
+                            )
+                          ],
+                        ),
+
+                        /// user name
+                        Text(
+                          HomeViewModel.matchedUserList[_controller.index].name,
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontFamily: CFontFamily.BOLD,
+                          ),
+                        ),
+
+                        /// user location
+                        Text(
+                          HomeViewModel.matchedUserList[_controller.index].address,
+                          style: TextStyle(
+                              fontFamily: CFontFamily.REGULAR,
+                              color: AppColor.TEXT_LIGHT
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Expanded(
+                      flex: 2,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+
+                          /// VIP points
+                          Stack(
+                            children: [
+                              Image.asset(
+                                Images.ICON_HEXAGON,
+                                height: 54,
+                                width: 48,
+                              ),
+                              Positioned.fill(
+                                child: Center(
+                                  child: Text(
+                                    '${HomeViewModel.matchedUserList[_controller.index].rank}',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontFamily: CFontFamily.MEDIUM
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+
+                          /// distance
+                          Row(
+                            children: [
+                              Icon(
+                                CupertinoIcons.location_fill,
+                                color: AppColor.PRIMARY,
+                                size: 14,
+                              ),
+                              SizedBox(width: 4),
+                              Text(
+                                '${HomeViewModel.matchedUserList[_controller.index].distance} Km',
+                                style: TextStyle(
+                                    color: AppColor.PRIMARY,
+                                    fontFamily: CFontFamily.REGULAR
+                                ),
+                              )
+                            ],
                           )
+
                         ],
                       )
-
-                    ],
                   )
-                )
-              ],
+                ],
+              ),
             ),
-          ),
-        ),
+          )
+        ],
       );
     }
-
     /// users bluh
     _buildUserBluh(){
-      return Padding(
+      return HomeViewModel.matchedUserList.length > 0 ? Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 8),
         child: Stack(
           children: [
@@ -224,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               padding: EdgeInsets.only(top: 16,left: 42, right: 8),
               child: Text(
-                'Katerina is an American singer and actress. She also loves to travel..',
+                '${HomeViewModel.matchedUserList[_controller.index].name} is an American singer and actress. She also loves to travel..',
                 style: TextStyle(
                   fontSize: 18,
                   fontFamily: CFontFamily.REGULAR
@@ -243,29 +242,28 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           ],
         ),
-      );
+      ) : SizedBox();
     }
 
     return Scaffold(
-      body: pageLoad ? Loader() : CustomScrollView(
+      body: pageLoad ? Loader() : Obx(()=>CustomScrollView(
         slivers: [
           SliverList(delegate: SliverChildListDelegate([
             HomeScreenDayBar(),
             _buildCards(),
-            _buildUserInfo(true),
             _buildUserBluh()
           ]))
         ],
-      ),
+      )),
     );
   }
 }
 
 
 class UserSwiperCard extends StatelessWidget {
-  final String image;
+  final MinimalUserModel matchedUser;
   const UserSwiperCard({Key? key,
-    required this.image
+    required this.matchedUser
   }) : super(key: key);
 
   @override
@@ -279,7 +277,7 @@ class UserSwiperCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
-                image: CachedNetworkImageProvider(image),
+                image: CachedNetworkImageProvider(matchedUser.image),
                 fit: BoxFit.cover
               )
             ),
@@ -297,17 +295,24 @@ class UserSwiperCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 CIconButton(
-                  onTap: (){},
+                  onTap: (){
+                    _controller..forward(direction: SwipDirection.Right);
+                  },
                   icon: Icons.refresh,
                   iconColor: Color(0xffF7BF60)
                 ),
                 CIconButton(
-                  onTap: (){},
+                  onTap: () {
+                    _controller..forward(direction: SwipDirection.Right);
+                    HomeRepo.matchUnMatchUser(matchedUser.id, false);
+                  },
                   icon: Icons.close,
                   iconColor: Color(0xffA36CF9)
                 ),
+
+
                 CIconButton(
-                  onTap: (){},
+                  onTap: () => UserRepo.likeUnLikeUser(matchedUser.id),
                   icon: Icons.thumb_up_sharp,
                   iconColor: Color(0xff7920FF)
                 ),
@@ -315,7 +320,7 @@ class UserSwiperCard extends StatelessWidget {
                 /// super like btn
                 CIconButton(
                   onTap: (){
-                    Get.to(() => SuperLikeOptionScreen());
+                    Get.to(() => SuperLikeOptionScreen(userId: matchedUser.id));
                   },
                   icon: Icons.emoji_emotions,
                   iconColor: Color(0xff00DC84)

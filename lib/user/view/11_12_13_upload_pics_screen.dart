@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sayphi/mainApp/components/mainButton.dart';
+import 'package:sayphi/mainApp/components/screenLoader.dart';
+import 'package:sayphi/mainApp/config/firebase/fStorage.dart';
 import 'package:sayphi/mainApp/helpers/imageHelper.dart';
+import 'package:sayphi/mainApp/helpers/snack.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/appImages.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
+import 'package:sayphi/user/repository/userRepo.dart';
 import 'package:sayphi/user/view/14_password_set_screen.dart';
 
 class UploadPhotoViewScreen extends StatefulWidget {
@@ -46,6 +50,8 @@ class _UploadPhotoViewScreenState extends State<UploadPhotoViewScreen> {
       }
     }
   }
+
+  bool screenLoader = false;
 
   @override
   Widget build(BuildContext context) {
@@ -189,99 +195,135 @@ class _UploadPhotoViewScreenState extends State<UploadPhotoViewScreen> {
       );
     }
 
-    return Scaffold(
-      backgroundColor: AppColor.SCAFFOLD_BG_PINK,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          showImagePickers ? 'Add photo/video' : '',
-          style: TextStyle(color: AppColor.TEXT_COLOR),
-        )
-      ),
-      body: Container(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AnimatedCrossFade(
-              firstChild: _buildBaseInfo(),
-              secondChild: _buildImagePickerOptions(),
-              duration: Duration(milliseconds: 400),
-              crossFadeState: showImagePickers ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-            ),
+    return ScreenLoader(
+      loader: screenLoader,
+      child: Scaffold(
+        backgroundColor: AppColor.SCAFFOLD_BG_PINK,
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            showImagePickers ? 'Add photo/video' : '',
+            style: TextStyle(color: AppColor.TEXT_COLOR),
+          )
+        ),
+        body: Container(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AnimatedCrossFade(
+                firstChild: _buildBaseInfo(),
+                secondChild: _buildImagePickerOptions(),
+                duration: Duration(milliseconds: 400),
+                crossFadeState: showImagePickers ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+              ),
 
-            /// big image add btn
-            if(!showImagePickers)GestureDetector(
-              onTap: (){
+              /// big image add btn
+              if(!showImagePickers)GestureDetector(
+                onTap: (){
+                  setState(() {
+                    showImagePickers = true;
+                  });
+                },
+                child: Center(
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: 200,
+                        width: 200,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColor.PRIMARY.withOpacity(.1)
+                        ),
+                      ),
+                      Positioned(
+                        left: 42,
+                        right: 42,
+                        top: 42,
+                        bottom: 42,
+                        child: Image.asset(
+                          Images.ICON_GALLERY_IMAGE
+                        ),
+                      ),
+                      Positioned(
+                        top: 70,
+                        left: 50,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                            SizedBox(width: 4),
+                            Text(
+                              'Add',
+                              style: TextStyle(
+                                color: Colors.white
+                              ),
+                            )
+                          ],
+                        )
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.all(20),
+          child: MainButton(
+            onPress: () async{
+              /// if info is showing show the image pickers next
+              /// instead of uploading image
+              /// which would fail since there are none
+              if(!showImagePickers){
                 setState(() {
                   showImagePickers = true;
                 });
-              },
-              child: Center(
-                child: Stack(
-                  children: [
-                    Container(
-                      height: 200,
-                      width: 200,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColor.PRIMARY.withOpacity(.1)
-                      ),
-                    ),
-                    Positioned(
-                      left: 42,
-                      right: 42,
-                      top: 42,
-                      bottom: 42,
-                      child: Image.asset(
-                        Images.ICON_GALLERY_IMAGE
-                      ),
-                    ),
-                    Positioned(
-                      top: 70,
-                      left: 50,
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            'Add',
-                            style: TextStyle(
-                              color: Colors.white
-                            ),
-                          )
-                        ],
-                      )
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(20),
-        child: MainButton(
-          onPress: (){
-            /// if info is showing show the image pickers next
-            /// instead of uploading image
-            /// which would fail since there are none
-            if(!showImagePickers){
-              setState(() {
-                showImagePickers = true;
-              });
-            }else{
-              /// uploading selected images if there are any
-              Get.to(()=>SetPasswordScreen());
-            }
-          },
-          label: 'Upload photo/video'
+              }else{
+                /// uploading selected images if there are any
+                bool hasFile = false;
+                files.forEach((element) {
+                  if(element.path != ''){
+                    hasFile = true;
+                  }
+                });
+
+
+                if(hasFile){
+
+                  setState(() {
+                    screenLoader = true;
+                  });
+
+                  final _uploadFiles = files.where((element) => element.path != '');
+
+                  final _links = await Future.wait(_uploadFiles.map((e) => FStorage.storeFile(e)));
+
+                  for(int i =0; i< _links.length; i++){
+                    if(i==0){
+                      await UserRepo.updateProfile(profileImage: _links[i]);
+                      await UserRepo.addImage(_links[i]);
+                    }else{
+                      await UserRepo.addImage(_links[i]);
+                    }
+                  }
+
+                  setState(() {
+                    screenLoader = false;
+                  });
+                  Get.to(()=>SetPasswordScreen());
+                }else{
+                  Snack.top(title: 'Please upload an image', message: 'Select atleast 1 image to continue');
+                }
+              }
+            },
+            label: 'Upload photo/video'
+          ),
         ),
       ),
     );

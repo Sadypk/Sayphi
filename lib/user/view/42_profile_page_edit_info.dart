@@ -1,10 +1,19 @@
+import 'package:dash_chat/dash_chat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geocode/geocode.dart';
 import 'package:get/get.dart';
+import 'package:sayphi/mainApp/components/loader.dart';
+import 'package:sayphi/mainApp/components/mainButton.dart';
+import 'package:sayphi/mainApp/helpers/timeHelper.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/mainApp/view/widgets/primary_color_button.dart';
+import 'package:sayphi/user/model/ethnicityModel.dart';
+import 'package:sayphi/user/model/religionModel.dart';
+import 'package:sayphi/user/model/userModel.dart';
+import 'package:sayphi/user/repository/getBasicData.dart';
 import 'package:sayphi/user/view/43_profile_page_photos.dart';
 import 'package:sayphi/user/repository/userRepo.dart';
 import 'package:sayphi/user/view/44_profile_page_add_prompt.dart';
@@ -19,6 +28,7 @@ class ProfilePageEditInfo extends StatefulWidget {
 
 class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTickerProviderStateMixin{
   TextEditingController _nameController = TextEditingController();
+  TextEditingController _dobController = TextEditingController();
   TextEditingController _cityController = TextEditingController();
   TextEditingController _ethnicityController = TextEditingController();
   TextEditingController _religionController = TextEditingController();
@@ -84,11 +94,28 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
         actions: [
 
           TextButton(
-            onPressed: (){
+            onPressed: () async{
+
+              LocationModel? _userLocation;
+
+              if(_cityController.text != ''){
+                final latlng = await GeoCode().forwardGeocoding(address: _cityController.text);
+                _userLocation = LocationModel(name: _cityController.text, coordinates: CoordinatesModel(lat: latlng.latitude, lng: latlng.longitude));
+              }
+
+              String? birthday;
+              if(_dobController.text != ''){
+                try{
+                  birthday = DateFormat('dd MMM yyy').parse(_dobController.text).millisecondsSinceEpoch.toString();
+                }catch(e){
+                  print(e.toString());
+                }
+              }
 
               UserRepo.updateProfile(
                 nickName: _nameController.text == '' ? null : _nameController.text,
-                userLocationName: _cityController.text == '' ? null : _cityController.text,
+                dob: birthday,
+                userLocation: _userLocation,
                 userHeight: _heightController.text == '' ? null : int.parse(_heightController.text),
                 school: _schoolController.text == '' ? null : _schoolController.text,
                 college: _collegeController.text == '' ? null : _collegeController.text,
@@ -138,10 +165,197 @@ class _ProfilePageEditInfoState extends State<ProfilePageEditInfo> with SingleTi
                           Divider(height: 40,),
                           Text('Edit public profile', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                           SizedBox(height: 10,),
-                          editors('Age', '69'),
-                          editors('City', _user.filters.location!.name, _cityController),
-                          editors('Ethnicity', _user.ethnicity == null ? null : _user.ethnicity!.ethnicity , _ethnicityController, false, false),
-                          editors('Religion', _user.religion == null ? null : _user.religion!.religion , _religionController, false, false),
+                          editors('Birthday', _user.dateOfBirth == null ? null : TimeHelper.birthday(_user.dateOfBirth!), _dobController),
+                          editors('City', _user.filters.location == null ? null : _user.filters.location!.name, _cityController),
+
+
+                          InkWell(
+                            onTap: () async{
+
+                              EthnicityModel? selectedValue = _user.ethnicity;
+
+                              await Get.dialog(Dialog(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Please Choose a Ethnicity?',
+                                          style: TextStyle(
+                                              fontSize: 18
+                                          ),
+                                        ),
+                                      ),
+
+                                      SizedBox(
+                                        height: Get.height * .4,
+                                        child: FutureBuilder(
+                                          future: BasicDataRepo.getAllEthnicity(),
+                                          builder: (_, AsyncSnapshot<List<EthnicityModel>> snapshot){
+
+                                            if(snapshot.hasData && snapshot.data !=null){
+                                              return StatefulBuilder(builder: (BuildContext context, void Function(void Function()) setStateHeight) => GridView.builder(
+                                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                                    crossAxisCount: 2,
+                                                    crossAxisSpacing: 12,
+                                                    mainAxisSpacing: 12,
+                                                    childAspectRatio: 16/5
+                                                ),
+                                                itemCount: snapshot.data!.length,
+                                                padding: EdgeInsets.all(12),
+                                                itemBuilder: (_, index) {
+
+                                                  final _religion = snapshot.data![index];
+
+
+                                                  final _isSelected = selectedValue != null && selectedValue!.id == _religion.id;
+
+                                                  return GestureDetector(
+                                                    onTap: (){
+                                                      setStateHeight((){
+                                                        selectedValue = _religion;
+                                                      });
+                                                    },
+                                                    child: Card(
+                                                        color: _isSelected ? AppColor.PRIMARY : Colors.white,
+                                                        child: Container(
+                                                          padding: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+                                                          child: Center(
+                                                            child: Text(
+                                                              _religion.ethnicity,
+                                                              style: TextStyle(
+                                                                  color: _isSelected ? Colors.white : AppColor.TEXT_COLOR
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        )
+                                                    ),
+                                                  );
+
+                                                },
+                                              ));
+                                            }else{
+                                              return Loader();
+                                            }
+
+                                          },
+                                        ),
+                                      ),
+
+
+                                      Padding(
+                                        padding: const EdgeInsets.all(12),
+                                        child: MainButton(onPress: (){
+                                          Get.back();
+                                          if(selectedValue != null){
+                                            UserRepo.updateProfile(userEthnicityID: selectedValue!.id);
+                                          }
+                                        }, label: 'Confirm'),
+                                      )
+                                    ],
+                                  )
+                              ));
+
+                            },
+                            child: editors('Ethnicity', _user.ethnicity == null ? null : _user.ethnicity!.ethnicity , _ethnicityController, false, false)),
+                          InkWell(
+                            onTap: () async{
+
+                              ReligionModel? selectedValue = _user.religion;
+
+                              await Get.dialog(Dialog(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Please Choose a religion?',
+                                          style: TextStyle(
+                                              fontSize: 18
+                                          ),
+                                        ),
+                                      ),
+
+                                      SizedBox(
+                                        height: Get.height * .4,
+                                        child: FutureBuilder(
+                                          future: BasicDataRepo.getAllReligion(),
+                                          builder: (_, AsyncSnapshot<List<ReligionModel>> snapshot){
+
+                                            if(snapshot.hasData && snapshot.data !=null){
+                                              return StatefulBuilder(builder: (BuildContext context, void Function(void Function()) setStateHeight) => GridView.builder(
+                                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                                    crossAxisCount: 2,
+                                                    crossAxisSpacing: 12,
+                                                    mainAxisSpacing: 12,
+                                                    childAspectRatio: 16/5
+                                                ),
+                                                itemCount: snapshot.data!.length,
+                                                padding: EdgeInsets.all(12),
+                                                itemBuilder: (_, index) {
+
+                                                  final _religion = snapshot.data![index];
+
+
+                                                  final _isSelected = selectedValue != null && selectedValue!.id == _religion.id;
+
+                                                  return GestureDetector(
+                                                    onTap: (){
+                                                      setStateHeight((){
+                                                        selectedValue = _religion;
+                                                      });
+                                                    },
+                                                    child: Card(
+                                                        color: _isSelected ? AppColor.PRIMARY : Colors.white,
+                                                        child: Container(
+                                                          padding: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+                                                          child: Center(
+                                                            child: Text(
+                                                              _religion.religion,
+                                                              style: TextStyle(
+                                                                  color: _isSelected ? Colors.white : AppColor.TEXT_COLOR
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        )
+                                                    ),
+                                                  );
+
+                                                },
+                                              ));
+                                            }else{
+                                              return Loader();
+                                            }
+
+                                          },
+                                        ),
+                                      ),
+
+
+                                      Padding(
+                                        padding: const EdgeInsets.all(12),
+                                        child: MainButton(onPress: (){
+                                          Get.back();
+                                          if(selectedValue != null){
+                                            UserRepo.updateProfile(userReligion: selectedValue!.id);
+                                          }
+                                        }, label: 'Confirm'),
+                                      )
+                                    ],
+                                  )
+                              ));
+
+                            },
+                            child: editors('Religion', _user.religion == null ? null : _user.religion!.religion , _religionController, false, false)),
+
+
+
                           editors('Height', _user.height!.toString() , _heightController, false, true, TextInputType.number),
                           editors('Occupation', _user.occupation, _occupationController),
                           editors('School', _user.school, _schoolController),

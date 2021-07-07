@@ -16,8 +16,8 @@ class DayStoryRepo{
 
 
     await Future.wait(imageLinks.map((link) => Api.mutate(
-      queryName: GMutation.USER_ADD_DAY_NAME,
-      query: GMutation.USER_ADD_DAY,
+      mutationName: GMutation.USER_ADD_DAY_NAME,
+      mutation: GMutation.USER_ADD_DAY,
       variables: {
         'image' : link
       },

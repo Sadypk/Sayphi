@@ -1,4 +1,5 @@
 import 'package:sayphi/authentication/repository/authRepo.dart';
+import 'package:sayphi/features/homeScreen/model/matchedUserModel.dart';
 import 'package:sayphi/mainApp/config/graphql/apiConfig.dart';
 import 'package:sayphi/mainApp/config/graphql/mutations.dart';
 import 'package:sayphi/mainApp/config/graphql/queries.dart';
@@ -6,6 +7,7 @@ import 'package:sayphi/mainApp/helpers/snack.dart';
 import 'package:sayphi/mainApp/model/apiResponse.dart';
 import 'package:sayphi/mainApp/model/otherUserModel.dart';
 import 'package:sayphi/user/model/promptModel.dart';
+import 'package:sayphi/user/model/userModel.dart';
 import 'package:sayphi/user/view_model/userViewModel.dart';
 
 class UserRepo{
@@ -19,9 +21,8 @@ class UserRepo{
     String? userEthnicityID,
     String? profileImage,
     bool? isComplete,
-    String? userLocationName,
-    double? latitude,
-    double? longitude,
+    LocationModel? userLocation,
+    LocationModel? filterLocation,
     String? interestedIn,
     String? filterBy,
     int? ageRangeStart,
@@ -75,11 +76,10 @@ class UserRepo{
     if(instaId !=null) variables.putIfAbsent('instaId', () => instaId);
     if(spotifyId !=null) variables.putIfAbsent('spotifyId', () => spotifyId);
     if(status !=null) variables.putIfAbsent('status', () => status);
+    if(userLocation !=null) variables.putIfAbsent('userLocaion', () => userLocation);
 
     /// FILTER
-    if(userLocationName !=null) variables.putIfAbsent('locationName', () => userLocationName);
-    if(latitude !=null) variables.putIfAbsent('latitude', () => latitude);
-    if(longitude !=null) variables.putIfAbsent('longitude', () => longitude);
+    if(filterLocation !=null) variables.putIfAbsent('filterLocation', () => filterLocation);
     if(interestedIn !=null) variables.putIfAbsent('interestedIn', () => interestedIn);
     if(filterBy !=null) variables.putIfAbsent('filterBy', () => filterBy);
     if(ageRangeStart !=null) variables.putIfAbsent('ageRangeStart', () => ageRangeStart);
@@ -102,8 +102,8 @@ class UserRepo{
     if(questionAnswer !=null) variables.putIfAbsent('questionAnswer', () => questionAnswer);
 
     ApiResponse _response = await Api.mutate(
-      queryName: GMutation.UPDATE_USER_NAME,
-      query: GMutation.UPDATE_USER,
+      mutationName: GMutation.UPDATE_USER_NAME,
+      mutation: GMutation.UPDATE_USER,
       variables: variables,
       auth: true
     );
@@ -136,8 +136,8 @@ class UserRepo{
     };
 
     ApiResponse _response = await Api.mutate(
-        queryName: GMutation.USER_ADD_PROMPT_NAME,
-        query: GMutation.USER_ADD_PROMPT,
+        mutationName: GMutation.USER_ADD_PROMPT_NAME,
+        mutation: GMutation.USER_ADD_PROMPT,
         variables: variables,
         auth: true
     );
@@ -157,8 +157,8 @@ class UserRepo{
     };
 
     ApiResponse _response = await Api.mutate(
-        queryName: GMutation.USER_DELETE_PROMPT_NAME,
-        query: GMutation.USER_DELETE_PROMPT,
+        mutationName: GMutation.USER_DELETE_PROMPT_NAME,
+        mutation: GMutation.USER_DELETE_PROMPT,
         variables: variables,
         auth: true
     );
@@ -177,8 +177,8 @@ class UserRepo{
     };
 
     ApiResponse _response = await Api.mutate(
-        queryName: GMutation.USER_UPDATE_PROMPT_NAME,
-        query: GMutation.USER_UPDATE_PROMPT,
+        mutationName: GMutation.USER_UPDATE_PROMPT_NAME,
+        mutation: GMutation.USER_UPDATE_PROMPT,
         variables: variables,
         auth: true
     );
@@ -196,8 +196,8 @@ class UserRepo{
     };
 
     ApiResponse _response = await Api.mutate(
-        queryName: GMutation.USER_ADD_IMAGE_NAME,
-        query: GMutation.USER_ADD_IMAGE,
+        mutationName: GMutation.USER_ADD_IMAGE_NAME,
+        mutation: GMutation.USER_ADD_IMAGE,
         variables: variables,
         auth: true
     );
@@ -241,19 +241,52 @@ class UserRepo{
 
   }
 
-  static Future<void> likeUser(String userId) async{
+
+  // TODO like user api
+  static Future<void> likeUnLikeUser(String userId) async{
     await Api.mutate(
-      queryName: GMutation.LIKE_USER_NAME,
-      query: GMutation.LIKE_USER,
-      auth: true
+      mutationName: GMutation.LIKE_USER_NAME,
+      mutation: GMutation.LIKE_USER,
+      auth: true,
+      variables: {
+        'userId' : userId
+      }
     );
   }
-  
-  static Future<void> followUser(String userId) async{
+
+  // TODO follow user api
+  static Future<void> followUnFollowUser(String userId) async{
     await Api.mutate(
-      queryName: GMutation.FOLLOW_USER_NAME,
-      query: GMutation.FOLLOW_USER,
-      auth: true
+      mutationName: GMutation.FOLLOW_USER_NAME,
+      mutation: GMutation.FOLLOW_USER,
+      auth: true,
+      variables: {
+        'userId' : userId
+      }
+    );
+  }
+
+  // TODO block user api
+  static Future<void> blockUnBlockUser(String userId) async{
+    await Api.mutate(
+      mutationName: GMutation.BLOCK_UNBLOCK_USER_NAME,
+      mutation: GMutation.BLOCK_UNBLOCK_USER,
+      auth: true,
+      variables: {
+        'userID' : userId
+      }
+    );
+  }
+
+  // TODO visit user api
+  static Future<void> visitUser(String userId) async{
+    await Api.mutate(
+        mutationName: GMutation.VISIT_USER_NAME,
+        mutation: GMutation.VISIT_USER,
+        auth: true,
+        variables: {
+          'userID' : userId
+        }
     );
   }
 
@@ -287,5 +320,72 @@ class UserRepo{
       return List.from(_response.data.map((user) => OtherUserModel.fromJson(user)));
     }
 
+  }
+
+  static Future<List<OtherUserModel>> getBlockedUsers() async{
+
+    final _response = await Api.query(
+        queryName: GQueries.BLOCKED_USERS_NAME,
+        query: GQueries.BLOCKED_USERS,
+        auth: true
+    );
+
+    if(_response.error){
+      return [];
+    }else{
+      return List.from(_response.data.map((user) => OtherUserModel.fromJson(user)));
+    }
+
+  }
+
+  static Future<List<OtherUserModel>> getUserVisitors() async{
+
+    final _response = await Api.query(
+      queryName: GQueries.USER_VISITORS_NAME,
+      query: GQueries.USER_VISITORS,
+      auth: true
+    );
+
+    if(_response.error){
+      return [];
+    }else{
+      return List.from(_response.data.map((user) => OtherUserModel.fromJson(user)));
+    }
+
+  }
+
+  static Future<List<MinimalUserModel>> getTopRankedUsers() async{
+
+    final _response = await Api.query(
+      queryName: GQueries.TOP_RANKED_USERS_NAME,
+      query: GQueries.TOP_RANKED_USERS,
+      auth: true
+    );
+
+    if(_response.error){
+      return [];
+    }else{
+      return List.from(_response.data.map((user) => MinimalUserModel.fromJson(user)));
+    }
+
+  }
+
+  static Future<void> addVideo(String link) async{
+    final variables = {
+      'videoLink' : link
+    };
+
+    ApiResponse _response = await Api.mutate(
+        mutationName: GMutation.ADD_VIDEO_PROFILE_NAME,
+        mutation: GMutation.ADD_VIDEO_PROFILE,
+        variables: variables,
+        auth: true
+    );
+
+    if(!_response.error){
+      Snack.top(title: 'Video uploaded',message: 'Others can see it now');
+      /// updating user profile by verifying the token
+      AuthRepo.verifyToken(UserViewModel.userToken);
+    }
   }
 }

@@ -4,24 +4,29 @@ import 'package:get/get.dart';
 import 'package:sayphi/features/chat_messaging/model/messagModel.dart';
 import 'package:sayphi/features/chat_messaging/repository/chatRepo.dart';
 import 'package:sayphi/features/chat_messaging/view_model/chatViewModel.dart';
+import 'package:sayphi/features/homeScreen/model/matchedUserModel.dart';
+import 'package:sayphi/features/homeScreen/repository/homeRepository.dart';
+import 'package:sayphi/mainApp/components/loader.dart';
+import 'package:sayphi/mainApp/model/otherUserModel.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
 import 'package:sayphi/features/chat_messaging/view/widgets/chat_head.dart';
-
-import '../../../demo_files.dart';
 import 'widgets/messageListView.dart';
 
 class ChatMainScreen extends StatefulWidget {
+
+  static RxString searchText = ''.obs;
+  static void onChanged(String value) => searchText.value = value;
+
   @override
   _ChatMainScreenState createState() => _ChatMainScreenState();
 }
 
 class _ChatMainScreenState extends State<ChatMainScreen> {
-  final TextEditingController searchController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
+    ChatMainScreen.searchText.value = '';
     ChatRepo.init();
   }
 
@@ -43,7 +48,7 @@ class _ChatMainScreenState extends State<ChatMainScreen> {
             Padding(padding: EdgeInsets.symmetric(horizontal: 5), child: Icon(Icons.search, color: Colors.grey)),
             Flexible(
               child: TextField(
-                controller: searchController,
+                onChanged: ChatMainScreen.onChanged,
                 decoration: InputDecoration.collapsed(
                     hintText: 'Search matches', hintStyle: TextStyle(fontSize: 16, fontFamily: CFontFamily.REGULAR, color: AppColor.DARK_GREY)),
               ),
@@ -69,14 +74,22 @@ class _ChatMainScreenState extends State<ChatMainScreen> {
           ),
           Container(
             height: 60,
-            child: ListView.builder(
-              shrinkWrap: true,
-              padding: EdgeInsets.only(left: 20),
-              itemCount: Demo.DEMO_USERS.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (_, index) {
-                return SizedBox();
-                // return ChatHeader(image: Demo.DEMO_USERS[index], isActive: index%2==0);
+            child: FutureBuilder(
+              future: HomeRepo.getMatchedUsers(),
+              builder: (_ ,AsyncSnapshot<List<MinimalUserModel>> snapshot){
+                if(snapshot.hasData && snapshot.data != null){
+                  return snapshot.data!.length > 0 ? ListView.builder(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.only(left: 20),
+                    itemCount: snapshot.data!.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (_, index) {
+                      return ChatHeader(minUser: snapshot.data![index]);
+                    },
+                  ) : Center(child: Text('None found'));
+                }else{
+                  return Loader();
+                }
               },
             ),
           ),
@@ -174,11 +187,12 @@ class _ChatMainScreenState extends State<ChatMainScreen> {
 
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
 
         SizedBox(height: 12),
 
-        _buildSearchMatchesTextField(),
+        // _buildSearchMatchesTextField(),
 
         _buildNewMatches(),
 

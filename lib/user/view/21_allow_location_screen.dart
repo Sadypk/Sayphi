@@ -7,6 +7,7 @@ import 'package:sayphi/mainApp/components/loader.dart';
 import 'package:sayphi/mainApp/components/mainButton.dart';
 import 'package:sayphi/mainApp/helpers/snack.dart';
 import 'package:sayphi/mainApp/view/home.dart';
+import 'package:sayphi/user/model/userModel.dart';
 import 'package:sayphi/user/repository/mapRepository.dart';
 import 'package:sayphi/user/repository/userRepo.dart';
 
@@ -105,9 +106,13 @@ class _AllowLocationScreenState extends State<AllowLocationScreen> {
             if(_currentLocation != null){
 
               UserRepo.updateProfile(
-                userLocationName: await MapRepo.getAddressFromLatLng(_currentLocation!),
-                latitude: _currentLocation!.latitude,
-                longitude: _currentLocation!.longitude
+                userLocation: LocationModel(
+                  name: await MapRepo.getAddressFromLatLng(_currentLocation!),
+                  coordinates: CoordinatesModel(
+                    lat: _currentLocation!.latitude,
+                    lng: _currentLocation!.longitude
+                  )
+                )
               );
 
               Get.offAll(()=>Home());

@@ -14,7 +14,7 @@ class AppRepo{
     ]);
 
     AppViewModel.termsAndConditions = _response[0];
-    AppViewModel.termsAndConditions = _response[1];
+    AppViewModel.streamingConditions = _response[1];
     AppViewModel.legalAndPrivacy = _response[2];
 
   }

@@ -101,6 +101,13 @@ query($token: String){
       profile_image
       complete
       date_of_birth
+      address{
+          address
+          location{
+            lat
+            lng
+          }
+        }
       question_answer{
         question{
           _id
@@ -139,9 +146,9 @@ query($token: String){
       spotifyID
       status
       filters{
-        location {
-          name
-          coordinates{
+        address{
+          address
+          location{
             lat
             lng
           }
@@ -319,6 +326,35 @@ query($token: String){
 }
   ''';
 
+  static const BLOCKED_USERS_NAME = 'getUserBlocks';
+  static const BLOCKED_USERS = r'''
+  query {
+  getUserBlocks {
+    error
+    msg 
+    data {
+      _id
+      nick_name
+      profile_image
+    }
+  }
+}
+  ''';
+
+  static const USER_VISITORS_NAME = 'getUserVisitors';
+  static const USER_VISITORS = r'''
+  query{
+  getUserVisitors{
+    error
+    msg
+    data{
+      _id
+      nick_name
+      profile_image
+    }
+  }
+}
+  ''';
 
   static const GET_LIVE_VIDEO_USERS_NAME = 'getLiveVideos';
   static const GET_LIVE_VIDEO_USERS = r'''
@@ -335,6 +371,7 @@ query($token: String){
   }
 }
   ''';
+
   static const GET_LIVE_AUDIO_USERS_NAME = 'getLiveAudios';
   static const GET_LIVE_AUDIO_USERS = r'''
   query{
@@ -346,6 +383,158 @@ query($token: String){
       nick_name
       profile_image
       channel_name
+    }
+  }
+}
+  ''';
+
+  static const MATCHED_USERS_NAME = 'getAllMatchedUser';
+  static const MATCHED_USERS = r'''
+  query{
+  getAllMatchedUser{
+    error
+    msg
+    data{
+      _id
+      profile_image
+      nick_name
+      address{
+        address
+      }
+      rank
+      calculated_distance
+    }
+  }
+}
+  ''';
+
+  static const GET_MATCHED_USERS_NAME = 'getUserMatchedList';
+  static const GET_MATCHED_USERS = r'''
+  query{
+  getUserMatchedList{
+    error
+    msg
+    data{
+      _id
+      profile_image
+      nick_name
+      address{
+        address
+      }
+    }
+  }
+}
+  ''';
+
+  static const TOP_RANKED_USERS_NAME = 'getTopRankedUser';
+  static const TOP_RANKED_USERS = r'''
+  query{
+  getTopRankedUser{
+    error
+    msg
+    data{
+      _id
+      nick_name
+      profile_image
+      rank
+      address{
+        address
+      }
+    }
+  }
+}
+  ''';
+
+  static const GET_USER_PROFILE_NAME = 'getUserProfile';
+  static const GET_USER_PROFILE = r'''
+  query($userId: ID){
+  getUserProfile(_id: $userId){
+    error
+    msg
+    data{
+      _id
+      phone_or_email
+      nick_name
+      height
+      profile_image
+      complete
+      date_of_birth
+      address{
+          address
+          location{
+            lat
+            lng
+          }
+        }
+      question_answer{
+        question{
+          _id
+          question
+          answers
+        }
+        answer
+      }
+    	images{
+        image
+        status
+      }
+      videos{
+        video
+        status
+      }
+      show_gender_in_profile
+      ethnicity{
+        _id
+        ethnicity
+      }
+      religion{
+        _id
+        religion
+      }
+      gender{
+        _id
+        gender
+      }
+      occupation
+      school
+      college
+      relationshipGoal
+      relationshipStatus
+      instagramID
+      spotifyID
+      status
+      filters{
+        address{
+          address
+          location{
+            lat
+            lng
+          }
+        }
+        interest
+        filter_by
+        age_range{
+          start
+          end
+        }
+        language
+        looking_for
+        photo_verified
+        height{
+          start
+          end
+        }
+        children{
+          start
+          end
+        }
+        smoking
+        pets
+        religion{
+          _id
+          religion
+        }
+      }
     }
   }
 }

@@ -66,6 +66,7 @@ class AuthRepo{
     ApiResponse _response = await Api.query(
       queryName: GQueries.VERIFY_TOKEN_NAME,
       query: GQueries.VERIFY_TOKEN,
+      showLoad: true,
       variables: {
         'token' : token
       }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_chat/dash_chat.dart';
+import 'package:sayphi/features/agora_streaming/view/boradcastPage.dart';
 import 'package:sayphi/features/chat_messaging/model/messagModel.dart';
 import 'package:sayphi/features/chat_messaging/view_model/chatViewModel.dart';
 import 'package:sayphi/user/view_model/userViewModel.dart';
@@ -11,15 +12,15 @@ class ChatRepo{
     _getAllMessages();
   }
 
-  static final _instance = FirebaseFirestore.instance.collection('CHAT_MESSAGES');
+  static final _chatMessageInstance = FirebaseFirestore.instance.collection('CHAT_MESSAGES');
 
   static Future<void> sendMessage(String message, ChatUser toUser) async{
 
-    await _instance.add({
+    await _chatMessageInstance.add({
       'fromUser' : UserViewModel.user.value.id,
       'toUser' : toUser.uid,
       'toUserImage' : toUser.avatar,
-      'message' : message,
+      'message' : message == '' ? 'You Both have matched' : message,
       'toUserName' : toUser.name,
       'createdAt' : new DateTime.now().millisecondsSinceEpoch
     });
@@ -31,7 +32,7 @@ class ChatRepo{
 
     final _userID = UserViewModel.user.value.id;
 
-    _instance.snapshots().listen((event) {
+    _chatMessageInstance.snapshots().listen((event) {
       ChatViewModel.allChat.clear();
       event.docs.forEach((element) {
         final _message = MessageModel.fromJson(element.data());
@@ -52,7 +53,7 @@ class ChatRepo{
 
     final _userID = UserViewModel.user.value.id;
 
-    _instance.snapshots().listen((event) {
+    _chatMessageInstance.snapshots().listen((event) {
       ChatViewModel.currentChat.clear();
       event.docs.forEach((element) {
         final _message = MessageModel.fromJson(element.data());
@@ -69,5 +70,4 @@ class ChatRepo{
     });
 
   }
-
 }

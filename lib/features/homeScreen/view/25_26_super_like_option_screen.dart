@@ -3,19 +3,45 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
-import 'package:sayphi/demo_files.dart';
 import 'package:sayphi/features/chat_messaging/view/28_sendMessageBottomSheet.dart';
+import 'package:sayphi/features/homeScreen/repository/homeRepository.dart';
 import 'package:sayphi/features/homeScreen/view/27_send_gift_to_user_sheet.dart';
+import 'package:sayphi/mainApp/components/loader.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
+import 'package:sayphi/user/model/userModel.dart';
+import 'package:sayphi/user/repository/userRepo.dart';
 
 class SuperLikeOptionScreen extends StatefulWidget {
-  const SuperLikeOptionScreen({Key? key}) : super(key: key);
+
+  final String userId;
+
+  const SuperLikeOptionScreen({Key? key, required this.userId}) : super(key: key);
 
   @override
   _SuperLikeOptionScreenState createState() => _SuperLikeOptionScreenState();
 }
 
+bool isLiked = false;
+
 class _SuperLikeOptionScreenState extends State<SuperLikeOptionScreen> {
+
+  bool dataLoad = true;
+  late UserModel user;
+
+  getData() async{
+
+    user = await HomeRepo.getUserProfile(widget.userId);
+
+    setState(() {
+      dataLoad = false;
+    });
+}
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +53,13 @@ class _SuperLikeOptionScreenState extends State<SuperLikeOptionScreen> {
           data: ThemeData(
             primaryColor: AppColor.PRIMARY
           ),
-          child: Swiper(
+          child: user.images.length > 0 ? Swiper(
             itemBuilder: (BuildContext context,int index){
-              return UserImageView(image: Demo.DEMO_USERS[index]);
+              return UserImageView(image: user.images[index].image, id: user.id);
             },
-            itemCount: Demo.DEMO_USERS.length,
+            itemCount: user.images.length,
             pagination: SwiperPagination(),
-          ),
+          ) : UserImageView(image: user.profileImage!, id: user.id),
         ),
       );
     }
@@ -64,7 +90,7 @@ class _SuperLikeOptionScreenState extends State<SuperLikeOptionScreen> {
                 /// send message
                 CardWrap(
                   onPressed: (){
-                    Get.bottomSheet(ChattingScreen(),isScrollControlled: true);
+                    Get.bottomSheet(ChattingScreen(user: user),isScrollControlled: true);
                   },
                   child: Row(
                     children: [
@@ -135,13 +161,13 @@ class _SuperLikeOptionScreenState extends State<SuperLikeOptionScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(
-          'Photos 1/123',
+          dataLoad ? '...' : user.name ?? '_123',
           style: TextStyle(
             color: AppColor.TEXT_COLOR
           ),
         ),
       ),
-      body: Column(
+      body: dataLoad ? Loader() : Column(
         children: [
           _buildUserPhotos(),
           _buildOptions()
@@ -178,14 +204,21 @@ class CardWrap extends StatelessWidget {
 }
 
 
-class UserImageView extends StatelessWidget {
+class UserImageView extends StatefulWidget {
   
   final String image;
-  
+  final String id;
+
   const UserImageView({Key? key,
-  required this.image
+  required this.image,
+  required this.id,
   }) : super(key: key);
 
+  @override
+  _UserImageViewState createState() => _UserImageViewState();
+}
+
+class _UserImageViewState extends State<UserImageView> {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -195,7 +228,7 @@ class UserImageView extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             image: DecorationImage(
-              image: CachedNetworkImageProvider(image),
+              image: CachedNetworkImageProvider(widget.image),
               fit: BoxFit.cover
             ),
           ),
@@ -235,6 +268,9 @@ class UserImageView extends StatelessWidget {
                     ),
                     Divider(),
                     ListTile(
+                      onTap: (){
+                        UserRepo.blockUnBlockUser(widget.id);
+                      },
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -265,31 +301,38 @@ class UserImageView extends StatelessWidget {
           ),
         ),
 
-        /// likey count
         Positioned(
           right: 32,
           top: 12,
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColor.PRIMARY,
-              borderRadius: BorderRadius.circular(12)
-            ),
-            padding: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
-            child: Row(
-              children: [
-                Icon(
-                  CupertinoIcons.heart,
-                  color: Colors.white,
-                  size: 16,
-                ),
-                SizedBox(width: 4),
-                Text(
-                  'Follow',
-                  style: TextStyle(
-                    color: Colors.white
+          child: GestureDetector(
+            onTap: (){
+              setState(() {
+                isLiked = !isLiked;
+              });
+              UserRepo.followUnFollowUser(widget.id);
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColor.PRIMARY,
+                borderRadius: BorderRadius.circular(12)
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+              child: Row(
+                children: [
+                  Icon(
+                    CupertinoIcons.heart,
+                    color: Colors.white,
+                    size: 16,
                   ),
-                )
-              ],
+                  SizedBox(width: 4),
+                  Text(
+                    isLiked ? 'Follow' : 'UnFollow',
+                    style: TextStyle(
+                      color: Colors.white
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

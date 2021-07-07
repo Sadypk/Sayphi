@@ -64,9 +64,8 @@ class GoLiveBtn extends StatelessWidget {
     return InkWell(
       onTap: (){
         /// closing the bottom sheet
-       // Get.back();
-        // Get.to(()=>GoLiveInfoScreen(liveType: type));
-        Get.to(()=>AgoraStreaming());
+       Get.back();
+        Get.to(()=>GoLiveInfoScreen(liveType: type));
       },
       borderRadius: BorderRadius.circular(8),
       child: Container(

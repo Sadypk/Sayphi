@@ -1,31 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sayphi/demo_files.dart';
+import 'package:sayphi/features/homeScreen/model/matchedUserModel.dart';
+import 'package:sayphi/features/homeScreen/repository/homeRepository.dart';
+import 'package:sayphi/mainApp/components/loader.dart';
+import 'package:sayphi/mainApp/model/otherUserModel.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/features/chat_messaging/view/widgets/chat_head.dart';
 
-RxList<String> selectedUsers = <String>[].obs;
+RxList<MinimalUserModel> selectedUsers = <MinimalUserModel>[].obs;
 
 class AddPeople extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-        primary: false,
-        padding: EdgeInsets.only(bottom: Get.height * .1),
-        shrinkWrap: true,
-        itemCount: Demo.DEMO_USERS.length,
-        scrollDirection: Axis.vertical,
-        itemBuilder: (_, index) => AudioRoomUser(user: Demo.DEMO_USERS[index]),
-      )
+    return FutureBuilder(
+      future: HomeRepo.getMatchedUsers(),
+      builder: (_, AsyncSnapshot<List<MinimalUserModel>> snapshot){
+        if(snapshot.hasData && snapshot.data != null){
+          return Expanded(
+              child: ListView.builder(
+                primary: false,
+                padding: EdgeInsets.only(bottom: Get.height * .1),
+                shrinkWrap: true,
+                itemCount: snapshot.data!.length,
+                scrollDirection: Axis.vertical,
+                itemBuilder: (_, index) => AudioRoomUser(user: snapshot.data![index]),
+              )
+          );
+        }else{
+          return Loader();
+        }
+      }
     );
   }
 }
 
 class AudioRoomUser extends StatelessWidget {
 
-  final String user;
+  final MinimalUserModel user;
 
   const AudioRoomUser({Key? key, required this.user}) : super(key: key);
 
@@ -58,13 +71,13 @@ class AudioRoomUser extends StatelessWidget {
                 children: [
                   Container(
                     height: 60,
-                    child: ChatHeader(image: user),
+                    child: ChatHeader(image: user.image),
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Arya Stark, 18',
+                        user.name,
                         style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
                       ),
                       SizedBox(
@@ -73,7 +86,7 @@ class AudioRoomUser extends StatelessWidget {
                       Container(
                         width: 215,
                         child: Text(
-                          'Winterfell',
+                          user.address,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
                         ),

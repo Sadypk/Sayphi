@@ -16,8 +16,8 @@ class LoginWithMobileEmailScreen extends StatefulWidget {
 
 class _LoginWithMobileEmailScreenState extends State<LoginWithMobileEmailScreen> {
 
-  final _valueController = TextEditingController(text: '01915949303');
-  final _passController = TextEditingController(text: '12341234');
+  final _valueController = TextEditingController(text: 'immortal.shuvro@gmail.com');
+  final _passController = TextEditingController(text: '12345678');
 
 
   @override
@@ -30,21 +30,6 @@ class _LoginWithMobileEmailScreenState extends State<LoginWithMobileEmailScreen>
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
-
-                //TODO remove this
-                Row(
-                  children: [
-                    IconButton(onPressed: ()async{
-                      await AuthRepo.loginWithEmailOrNumberAndPassword('immortal.shuvro@gmail.com', '12345678');
-
-
-                    }, icon: Icon(Icons.person_add_alt_1)),
-                    IconButton(onPressed: ()async{
-                      await AuthRepo.loginWithEmailOrNumberAndPassword('01915949303', '12341234');
-
-                    }, icon: Icon(Icons.person_add_alt_1)),
-                  ],
-                ),
 
                 ///top image
                 Expanded(
@@ -92,7 +77,8 @@ class _LoginWithMobileEmailScreenState extends State<LoginWithMobileEmailScreen>
                           SizedBox(height: 20),
                           CTextField(
                             controller: _passController,
-                              hintText: 'Enter your password'
+                            hintText: 'Enter your password',
+                            hideText: true,
                           ),
 
 

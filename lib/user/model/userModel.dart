@@ -1,4 +1,5 @@
 import 'package:sayphi/mainApp/model/questionAnswerModel.dart';
+import 'package:sayphi/user/model/ethnicityModel.dart';
 import 'package:sayphi/user/model/genderModel.dart';
 import 'package:sayphi/user/model/religionModel.dart';
 
@@ -27,6 +28,7 @@ class UserModel {
     this.spotifyId,
     this.instagramId,
     this.status = 'ok',
+    this.userLocation,
   });
 
   String id;
@@ -44,6 +46,7 @@ class UserModel {
   bool isProfileComplete;
   int? dateOfBirth;
   int? height;
+  LocationModel? userLocation;
   List<ImageModel> images;
   List<VideoModel> videos;
   bool showGenderInProfile;
@@ -58,6 +61,7 @@ class UserModel {
     emailOrPhone: json["phone_or_email"],
     name: json["nick_name"],
     height: json["height"],
+    userLocation: json["address"]['address'] == null ? null : LocationModel.fromJson(json["address"]),
     qa : List.from(json['question_answer'].map((data) => UserQuestionAnswerModel.fromJson(data))),
     profileImage: json["profile_image"],
     occupation: json["occupation"],
@@ -67,7 +71,7 @@ class UserModel {
     relationshipStatus: json["relationshipStatus"],
     instagramId: json["instagramID"],
     spotifyId: json["spotifyID"],
-    status: json["status"],
+    status: json["status"] ?? 'ok',
     isProfileComplete: json["complete"] == null ? false : json["complete"],
     dateOfBirth: json["date_of_birth"] == null ? null : int.parse(json["date_of_birth"]),
     images: json["images"] == null ? [] : List<ImageModel>.from(json["images"].map((x) => ImageModel.fromJson(x))),
@@ -91,7 +95,7 @@ class UserQuestionAnswerModel{
 
   factory UserQuestionAnswerModel.fromJson(Map<String, dynamic> json) => UserQuestionAnswerModel(
     qa: QuestionAnswerModel.fromJson(json['question']),
-    answer: json['answer']
+    answer: json['answer'] ?? ''
   );
 
 }
@@ -113,7 +117,7 @@ class ImageModel{
 
 class VideoModel{
   String video;
-  String status;
+  bool status;
 
   VideoModel({
     required this.video,
@@ -126,20 +130,6 @@ class VideoModel{
   );
 }
 
-class EthnicityModel {
-  EthnicityModel({
-    required this.id,
-    required this.ethnicity,
-  });
-
-  String id;
-  String? ethnicity;
-
-  factory EthnicityModel.fromJson(Map<String, dynamic> json) => EthnicityModel(
-    id: json["_id"],
-    ethnicity: json["ethnicity"],
-  );
-}
 
 class UserFilterModel {
   UserFilterModel({
@@ -171,7 +161,7 @@ class UserFilterModel {
   ReligionModel? religion;
 
   factory UserFilterModel.fromJson(Map<String, dynamic> json) => UserFilterModel(
-    location: json["location"] == null ? null : LocationModel.fromJson(json["location"]),
+    location: json["address"]['address'] == null ? null : LocationModel.fromJson(json["address"]),
     interestedIn: json["interest"] ?? '',
     filterBy: json["filter_by"] ?? '',
     ageRange: RangeModel.fromJson(json["age_range"]),
@@ -207,13 +197,18 @@ class LocationModel {
     required this.coordinates,
   });
 
-  String? name;
+  String name;
   CoordinatesModel coordinates;
 
   factory LocationModel.fromJson(Map<String, dynamic> json) => LocationModel(
-    name: json["name"] ?? '',
-    coordinates: CoordinatesModel.fromJson(json["coordinates"]),
+    name: json["address"],
+    coordinates: CoordinatesModel.fromJson(json["location"]),
   );
+
+  Map<String, dynamic> toJson() => {
+    'name' : name,
+    'coordinates' : coordinates.toJson()
+  };
 }
 
 class CoordinatesModel {
@@ -229,4 +224,9 @@ class CoordinatesModel {
     lat: json["lat"],
     lng: json["lng"],
   );
+
+  Map<String, dynamic> toJson() => {
+    'lat' : lat,
+    'lng' : lng,
+  };
 }

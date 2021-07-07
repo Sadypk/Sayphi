@@ -1,16 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dash_chat/dash_chat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sayphi/demo_files.dart';
+import 'package:sayphi/features/chat_messaging/repository/chatRepo.dart';
 import 'package:sayphi/features/gift/view/29_send_gift_bottom_sheet.dart';
 import 'package:sayphi/mainApp/resources/appColor.dart';
 import 'package:sayphi/mainApp/resources/appConst.dart';
 import 'package:sayphi/mainApp/resources/fontStyle.dart';
-import 'package:sayphi/features/chat_messaging/view/widgets/chat_head.dart';
+import 'package:sayphi/user/model/userModel.dart';
 
 class ChattingScreen extends StatefulWidget {
-  const ChattingScreen({Key? key}) : super(key: key);
+  final UserModel user;
+  const ChattingScreen({Key? key, required this.user}) : super(key: key);
 
   @override
   _ChattingScreenState createState() => _ChattingScreenState();
@@ -20,13 +22,15 @@ class _ChattingScreenState extends State<ChattingScreen> {
 
   bool _isSendGiftSheetOpen = false;
 
+  final _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
       height: _isSendGiftSheetOpen ? Get.height * .9 : Get.height * .6,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: CachedNetworkImageProvider(Demo.PROFILE_IMAGE),
+          image: CachedNetworkImageProvider(widget.user.profileImage!),
           fit: BoxFit.cover
         ),
         borderRadius: BorderRadius.only(
@@ -66,7 +70,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
 
               SizedBox(height: 12),
               Text(
-                'user_name is ready to chat',
+                '${widget.user.name} is ready to chat',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white,
@@ -80,6 +84,15 @@ class _ChattingScreenState extends State<ChattingScreen> {
                 child: SizedBox(
                   height: 50,
                   child: TextField(
+                    controller: _controller,
+                    onSubmitted: (message){
+                      ChatRepo.sendMessage(message, ChatUser(
+                        uid: widget.user.id,
+                        name: widget.user.name,
+                        avatar: widget.user.profileImage
+                      ));
+                      _controller.clear();
+                    },
                     decoration: InputDecoration(
                       fillColor: Colors.white,
                       filled: true,
