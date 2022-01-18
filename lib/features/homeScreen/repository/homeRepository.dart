@@ -18,7 +18,8 @@ class HomeRepo{
     if(_res.error){
       return [];
     }else{
-      return List.from(_res.data.map((match) => MinimalUserModel.fromJson(match)));
+      return [];
+      // return List.from(_res.data.map((match) => MinimalUserModel.fromJson(match)));
     }
   }
 
